@@ -4,7 +4,7 @@
   <title><![CDATA[code is evil]]></title>
   <link href="http://youngjd.com/atom.xml" rel="self"/>
   <link href="http://youngjd.com/"/>
-  <updated>2014-07-14T16:02:31+08:00</updated>
+  <updated>2014-07-14T17:42:38+08:00</updated>
   <id>http://youngjd.com/</id>
   <author>
     <name><![CDATA[thecodevil]]></name>
@@ -14,11 +14,36 @@
 
   
   <entry>
-    <title type="html"><![CDATA[First_blog]]></title>
+    <title type="html"><![CDATA[Markdown]]></title>
+    <link href="http://youngjd.com/blog/2014/07/14/markdown/"/>
+    <updated>2014-07-14T17:06:40+08:00</updated>
+    <id>http://youngjd.com/blog/2014/07/14/markdown</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Tyler's WARNING]]></title>
     <link href="http://youngjd.com/blog/2014/07/13/first-blog/"/>
     <updated>2014-07-13T16:26:55+08:00</updated>
     <id>http://youngjd.com/blog/2014/07/13/first-blog</id>
-    <content type="html"><![CDATA[<p>Hello world!</p>
+    <content type="html"><![CDATA[<blockquote><p>WARNING<br>
+If you are reading this then this warning is for you. <br>
+Every word you read of this useless fine print is another second off you life. <br>
+Do not you have other thing to do? <br>
+Is your life so empty that you honestly can&rsquo;t think of a better way to spend these moments？ <br>
+Or are you so impressed with authority that you give respect and credence to all who claim it？Do you read everything you are supposed read？ <br>
+Do you think everything you are supposed think？ <br>
+Buy what you are told you should want？ <br>
+Get out of your apartment. Meet a member of the opposite sex. <br>
+Stop the excessive shopping and masturbation. <br>
+Quit your job. Start a fight. Prove you are alive. <br>
+If you do not claim your humanity you will become a statistic. <br>
+You have been warned&hellip;&hellip; <br>
+Tyler.</p></blockquote>
+
+<!--More-->
+
 ]]></content>
   </entry>
   
