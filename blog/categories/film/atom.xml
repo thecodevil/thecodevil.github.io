@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[battousai's blog]]></title>
-  <link href="http://youngjd.com/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Film | battousai's blog]]></title>
+  <link href="http://youngjd.com/blog/categories/film/atom.xml" rel="self"/>
   <link href="http://youngjd.com/"/>
   <updated>2014-07-15T12:04:50+08:00</updated>
   <id>http://youngjd.com/</id>
@@ -12,57 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[Markdown]]></title>
-    <link href="http://youngjd.com/blog/2014/07/14/markdown/"/>
-    <updated>2014-07-14T17:06:40+08:00</updated>
-    <id>http://youngjd.com/blog/2014/07/14/markdown</id>
-    <content type="html"><![CDATA[<blockquote><p>Markdown 是一种轻量级标记语言，创始人为约翰·格鲁伯（John Gruber）。它允许人们“使用易读易写的纯文本格式编写文档，然后转换成有效的XHTML(或者HTML)文档”。&mdash; <a href="http://zh.wikipedia.org/wiki/Markdown">wikipedia</a></p></blockquote>
-
-<!--More-->
-
-
-<h2>标题</h2>
-
-<pre><code># 这是标题1
-## 这是标题2
-### 这是标题3
-###### 这是标题6
-</code></pre>
-
-<h2>引用</h2>
-
-<pre><code>&gt; 这是引用
-&gt; 还是引用
-&gt; 也是引用
-</code></pre>
-
-<h2>清单</h2>
-
-<pre><code>* 鼠标
-* 键盘
-* 耳机
-</code></pre>
-
-<h2>链接</h2>
-
-<pre><code>[链接名](url)
-</code></pre>
-
-<hr />
-
-<br>
-
-
-<p>参考链接</p>
-
-<ul>
-<li><a href="http://markdown.tw/">http://markdown.tw/</a></li>
-</ul>
-
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[Tyler's WARNING]]></title>
