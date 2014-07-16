@@ -4,7 +4,7 @@
   <title><![CDATA[battousai's blog]]></title>
   <link href="http://youngjd.com/atom.xml" rel="self"/>
   <link href="http://youngjd.com/"/>
-  <updated>2014-07-16T14:11:04+08:00</updated>
+  <updated>2014-07-16T14:12:10+08:00</updated>
   <id>http://youngjd.com/</id>
   <author>
     <name><![CDATA[battousai]]></name>
@@ -19,6 +19,9 @@
     <updated>2014-07-16T14:04:43+08:00</updated>
     <id>http://youngjd.com/blog/2014/07/16/install-jdk-on-ubuntu</id>
     <content type="html"><![CDATA[<h3>Install jdk7 on ubuntu step by step</h3>
+
+<!-- more -->
+
 
 <h4>1. Unpack install package</h4>
 

@@ -9,16 +9,7 @@
   <meta name="author" content="battousai">
 
   
-  <meta name="description" content="Install jdk7 on ubuntu step by step 1. Unpack install package 1
-sudo tar xvzf jdk-7u51-linux-x64.gz 2. Set environment. 1
-2
-3
-4
-5
-6
-7
-/**
-* JAVA_HOME &hellip;">
+  <meta name="description" content="Install jdk7 on ubuntu step by step ">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -108,65 +99,12 @@ sudo tar xvzf jdk-7u51-linux-x64.gz 2. Set environment. 1
 
   <div class="entry-content"><h3>Install jdk7 on ubuntu step by step</h3>
 
-<h4>1. Unpack install package</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo tar xvzf jdk-7u51-linux-x64.gz</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>2. Set environment.</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>/**
-</span><span class='line'>* JAVA_HOME=/usr/local/jdk7
-</span><span class='line'>* PATH=$PATH:$HOME/bin:$JAVA_HOME/bin
-</span><span class='line'>* export JAVA_HOME
-</span><span class='line'>* export PATH
-</span><span class='line'>**/
-</span><span class='line'>sudo vi /etc/profile</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>3. Inform system where jdk7 located</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo update-alternatives --install "/usr/bin/java" "java" "/usr/local/jdk7/bin/java" 1
-</span><span class='line'>sudo update-alternatives --install "/usr/bin/javac" "javac" "/usr/local/jdk7/bin/javac" 1
-</span><span class='line'>sudo update-alternatives --install "/usr/bin/javaws" "javaws" "/usr/local/jdk7/bin/javaws" 1</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>4. Set jdk7 to be the default jdk</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo update-alternatives --set java /usr/local/jdk7/bin/java
-</span><span class='line'>sudo update-alternatives --set javac /usr/local/jdk7/bin/javac
-</span><span class='line'>sudo update-alternatives --set javaws /usr/local/jdk7/bin/javaws</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>5. Apply /etc/profile</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>source /etc/profile</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>6. Check.</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>java -version
-</span><span class='line'>javac -version</span></code></pre></td></tr></table></div></figure>
-
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/07/16/install-jdk-on-ubuntu/">Read more &rarr;</a>
+    </footer>
   
 
 
