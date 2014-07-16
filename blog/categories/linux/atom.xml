@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | battousai's blog]]></title>
   <link href="http://youngjd.com/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://youngjd.com/"/>
-  <updated>2014-07-16T14:12:10+08:00</updated>
+  <updated>2014-07-16T14:24:34+08:00</updated>
   <id>http://youngjd.com/</id>
   <author>
     <name><![CDATA[battousai]]></name>
@@ -18,10 +18,13 @@
     <link href="http://youngjd.com/blog/2014/07/16/install-jdk-on-ubuntu/"/>
     <updated>2014-07-16T14:04:43+08:00</updated>
     <id>http://youngjd.com/blog/2014/07/16/install-jdk-on-ubuntu</id>
-    <content type="html"><![CDATA[<h3>Install jdk7 on ubuntu step by step</h3>
+    <content type="html"><![CDATA[<blockquote><p>利用对立想法构建新的解决方案的思考者，与那些每次只考虑一个模式的人相比，具有更大的内在优势。&mdash;&mdash;马丁<br/>
+马丁发现，最成功的领导者“欢迎混乱”。他们允许复杂性的存在，至少在寻找解决方案时如此，因为复杂性是创造性机会最可靠的来源。&mdash;&mdash; 《ideo,设计改变一切》</p></blockquote>
 
 <!-- more -->
 
+
+<h3>Install jdk7 on ubuntu step by step</h3>
 
 <h4>1. Unpack install package</h4>
 
