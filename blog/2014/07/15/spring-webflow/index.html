@@ -1,0 +1,289 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Spring-webflow - battousai's blog</title>
+  <meta name="author" content="battousai">
+
+  
+  <meta name="description" content="这篇博客先从宏观上认识spring-webflow。主要了解如何定义一个简单的流程。 元素 1. flow 流程节点，是一个流程中的根节点元素，作为整个流程的输入，流程的所有状态都要定义在这个节点的内部。 1
+2
+3
+4
+5
+6
+7
+&lt;?xml version=&quot;1.0&quot &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://youngjd.com/blog/2014/07/15/spring-webflow">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+   <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="battousai's blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts 
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+-->
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">battousai's blog</a></h1>
+  
+    <h2>“倘若我此刻封刀，以前所杀的人便死得毫无意义。人人都苦心经营渺小的幸福，在能缔造更大幸福的新时代建立前……我仍会继续挥剑” -- 绯村剑心</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:youngjd.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/aboutme">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Spring-webflow</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-15T13:31:52+08:00" pubdate data-updated="true">2014-07-15</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>这篇博客先从宏观上认识spring-webflow。主要了解如何定义一个简单的流程。</p>
+
+<!-- more -->
+
+
+<hr />
+
+<br>
+
+
+<h3>元素</h3>
+
+<h4>1. flow</h4>
+
+<p>流程节点，是一个流程中的根节点元素，作为整个流程的输入，流程的所有状态都要定义在这个节点的内部。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+</span><span class='line'><span class="nt">&lt;flow</span> <span class="na">xmlns=</span><span class="s">&quot;http://www.springframework.org/schema/webflow&quot;</span>
+</span><span class='line'>      <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+</span><span class='line'>      <span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.springframework.org/schema/webflow</span>
+</span><span class='line'><span class="s">                          http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;/flow&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>2. view-state</h4>
+
+<p>视图状态节点，用于定义流程中渲染页面的一个步骤。一般约定一个视图状态的id映射实际页面文件的id(文件名)</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;view-state</span> <span class="na">id=</span><span class="s">&quot;enterBookingDetails&quot;</span> <span class="nt">/&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>3. transition</h4>
+
+<p>状态转换节点，用于处理发生在状态内的事件。transitions会驱动页面的导航。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;view-state</span> <span class="na">id=</span><span class="s">&quot;enterBookingDetails&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="c">&lt;!-- 当接收到submit事件后，流程就会从enterBookingDetails状态跳转到reviewBooking状态 --&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;transition</span> <span class="na">on=</span><span class="s">&quot;submit&quot;</span> <span class="na">to=</span><span class="s">&quot;reviewBooking&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'><span class="nt">&lt;/view-state&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>4. end-state</h4>
+
+<p>结束状态节点，作为一个流程的输出。当流程转换到end-state，则会终止流程并返回输出。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;end-state</span> <span class="na">id=</span><span class="s">&quot;bookingCancelled&quot;</span> <span class="nt">/&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<br>
+
+
+<p>参考链接</p>
+
+<ul>
+<li><a href="http://docs.spring.io/spring-webflow/docs/2.4.0.RELEASE/reference/html/defining-flows.html">spring-webflow</a></li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">battousai</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-15T13:31:52+08:00" pubdate data-updated="true">2014-07-15</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/java/'>java</a>, <a class='category' href='/blog/categories/program/'>program</a>, <a class='category' href='/blog/categories/spring/'>spring</a>, <a class='category' href='/blog/categories/spring-webflow/'>spring-webflow</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/07/14/markdown/" title="Previous Post: markdown">&laquo; markdown</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/07/16/install-jdk-on-ubuntu/" title="Next Post: install-jdk-on-ubuntu">install-jdk-on-ubuntu &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/07/16/install-jdk-on-ubuntu/">Install-jdk-on-ubuntu</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/15/spring-webflow/">Spring-webflow</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/14/markdown/">Markdown</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/13/first-blog/">Tyler's WARNING</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - battousai -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

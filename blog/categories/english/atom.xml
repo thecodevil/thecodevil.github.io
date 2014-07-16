@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: English | battousai's blog]]></title>
+  <link href="http://youngjd.com/blog/categories/english/atom.xml" rel="self"/>
+  <link href="http://youngjd.com/"/>
+  <updated>2014-07-16T14:11:04+08:00</updated>
+  <id>http://youngjd.com/</id>
+  <author>
+    <name><![CDATA[battousai]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Install-jdk-on-ubuntu]]></title>
+    <link href="http://youngjd.com/blog/2014/07/16/install-jdk-on-ubuntu/"/>
+    <updated>2014-07-16T14:04:43+08:00</updated>
+    <id>http://youngjd.com/blog/2014/07/16/install-jdk-on-ubuntu</id>
+    <content type="html"><![CDATA[<h3>Install jdk7 on ubuntu step by step</h3>
+
+<h4>1. Unpack install package</h4>
+
+<p><code>
+sudo tar xvzf jdk-7u51-linux-x64.gz
+</code></p>
+
+<h4>2. Set environment.</h4>
+
+<p><code>
+/**
+* JAVA_HOME=/usr/local/jdk7
+* PATH=$PATH:$HOME/bin:$JAVA_HOME/bin
+* export JAVA_HOME
+* export PATH
+**/
+sudo vi /etc/profile
+</code></p>
+
+<h4>3. Inform system where jdk7 located</h4>
+
+<p><code>
+sudo update-alternatives --install "/usr/bin/java" "java" "/usr/local/jdk7/bin/java" 1
+sudo update-alternatives --install "/usr/bin/javac" "javac" "/usr/local/jdk7/bin/javac" 1
+sudo update-alternatives --install "/usr/bin/javaws" "javaws" "/usr/local/jdk7/bin/javaws" 1
+</code></p>
+
+<h4>4. Set jdk7 to be the default jdk</h4>
+
+<p><code>
+sudo update-alternatives --set java /usr/local/jdk7/bin/java
+sudo update-alternatives --set javac /usr/local/jdk7/bin/javac
+sudo update-alternatives --set javaws /usr/local/jdk7/bin/javaws
+</code></p>
+
+<h4>5. Apply /etc/profile</h4>
+
+<p><code>
+source /etc/profile
+</code></p>
+
+<h4>6. Check.</h4>
+
+<p><code>
+java -version
+javac -version
+</code></p>
+]]></content>
+  </entry>
+  
+</feed>

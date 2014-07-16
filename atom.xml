@@ -4,7 +4,7 @@
   <title><![CDATA[battousai's blog]]></title>
   <link href="http://youngjd.com/atom.xml" rel="self"/>
   <link href="http://youngjd.com/"/>
-  <updated>2014-07-15T12:21:11+08:00</updated>
+  <updated>2014-07-16T14:11:04+08:00</updated>
   <id>http://youngjd.com/</id>
   <author>
     <name><![CDATA[battousai]]></name>
@@ -12,6 +12,158 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Install-jdk-on-ubuntu]]></title>
+    <link href="http://youngjd.com/blog/2014/07/16/install-jdk-on-ubuntu/"/>
+    <updated>2014-07-16T14:04:43+08:00</updated>
+    <id>http://youngjd.com/blog/2014/07/16/install-jdk-on-ubuntu</id>
+    <content type="html"><![CDATA[<h3>Install jdk7 on ubuntu step by step</h3>
+
+<h4>1. Unpack install package</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo tar xvzf jdk-7u51-linux-x64.gz</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>2. Set environment.</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>/**
+</span><span class='line'>* JAVA_HOME=/usr/local/jdk7
+</span><span class='line'>* PATH=$PATH:$HOME/bin:$JAVA_HOME/bin
+</span><span class='line'>* export JAVA_HOME
+</span><span class='line'>* export PATH
+</span><span class='line'>**/
+</span><span class='line'>sudo vi /etc/profile</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>3. Inform system where jdk7 located</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo update-alternatives --install "/usr/bin/java" "java" "/usr/local/jdk7/bin/java" 1
+</span><span class='line'>sudo update-alternatives --install "/usr/bin/javac" "javac" "/usr/local/jdk7/bin/javac" 1
+</span><span class='line'>sudo update-alternatives --install "/usr/bin/javaws" "javaws" "/usr/local/jdk7/bin/javaws" 1</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>4. Set jdk7 to be the default jdk</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo update-alternatives --set java /usr/local/jdk7/bin/java
+</span><span class='line'>sudo update-alternatives --set javac /usr/local/jdk7/bin/javac
+</span><span class='line'>sudo update-alternatives --set javaws /usr/local/jdk7/bin/javaws</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>5. Apply /etc/profile</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>source /etc/profile</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>6. Check.</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>java -version
+</span><span class='line'>javac -version</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Spring-webflow]]></title>
+    <link href="http://youngjd.com/blog/2014/07/15/spring-webflow/"/>
+    <updated>2014-07-15T13:31:52+08:00</updated>
+    <id>http://youngjd.com/blog/2014/07/15/spring-webflow</id>
+    <content type="html"><![CDATA[<p>这篇博客先从宏观上认识spring-webflow。主要了解如何定义一个简单的流程。</p>
+
+<!-- more -->
+
+
+<hr />
+
+<br>
+
+
+<h3>元素</h3>
+
+<h4>1. flow</h4>
+
+<p>流程节点，是一个流程中的根节点元素，作为整个流程的输入，流程的所有状态都要定义在这个节点的内部。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+</span><span class='line'><span class="nt">&lt;flow</span> <span class="na">xmlns=</span><span class="s">&quot;http://www.springframework.org/schema/webflow&quot;</span>
+</span><span class='line'>      <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+</span><span class='line'>      <span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.springframework.org/schema/webflow</span>
+</span><span class='line'><span class="s">                          http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;/flow&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>2. view-state</h4>
+
+<p>视图状态节点，用于定义流程中渲染页面的一个步骤。一般约定一个视图状态的id映射实际页面文件的id(文件名)</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;view-state</span> <span class="na">id=</span><span class="s">&quot;enterBookingDetails&quot;</span> <span class="nt">/&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>3. transition</h4>
+
+<p>状态转换节点，用于处理发生在状态内的事件。transitions会驱动页面的导航。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;view-state</span> <span class="na">id=</span><span class="s">&quot;enterBookingDetails&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="c">&lt;!-- 当接收到submit事件后，流程就会从enterBookingDetails状态跳转到reviewBooking状态 --&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;transition</span> <span class="na">on=</span><span class="s">&quot;submit&quot;</span> <span class="na">to=</span><span class="s">&quot;reviewBooking&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'><span class="nt">&lt;/view-state&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>4. end-state</h4>
+
+<p>结束状态节点，作为一个流程的输出。当流程转换到end-state，则会终止流程并返回输出。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;end-state</span> <span class="na">id=</span><span class="s">&quot;bookingCancelled&quot;</span> <span class="nt">/&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<br>
+
+
+<p>参考链接</p>
+
+<ul>
+<li><a href="http://docs.spring.io/spring-webflow/docs/2.4.0.RELEASE/reference/html/defining-flows.html">spring-webflow</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Markdown]]></title>

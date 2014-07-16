@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Spring | battousai's blog]]></title>
+  <link href="http://youngjd.com/blog/categories/spring/atom.xml" rel="self"/>
+  <link href="http://youngjd.com/"/>
+  <updated>2014-07-16T14:11:04+08:00</updated>
+  <id>http://youngjd.com/</id>
+  <author>
+    <name><![CDATA[battousai]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Spring-webflow]]></title>
+    <link href="http://youngjd.com/blog/2014/07/15/spring-webflow/"/>
+    <updated>2014-07-15T13:31:52+08:00</updated>
+    <id>http://youngjd.com/blog/2014/07/15/spring-webflow</id>
+    <content type="html"><![CDATA[<p>这篇博客先从宏观上认识spring-webflow。主要了解如何定义一个简单的流程。</p>
+
+<!-- more -->
+
+
+<hr />
+
+<br>
+
+
+<h3>元素</h3>
+
+<h4>1. flow</h4>
+
+<p>流程节点，是一个流程中的根节点元素，作为整个流程的输入，流程的所有状态都要定义在这个节点的内部。
+```xml
+&lt;?xml version=&ldquo;1.0&rdquo; encoding=&ldquo;UTF-8&rdquo;?>
+&lt;flow xmlns=&ldquo;<a href="http://www.springframework.org/schema/webflow">http://www.springframework.org/schema/webflow</a>&rdquo;</p>
+
+<pre><code>  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/webflow
+                      http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd"&gt;
+</code></pre>
+
+<p></flow>
+```</p>
+
+<h4>2. view-state</h4>
+
+<p>视图状态节点，用于定义流程中渲染页面的一个步骤。一般约定一个视图状态的id映射实际页面文件的id(文件名)
+<code>xml
+&lt;view-state id="enterBookingDetails" /&gt;
+</code></p>
+
+<h4>3. transition</h4>
+
+<p>状态转换节点，用于处理发生在状态内的事件。transitions会驱动页面的导航。
+```xml
+&lt;view-state id=&ldquo;enterBookingDetails&rdquo;></p>
+
+<pre><code>  &lt;!-- 当接收到submit事件后，流程就会从enterBookingDetails状态跳转到reviewBooking状态 --&gt;
+&lt;transition on="submit" to="reviewBooking" /&gt;
+</code></pre>
+
+<p>&lt;/view-state>
+```</p>
+
+<h4>4. end-state</h4>
+
+<p>结束状态节点，作为一个流程的输出。当流程转换到end-state，则会终止流程并返回输出。
+<code>xml
+&lt;end-state id="bookingCancelled" /&gt;
+</code></p>
+
+<hr />
+
+<br>
+
+
+<p>参考链接</p>
+
+<ul>
+<li><a href="http://docs.spring.io/spring-webflow/docs/2.4.0.RELEASE/reference/html/defining-flows.html">spring-webflow</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>
