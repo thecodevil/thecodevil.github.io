@@ -175,5 +175,19 @@
 
 
 
+  <script type="text/javascript">
+	;(function($) {
+	    $(function() {
+	        var url=document.referrer;
+	        if ( url && url.search("http://")>-1) {
+	            var refurl =  url.match(/:\/\/(.[^/]+)/)[1];
+	            if(refurl.indexOf("baidu.com")>-1){
+	                $('#nobaidu_dlg').bPopup();
+	            }
+	        }
+	    });
+
+	})(jQuery);
+   </script>
 </body>
 </html>
