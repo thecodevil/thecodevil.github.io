@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Program | battousai's blog]]></title>
   <link href="http://youngjd.com/blog/categories/program/atom.xml" rel="self"/>
   <link href="http://youngjd.com/"/>
-  <updated>2014-07-18T17:36:01+08:00</updated>
+  <updated>2014-07-25T02:24:33+08:00</updated>
   <id>http://youngjd.com/</id>
   <author>
     <name><![CDATA[battousai]]></name>
@@ -14,14 +14,209 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Java: Getters and Setters]]></title>
+    <link href="http://youngjd.com/blog/2014/07/25/java-getters-and-setters/"/>
+    <updated>2014-07-25T00:58:11+08:00</updated>
+    <id>http://youngjd.com/blog/2014/07/25/java-getters-and-setters</id>
+    <content type="html"><![CDATA[<blockquote><p>我不在创业，就在去创业的路上 —— <a href="http://baike.baidu.com/view/1737286.htm?fr=aladdin">冯大辉</a> <a href="http://book.douban.com/subject/25800616/">《创业时，我们在知乎聊什么》</a></p></blockquote>
+
+<!-- more -->
+
+
+<hr />
+
+<br>
+
+
+<p>本文翻译自<a href="http://java.dzone.com/articles/getter-setter-use-or-not-use">http://java.dzone.com/articles/getter-setter-use-or-not-use</a></p>
+
+<br>
+
+
+<p>主要谈到Java的setter和getter方法.翻译内容不完全直译,带有个人感情,请读者冷静.</p>
+
+<br>
+
+
+<blockquote><p>我们为什么要把实例变量保持私有呢?因为我们并不希望其他的类过度地依赖它们,并且我们不希望它们会被随意的更改.为什么很多程序员在用IDE编写程序的时候,都会不假思索,娴熟地利用快捷键自动生成getter和setter方法并且这些setter和getter方法并没有特殊地实现,他们用这种形式去暴露私有变量,这样的话,那跟直接设置成public有什么区别呢?</p></blockquote>
+
+<h2>Accessor methods(访问方法)</h2>
+
+<p>Accessor(通常也称之为getter和setter方法)是一种让你能够读取和修改对象的实例变量的一种手段或方法.</p>
+
+<h2>为什么要使用Accessors呢?</h2>
+
+<p>使用Accessors确实比直接暴露类的属性更好一些.使用Getter和Setter似乎也能够使得API更加稳定.举例来说,考虑有这么一个类,它有一个公共变量,并且这个公共变量能够被其他的类访问.过了一阵子,你想在能够获取和读取变量的同时额外添加一些业务逻辑.这就会直接影响到API的调用者了.所以这个变量的任何变更都会要求依赖到它的每个类作出相应的变更.相反,使用访问方法,能够简单地在以后添加诸如数据缓存，延迟初始化等的逻辑。此外,一旦一个属性被触发更新事件,如果新的值不同于之前的值.所有使用get方法获取值的类都能无缝对接。(这段翻译得不好哇)</p>
+
+<h2>我们应该把所有的属性都加上Accessor方法吗?</h2>
+
+<p>我们都知道,属性有好几个访问修饰符,如public,pakcage,private.对于添加访问方法,直接暴露属性能带来更少的视觉上的混乱感,这种感觉在定义类和客户端使用的时候也尤其明显.</p>
+
+<blockquote><p>如果一个类是包内私有的或者是一个私有的内部类,直接暴露(不添加访问方法)其实并不是错的&mdash;这里假设已经很好地抽象了这个类的行为.(这里不知道怎么翻译)</p></blockquote>
+
+<p>这些代码其实已经被限定在该类所在包的作用域之内了,调用端代码也被绑定到了类的内部表现中.我们可以变更它而不用修改包外面的任何代码.并且,对于内部类这种情况,作用域范围内的变更都已经被严格限制在包裹类中了.(这段也不好翻译)</p>
+
+<p>另外使用public来设计的例子还有<a href="http://baike.baidu.com/view/209603.htm">JavaSpace</a>的entry objects.Ken Arnold描述了他们的历程,来阐明他们为什么会选择public而不是get和set方法.</p>
+
+<blockquote><p>当今很多时候都会让人很烦心,因为他们都被告诉不要去使用public,public字段并不是一种好的做法.并且很多时候,人们都变得教条主义了.但是我们并没有被教条束缚住.规则应该是由它的理由的.但是私有性的规则并不适合我们这种特殊的情况.这确实是一个罕见的特殊情况.我也经常告诉人们,不要设置对象的属性为public,但例外总是存在的.我们这个就是例外,因为定义它为一个属性更见简单和安全.我们常回过头问自己：为什么要这样规定?这些规定是否总是适用?至少我们的情况并不适用.</p></blockquote>
+
+<h2>私有属性 + 公共访问方法 == 封装</h2>
+
+<p>考虑一下这个例子
+```java
+public class A {</p>
+
+<pre><code>public int a;
+</code></pre>
+
+<p>}
+<code>
+通常上面的代码被认为是不好的,因为它违背了封装原则,一个替代的方法是
+</code>java
+public class A {</p>
+
+<pre><code>private int a;
+
+public void setA(int a) {
+    this.a =a;
+}
+
+public int getA() {
+    return this.a;
+}
+</code></pre>
+
+<p>}
+```
+有人认为这就是对属性的封装.但是你真的认为它就是真正意义上的封装了吗?</p>
+
+<p>实际上,getter和setter对于封装性一点意义都没有.在上面的代码中,加上了getter和setter之后,内部的数据也并没有比直接暴露(public)属性获得更好的隐蔽性和封装性.其它的对象依然能够很轻易地就了解到这个类的内部信息.这个类的变更能够或多或少地对依赖其的类产生波动(影响)并迫使他们也作出相应的变更.以这种方式去使用getter和setter,其实也是打破了封装性.一个比较确切的良好的封装类应该是没有setter,最好也没有getter方法.相比于直接访问一个类来获取数据,然后计算它,再重新把计算好的值赋值给这个类(哇靠,啰不啰嗦啊),其实还不如(更应该)由这个类本身去承担计算的责任,并返回计算后的结果.</p>
+
+<p>再来看看下面这个例子吧,
+```java
+public class Screens {</p>
+
+<pre><code>private Map screens = new HashMap();
+
+public Map getScreens() {
+    return screens;
+}
+
+public void setScreens(Map screens) {
+    this.screens = screens;
+}
+// remaining code here
+</code></pre>
+
+<p>}
+```</p>
+
+<p>如果我们需要一个特别一点的screen,那我们就写成下面这样
+<code>java
+Screen s = (Screen)screens.get(screenId);
+</code></p>
+
+<p>上面的代码有一些细节值得我们去思考</p>
+
+<p>代码调用者需要从Map里面获得一个对象,并把它强制转换为我们需要的类型(Screen).并且,更不能忍的是,居然任何一个代码的调用者都有能力去把Screen里面的screens对象给清空掉.</p>
+
+<p>一个替代上面如此脑残的代码的方法我认为是:
+```java
+public class Screens {</p>
+
+<pre><code>private Map screens = new HashMap();
+
+public Screen getById(String id) {
+    return (Screen) screens.get(id);
+}
+// remaining code here
+</code></pre>
+
+<p>}
+```</p>
+
+<p>像这样子,Map实例和Map内部的所有接口就都能够做到更好的隐秘性和封装性了,你认为是吗?</p>
+
+<h2>哎,getter和setter在很多情况下都被滥用了(尤其Java)</h2>
+
+<p>创建一个私有属性,然后娴熟地使用IDE去自动生成getter和setter的方法已经成为很多程序员的"必杀技".这些完全没有任何意义的getter/setter代码居然比真正的业务逻辑都还有长,并且你还要去阅读(这里读者应该指单纯地看,我是不会去阅读的)这些代码一遍又一遍,即便你一点都不愿意
+(所以现在的IDE自动折叠功能还是有用的).</p>
+
+<p>所有的属性都应该保持私有,当只有把对象设置成不可变的时候,setter方法才有那么一点能够被理解.增加一个没啥必要的getter方法,揭露了类的内部信息,增加了产生耦合的可能性.</p>
+
+<p><strong>所以啊,为了规避上述这些脑子被门缝夹过后才有可能会干出的鸟事,大伙在使用快捷键愉快地自动生成get/set方法,在妹子面前炫耀你牛A闪闪的手速的之前,还是先多拍几下自己的脑袋,也许能够拍出个更美妙的封装方法也说不定哦.</strong></p>
+
+<p>最后一个例子了,
+```java
+public class Money {</p>
+
+<pre><code>private double amount;    
+
+public double getAmount() {
+    return amount;
+}
+
+public void setAmount(double amount) {
+    this.amount = amount;
+}
+
+//client
+Money pocketMoney = new Money();
+pocketMoney.setAmount(15d); 
+double amount = pocketMoney.getAmount();  // we know its double  
+pocketMoney.setAmount(amount + 10d);
+</code></pre>
+
+<p>}
+```</p>
+
+<p>按照上面的逻辑,一段时间后,我们假设double类型已经不适用了,要用BigDecimal代替它,这时候,所有的的代码调用者都崩溃了(调用代码全部报错,一片红色的海洋,还能不崩溃吗?)</p>
+
+<p>唯有重构上面那堆垃圾代码了.
+```java
+public class Money {</p>
+
+<pre><code>private BigDecimal amount;
+
+public Money(String amount) {
+    this.amount = new BigDecimal(amount);
+}
+
+public void add(Money toAdd) {
+    amount = amount.add(toAdd.amount);
+}
+
+// client
+Money balance1 = new Money("10.0");
+Money balance2 = new Money("6.0");
+balance1.add(balance2);
+</code></pre>
+
+<p>}
+```</p>
+
+<p>现在,不再是去访问一个值了,Money类已经拥有自我提升的责任(能力)了.现在这种方式无论你以后怎么改变amount的数据类型,都不会影响到代码的调用者了.其实这里,已不单只是数据被封装起来,它存储的数据和与它相关联的存在的所有事实也被封装起来了.(这里有点哲学)</p>
+
+<h2>结论</h2>
+
+<p>与直接暴露变量相比,使用访问方法去限制对变量的直接访问应该是优先考虑的.但是,每一个变量都加上getter和setter方法就有点矫枉过正了,我们还是要根据实际情况做出适当的决策.因为有时你可能只是需要一个又隆又哑的数据对象而已.访问方法只有在实际需要的情况下才去使用.一个类应该暴露一个粒度更粗的行为接口,这个行为接口要能恰如其分地表达它当且的状态,而不是把一堆状态的集合暴露出来,随意让人操作.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Install-jdk-on-ubuntu]]></title>
     <link href="http://youngjd.com/blog/2014/07/16/install-jdk-on-ubuntu/"/>
     <updated>2014-07-16T14:04:43+08:00</updated>
     <id>http://youngjd.com/blog/2014/07/16/install-jdk-on-ubuntu</id>
     <content type="html"><![CDATA[<blockquote><p>利用对立想法构建新的解决方案的思考者，与那些每次只考虑一个模式的人相比，具有更大的内在优势。&mdash;&mdash;马丁<br/>
-马丁发现，最成功的领导者“欢迎混乱”。他们允许复杂性的存在，至少在寻找解决方案时如此，因为复杂性是创造性机会最可靠的来源。&mdash;&mdash; 《ideo,设计改变一切》</p></blockquote>
+马丁发现，最成功的领导者“欢迎混乱”。他们允许复杂性的存在，至少在寻找解决方案时如此，因为复杂性是创造性机会最可靠的来源。&mdash;&mdash; <a href="http://book.douban.com/subject/6522698/">《ideo,设计改变一切》</a></p></blockquote>
 
 <!-- more -->
+
+
+<hr />
+
+<br>
 
 
 <h3>Install jdk7 on ubuntu step by step</h3>
@@ -81,7 +276,7 @@ javac -version
     <updated>2014-07-15T13:31:52+08:00</updated>
     <id>http://youngjd.com/blog/2014/07/15/spring-webflow</id>
     <content type="html"><![CDATA[<blockquote><p>通过判例可以迅速灵活地反映社会发展对法律调整提出的不同要求，及时确立合乎社会需要的法律规范。成文法考虑的是立法时的社会价值标准，而不是案件发生时的社会价值标准，因此，只要法律没有改变，不管现实的价值标准同立法时的价值标准发生怎样的冲突，都只能依照法律的规定处理案件。<br/>
-&mdash;&mdash; 《普通法与自由主义理论:柯克霍布斯及美国宪政主义之诸源头》</p></blockquote>
+&mdash;&mdash; <a href="http://book.douban.com/subject/1391975/">《普通法与自由主义理论:柯克霍布斯及美国宪政主义之诸源头》</a></p></blockquote>
 
 <!-- more -->
 
@@ -156,10 +351,19 @@ javac -version
     <link href="http://youngjd.com/blog/2014/07/14/markdown/"/>
     <updated>2014-07-14T17:06:40+08:00</updated>
     <id>http://youngjd.com/blog/2014/07/14/markdown</id>
-    <content type="html"><![CDATA[<blockquote><p>Markdown 是一种轻量级标记语言，创始人为约翰·格鲁伯（John Gruber）。它允许人们“使用易读易写的纯文本格式编写文档，然后转换成有效的XHTML(或者HTML)文档”。&mdash; <a href="http://zh.wikipedia.org/wiki/Markdown">wikipedia</a></p></blockquote>
+    <content type="html"><![CDATA[<blockquote><p>所谓设计就是，以非现有的逻辑的逻辑，解决现有逻辑解决不了的问题。 &mdash; <a href="http://baike.baidu.com/view/548853.htm?fr=aladdin">蒋友柏</a></p></blockquote>
 
 <!--More-->
 
+
+<hr />
+
+<br>
+
+
+<p>这篇文章主要记录Markdown的基础语法。</p>
+
+<blockquote><p>Markdown 是一种轻量级标记语言，创始人为约翰·格鲁伯（John Gruber）。它允许人们“使用易读易写的纯文本格式编写文档，然后转换成有效的XHTML(或者HTML)文档”。&mdash; <a href="http://zh.wikipedia.org/wiki/Markdown">wikipedia</a></p></blockquote>
 
 <h2>标题</h2>
 

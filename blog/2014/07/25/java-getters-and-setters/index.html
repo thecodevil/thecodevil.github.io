@@ -1,24 +1,100 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[battousai's blog]]></title>
-  <link href="http://youngjd.com/atom.xml" rel="self"/>
-  <link href="http://youngjd.com/"/>
-  <updated>2014-07-25T02:24:33+08:00</updated>
-  <id>http://youngjd.com/</id>
-  <author>
-    <name><![CDATA[battousai]]></name>
-    
-  </author>
-  <generator uri="http://octopress.org/">Octopress</generator>
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Java: Getters and Setters - battousai's blog</title>
+  <meta name="author" content="battousai">
 
   
-  <entry>
-    <title type="html"><![CDATA[Java: Getters and Setters]]></title>
-    <link href="http://youngjd.com/blog/2014/07/25/java-getters-and-setters/"/>
-    <updated>2014-07-25T00:58:11+08:00</updated>
-    <id>http://youngjd.com/blog/2014/07/25/java-getters-and-setters</id>
-    <content type="html"><![CDATA[<blockquote><p>我不在创业，就在去创业的路上 —— <a href="http://baike.baidu.com/view/1737286.htm?fr=aladdin">冯大辉</a> <a href="http://book.douban.com/subject/25800616/">《创业时，我们在知乎聊什么》</a></p></blockquote>
+  <meta name="description" content="我不在创业，就在去创业的路上 —— 冯大辉 《创业时，我们在知乎聊什么》 本文翻译自http://java.dzone.com/articles/getter-setter-use-or-not-use 主要谈到Java的setter和getter方法.翻译内容不完全直译,带有个人感情,请读者冷静 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://youngjd.com/blog/2014/07/25/java-getters-and-setters">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+   <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="battousai's blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts 
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+-->
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">battousai's blog</a></h1>
+  
+    <h2>“倘若我此刻封刀，以前所杀的人便死得毫无意义。人人都苦心经营渺小的幸福，在能缔造更大幸福的新时代建立前……我仍会继续挥剑” -- 绯村剑心</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:youngjd.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/aboutme">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Java: Getters and Setters</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-25T00:58:11+08:00" pubdate data-updated="true">2014-07-25</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><blockquote><p>我不在创业，就在去创业的路上 —— <a href="http://baike.baidu.com/view/1737286.htm?fr=aladdin">冯大辉</a> <a href="http://book.douban.com/subject/25800616/">《创业时，我们在知乎聊什么》</a></p></blockquote>
 
 <!-- more -->
 
@@ -261,300 +337,128 @@
 <h2>结论</h2>
 
 <p>与直接暴露变量相比,使用访问方法去限制对变量的直接访问应该是优先考虑的.但是,每一个变量都加上getter和setter方法就有点矫枉过正了,我们还是要根据实际情况做出适当的决策.因为有时你可能只是需要一个又隆又哑的数据对象而已.访问方法只有在实际需要的情况下才去使用.一个类应该暴露一个粒度更粗的行为接口,这个行为接口要能恰如其分地表达它当且的状态,而不是把一堆状态的集合暴露出来,随意让人操作.</p>
-]]></content>
-  </entry>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
   
-  <entry>
-    <title type="html"><![CDATA[The_docker_user_guide]]></title>
-    <link href="http://youngjd.com/blog/2014/07/20/the-docker-user-guide/"/>
-    <updated>2014-07-20T19:29:31+08:00</updated>
-    <id>http://youngjd.com/blog/2014/07/20/the-docker-user-guide</id>
-    <content type="html"><![CDATA[<p>没翻译完</p>
 
-<!-- more -->
+<span class="byline author vcard">Posted by <span class="fn">battousai</span></span>
+
+      
 
 
-<h3>Docker用户指南</h3>
-
-<p>在介绍篇中你已经了解了什么事Docker和如何利用它来工作。在这篇指南我们将带着你学习
-使用Docker和如何把它集成到你的环境中的基础知识。</p>
-
-<p>我们将指导你如何使用Docker：</p>
-
-<ul>
-<li>使用的应用Docker化</li>
-<li>运行你自己的容器</li>
-<li>建立Docker的镜像</li>
-<li>分享你的Docker镜像</li>
-<li>还有更多</li>
-</ul>
 
 
-<p>我们把这个指南分成了几个主要的部分来让你了解Docker的生命周期</p>
 
-<h3>让我们开始学习Docker Hub</h3>
 
-<p>如何使用Docker Hub?
-Docker Hub是Docker中心。它存放公共的Docke镜像并提供服务来帮助你建立和管理你的Docker环境。想了解更多：
-请阅读 (User Docker Hub)[]</p>
 
-<h3>让你的应用Docker起来：A &ldquo;Hello world&rdquo;</h3>
 
-<p>如何在容器内部运行应用?</p>
-
-<p>Docker提供了一个基于容器的虚拟化平台来运行你的应用。</p>
-]]></content>
-  </entry>
   
-  <entry>
-    <title type="html"><![CDATA[Install-jdk-on-ubuntu]]></title>
-    <link href="http://youngjd.com/blog/2014/07/16/install-jdk-on-ubuntu/"/>
-    <updated>2014-07-16T14:04:43+08:00</updated>
-    <id>http://youngjd.com/blog/2014/07/16/install-jdk-on-ubuntu</id>
-    <content type="html"><![CDATA[<blockquote><p>利用对立想法构建新的解决方案的思考者，与那些每次只考虑一个模式的人相比，具有更大的内在优势。&mdash;&mdash;马丁<br/>
-马丁发现，最成功的领导者“欢迎混乱”。他们允许复杂性的存在，至少在寻找解决方案时如此，因为复杂性是创造性机会最可靠的来源。&mdash;&mdash; <a href="http://book.douban.com/subject/6522698/">《ideo,设计改变一切》</a></p></blockquote>
-
-<!-- more -->
 
 
-<hr />
+<time datetime="2014-07-25T00:58:11+08:00" pubdate data-updated="true">2014-07-25</time>
+      
 
-<br>
-
-
-<h3>Install jdk7 on ubuntu step by step</h3>
-
-<h4>1. Unpack install package</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo tar xvzf jdk-7u51-linux-x64.gz</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>2. Set environment.</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>/**
-</span><span class='line'>* JAVA_HOME=/usr/local/jdk7
-</span><span class='line'>* PATH=$PATH:$HOME/bin:$JAVA_HOME/bin
-</span><span class='line'>* export JAVA_HOME
-</span><span class='line'>* export PATH
-</span><span class='line'>**/
-</span><span class='line'>sudo vi /etc/profile</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>3. Inform system where jdk7 located</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo update-alternatives --install "/usr/bin/java" "java" "/usr/local/jdk7/bin/java" 1
-</span><span class='line'>sudo update-alternatives --install "/usr/bin/javac" "javac" "/usr/local/jdk7/bin/javac" 1
-</span><span class='line'>sudo update-alternatives --install "/usr/bin/javaws" "javaws" "/usr/local/jdk7/bin/javaws" 1</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>4. Set jdk7 to be the default jdk</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo update-alternatives --set java /usr/local/jdk7/bin/java
-</span><span class='line'>sudo update-alternatives --set javac /usr/local/jdk7/bin/javac
-</span><span class='line'>sudo update-alternatives --set javaws /usr/local/jdk7/bin/javaws</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>5. Apply /etc/profile</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>source /etc/profile</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>6. Check.</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>java -version
-</span><span class='line'>javac -version</span></code></pre></td></tr></table></div></figure>
-
-]]></content>
-  </entry>
+<span class="categories">
   
-  <entry>
-    <title type="html"><![CDATA[Spring-webflow]]></title>
-    <link href="http://youngjd.com/blog/2014/07/15/spring-webflow/"/>
-    <updated>2014-07-15T13:31:52+08:00</updated>
-    <id>http://youngjd.com/blog/2014/07/15/spring-webflow</id>
-    <content type="html"><![CDATA[<blockquote><p>通过判例可以迅速灵活地反映社会发展对法律调整提出的不同要求，及时确立合乎社会需要的法律规范。成文法考虑的是立法时的社会价值标准，而不是案件发生时的社会价值标准，因此，只要法律没有改变，不管现实的价值标准同立法时的价值标准发生怎样的冲突，都只能依照法律的规定处理案件。<br/>
-&mdash;&mdash; <a href="http://book.douban.com/subject/1391975/">《普通法与自由主义理论:柯克霍布斯及美国宪政主义之诸源头》</a></p></blockquote>
-
-<!-- more -->
-
-
-<p>这篇博客先从宏观上认识spring-webflow。主要了解如何定义一个简单的流程。</p>
-
-<hr />
-
-<br>
-
-
-<h3>元素</h3>
-
-<h4>1. flow</h4>
-
-<p>流程节点，是一个流程中的根节点元素，作为整个流程的输入，流程的所有状态都要定义在这个节点的内部。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
-</span><span class='line'><span class="nt">&lt;flow</span> <span class="na">xmlns=</span><span class="s">&quot;http://www.springframework.org/schema/webflow&quot;</span>
-</span><span class='line'>      <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
-</span><span class='line'>      <span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.springframework.org/schema/webflow</span>
-</span><span class='line'><span class="s">                          http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nt">&lt;/flow&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>2. view-state</h4>
-
-<p>视图状态节点，用于定义流程中渲染页面的一个步骤。一般约定一个视图状态的id映射实际页面文件的id(文件名)</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;view-state</span> <span class="na">id=</span><span class="s">&quot;enterBookingDetails&quot;</span> <span class="nt">/&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>3. transition</h4>
-
-<p>状态转换节点，用于处理发生在状态内的事件。transitions会驱动页面的导航。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;view-state</span> <span class="na">id=</span><span class="s">&quot;enterBookingDetails&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>    <span class="c">&lt;!-- 当接收到submit事件后，流程就会从enterBookingDetails状态跳转到reviewBooking状态 --&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;transition</span> <span class="na">on=</span><span class="s">&quot;submit&quot;</span> <span class="na">to=</span><span class="s">&quot;reviewBooking&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'><span class="nt">&lt;/view-state&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>4. end-state</h4>
-
-<p>结束状态节点，作为一个流程的输出。当流程转换到end-state，则会终止流程并返回输出。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;end-state</span> <span class="na">id=</span><span class="s">&quot;bookingCancelled&quot;</span> <span class="nt">/&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<hr />
-
-<br>
-
-
-<p>参考链接</p>
-
-<ul>
-<li><a href="http://docs.spring.io/spring-webflow/docs/2.4.0.RELEASE/reference/html/defining-flows.html">spring-webflow</a></li>
-</ul>
-
-]]></content>
-  </entry>
+    <a class='category' href='/blog/categories/english/'>english</a>, <a class='category' href='/blog/categories/java/'>java</a>, <a class='category' href='/blog/categories/program/'>program</a>
   
-  <entry>
-    <title type="html"><![CDATA[Markdown]]></title>
-    <link href="http://youngjd.com/blog/2014/07/14/markdown/"/>
-    <updated>2014-07-14T17:06:40+08:00</updated>
-    <id>http://youngjd.com/blog/2014/07/14/markdown</id>
-    <content type="html"><![CDATA[<blockquote><p>所谓设计就是，以非现有的逻辑的逻辑，解决现有逻辑解决不了的问题。 &mdash; <a href="http://baike.baidu.com/view/548853.htm?fr=aladdin">蒋友柏</a></p></blockquote>
-
-<!--More-->
+</span>
 
 
-<hr />
-
-<br>
-
-
-<p>这篇文章主要记录Markdown的基础语法。</p>
-
-<blockquote><p>Markdown 是一种轻量级标记语言，创始人为约翰·格鲁伯（John Gruber）。它允许人们“使用易读易写的纯文本格式编写文档，然后转换成有效的XHTML(或者HTML)文档”。&mdash; <a href="http://zh.wikipedia.org/wiki/Markdown">wikipedia</a></p></blockquote>
-
-<h2>标题</h2>
-
-<pre><code># 这是标题1
-## 这是标题2
-### 这是标题3
-###### 这是标题6
-</code></pre>
-
-<h2>引用</h2>
-
-<pre><code>&gt; 这是引用
-&gt; 还是引用
-&gt; 也是引用
-</code></pre>
-
-<h2>清单</h2>
-
-<pre><code>* 鼠标
-* 键盘
-* 耳机
-</code></pre>
-
-<h2>链接</h2>
-
-<pre><code>[链接名](url)
-</code></pre>
-
-<hr />
-
-<br>
-
-
-<p>参考链接</p>
-
-<ul>
-<li><a href="http://markdown.tw/">http://markdown.tw/</a></li>
-</ul>
-
-]]></content>
-  </entry>
+    </p>
+    
+      <div class="sharing">
   
-  <entry>
-    <title type="html"><![CDATA[Tyler's WARNING]]></title>
-    <link href="http://youngjd.com/blog/2014/07/13/first-blog/"/>
-    <updated>2014-07-13T16:26:55+08:00</updated>
-    <id>http://youngjd.com/blog/2014/07/13/first-blog</id>
-    <content type="html"><![CDATA[<blockquote><p>WARNING<br>
-If you are reading this then this warning is for you. <br>
-Every word you read of this useless fine print is another second off you life. <br>
-Do not you have other thing to do? <br>
-Is your life so empty that you honestly can&rsquo;t think of a better way to spend these moments？ <br>
-Or are you so impressed with authority that you give respect and credence to all who claim it？Do you read everything you are supposed read？ <br>
-Do you think everything you are supposed think？ <br>
-Buy what you are told you should want？ <br>
-Get out of your apartment. Meet a member of the opposite sex. <br>
-Stop the excessive shopping and masturbation. <br>
-Quit your job. Start a fight. Prove you are alive. <br>
-If you do not claim your humanity you will become a statistic. <br>
-You have been warned&hellip;&hellip; <br>
-Tyler.  &mdash;<a href="http://movie.douban.com/subject/1292000/">《搏击俱乐部》</a></p></blockquote>
-
-<!--More-->
-
-]]></content>
-  </entry>
   
-</feed>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/07/20/the-docker-user-guide/" title="Previous Post: the_docker_user_guide">&laquo; the_docker_user_guide</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/07/25/java-getters-and-setters/">Java: Getters and Setters</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/20/the-docker-user-guide/">The_docker_user_guide</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/16/install-jdk-on-ubuntu/">Install-jdk-on-ubuntu</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/15/spring-webflow/">Spring-webflow</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/14/markdown/">Markdown</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - battousai -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <script type="text/javascript">
+	;(function($) {
+	    $(function() {
+	        var url=document.referrer;
+	        if ( url && url.search("http://")>-1) {
+	            var refurl =  url.match(/:\/\/(.[^/]+)/)[1];
+	            if(refurl.indexOf("baidu.com")>-1){
+	                alert('sayno to baidu');
+	            }
+	        }
+	    });
+
+	})(jQuery);
+   </script>
+</body>
+</html>
