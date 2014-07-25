@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | battousai's blog]]></title>
   <link href="http://youngjd.com/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://youngjd.com/"/>
-  <updated>2014-07-25T11:01:17+08:00</updated>
+  <updated>2014-07-25T11:20:36+08:00</updated>
   <id>http://youngjd.com/</id>
   <author>
     <name><![CDATA[battousai]]></name>
@@ -38,7 +38,7 @@
 <br>
 
 
-<blockquote><p>我们为什么要把实例变量保持私有呢?因为我们并不希望其他的类过度地依赖它们,并且我们不希望它们会被随意的更改.为什么很多程序员在用IDE编写程序的时候,都会不假思索,娴熟地利用快捷键自动生成getter和setter方法并且这些setter和getter方法并没有特殊地实现,他们用这种形式去暴露私有变量,这样的话,那跟直接设置成public有什么区别呢?</p></blockquote>
+<blockquote><p>我们为什么要把实例变量保持私有呢?因为我们并不希望其他的类过度地依赖它们,并且我们不希望它们会被随意的更改.为什么很多程序员在用IDE编写程序的时候,都会不假思索,娴熟地利用快捷键自动生成getter和setter方法,并且这些setter和getter方法并没有特殊的实现,他们用这种形式去暴露私有变量,这样的话,那跟直接设置成public有什么区别呢?</p></blockquote>
 
 <h2>Accessor methods(访问方法)</h2>
 
