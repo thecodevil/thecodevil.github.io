@@ -259,7 +259,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>看到这里，我们发现了一些苗头了。在getMessageConverters里面，它会判断是否jackson2Present，如果是，则会默认地把MappingJackson2HttpMessageConverter添加到messageConverters列表中。而MappingJackson2HttpMessageConverter就会用到jackson包去做解释json的工作了。所以现在关键就是看看jackson2Present这个判断了。</p>
+<p>看到这里，我们似乎看到一些些苗头了。在getMessageConverters方法里，它会判断是否<strong>jackson2Present(全局boolean常量)</strong>，如果是，则会默认地把MappingJackson2HttpMessageConverter添加到messageConverters列表中。而MappingJackson2HttpMessageConverter就会用到jackson包去做解释json的工作了。所以现在关键就是看看<strong>jackson2Present</strong>到底是什么东东。</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -270,7 +270,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>看到这行代码，我恍然大悟了(哈哈)。原来它是通过判断有没有加载到与jackson相关的包来决定是否把MappingJackson2HttpMessageConverter添加到转换器队列中的。接下来，我们再稍微看看它是如何写信息的。</p>
+<p>看到这行代码，应该就会有种&#8221;原来如此&#8221;的感觉了。它是通过判断类加载器有没有加载到与jackson相关的依赖包来决定是否把MappingJackson2HttpMessageConverter添加到转换器队列中的。接下来，我们再稍微看看它是如何写信息的。</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -372,7 +372,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>spring会用一系列的方法去判断当前这个converter是否能以返回值的类型正确输出(校验很多，没细看，大家可以去研究一下，反正大概就是这个样子了)。如果可以就把这个转换器的自身的SupportedMediaTypes加入到producibleMediaTypes中。后面还会再循环判断一次，但后面的判断是，一旦遇到了合适的转换器就会使用它来写返回信息。假如后面还有与producibleMediaTypes匹配的converter，就被忽略了(这里会有一个简单的默认排序和优先规则在这里)。</p>
+<p>spring会用一系列的方法去判断当前这个converter是否能以返回值的类型来正确输出(校验很多，没细看，大家可以去研究一下，反正大概就是这个样子了)。如果可以就把这个转换器的自身的SupportedMediaTypes加入到producibleMediaTypes中。后面还会再循环判断一次，但后面的判断是，一旦遇到了合适的转换器就会使用它来写返回信息。假如后面还有与producibleMediaTypes匹配的converter，就被忽略了(这里会有一个简单的默认排序和优先规则在这里)。</p>
 
 <p>时间仓促，讲得比较粗略，这篇文章以后还会继续完善。希望文章对大家有所帮助。</p>
 </div>
