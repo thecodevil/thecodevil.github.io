@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Program | battousai's blog]]></title>
   <link href="http://youngjd.com/blog/categories/program/atom.xml" rel="self"/>
   <link href="http://youngjd.com/"/>
-  <updated>2014-07-25T11:20:36+08:00</updated>
+  <updated>2014-07-28T09:41:16+08:00</updated>
   <id>http://youngjd.com/</id>
   <author>
     <name><![CDATA[battousai]]></name>
@@ -12,6 +12,389 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Spring_message_converter]]></title>
+    <link href="http://youngjd.com/blog/2014/07/27/spring-message-converter/"/>
+    <updated>2014-07-27T23:21:19+08:00</updated>
+    <id>http://youngjd.com/blog/2014/07/27/spring-message-converter</id>
+    <content type="html"><![CDATA[<blockquote><p>与其说星巴克是在卖咖啡，不如说是在卖预先定制好的体验。如果考虑星巴克顾客实际消费的产品，就会发现咖啡其实并不是关键产品。实际上，星巴克希望自己成为你的另一个家。星巴克在其2004年的年报中解释道，公司的目标是成为人们除了家庭和工作场所之外的第三个场所，让人在其中感到舒适并保持忠诚。&mdash; <a href="http://book.douban.com/subject/19934344/">《交互设计沉思录》</a></p></blockquote>
+
+<!-- more -->
+
+
+<hr />
+
+<p>工作的时候有个同事提出了这样一个疑问。
+```xml</p>
+
+<!-- 省略了namespace -->
+
+
+<p><beans></p>
+
+<pre><code>&lt;mvc:annotation-driven/&gt;    
+&lt;context:component-scan base-package="com.springapp.mvc"/&gt;
+
+&lt;bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"&gt;
+    &lt;property name="prefix" value="/WEB-INF/pages/"/&gt;
+    &lt;property name="suffix" value=".jsp"/&gt;
+&lt;/bean&gt;
+</code></pre>
+
+<p></beans>
+<code>
+</code>java
+@Controller
+@RequestMapping(&ldquo;/&rdquo;)
+public class HelloController {</p>
+
+<pre><code>@RequestMapping(method = RequestMethod.GET)
+@ResponseBody
+public JsonResult printWelcome() {
+    return new JsonResult(1001, "test").putData("name", "imyoung");
+}
+</code></pre>
+
+<p>}
+<code>
+为什么这么简单的配置，spring就能够识别到你返回的是一个Json，从配置里压根就看不到任何头绪。我头一蒙，原来自己还真没有考虑过这个问题，所以就去捣腾了一下。我还记得以前spring的COC(convention over configuration)还没有成风潮，那时候配置这个的时候，我翻阅了一下资料，有两行配置大概是这个样子的。
+</code>xml
+<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />
+<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter" />
+<code>
+查看一下RequestMappingHandlerAdapter的源码
+</code>java
+public RequestMappingHandlerAdapter() {</p>
+
+<pre><code>this.messageConverters.add(new ByteArrayHttpMessageConverter());
+this.messageConverters.add(stringHttpMessageConverter);
+this.messageConverters.add(new SourceHttpMessageConverter&lt;Source&gt;());
+this.messageConverters.add(new AllEncompassingFormHttpMessageConverter());
+</code></pre>
+
+<p>}
+<code>
+按照这种配置，RequestMappingHandlerAdapter就只是注册了4个信息转换器，清晰的看到，这里面并没有我们熟悉的mappingJacksonHttpMessageConverter。所以我们以前配置这个的时候，还会加上mappingJacksonHttpMessageConverter的bean注入。
+</code>java
+<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"></p>
+
+<pre><code>&lt;property name="messageConverters"&gt;
+    &lt;list&gt;
+        &lt;ref bean="mappingJacksonHttpMessageConverter"/&gt;
+    &lt;/list&gt;
+&lt;/property&gt;
+</code></pre>
+
+<p></bean>
+<code>
+这个配置方式就是我那个同事以前常看到的一种比较传统的配置方式。随着spring的发展，spring越来越重视这种约定大于配置的能够减少很多代码量的风格。就会有了文章开头的那种简洁的配置
+</code>xml</p>
+
+<!-- 这个配置其实还包含了很多东西,我这里写的只是其中一小项 -->
+
+
+<p>&lt;mvc:annotation-driven/>
+<code>
+假如我们在配置文件里面使用了这种配置方式，来看看spring大概做了些什么。
+</code>java
+ */
+public class MvcNamespaceHandler extends NamespaceHandlerSupport {</p>
+
+<pre><code>@Override
+public void init() {
+    registerBeanDefinitionParser("annotation-driven", new AnnotationDrivenBeanDefinitionParser());
+    registerBeanDefinitionParser("default-servlet-handler", new DefaultServletHandlerBeanDefinitionParser());
+    registerBeanDefinitionParser("interceptors", new InterceptorsBeanDefinitionParser());
+    registerBeanDefinitionParser("resources", new ResourcesBeanDefinitionParser());
+    registerBeanDefinitionParser("view-controller", new ViewControllerBeanDefinitionParser());
+}
+</code></pre>
+
+<p>}
+<code>
+在这个类里面，init方法里面的第一行就是注册一个bean的对于annotation-driven这个定义的解释器，再来看看解释器的几个方法
+</code>java
+//我抽取了我们关注的代码
+class AnnotationDrivenBeanDefinitionParser implements BeanDefinitionParser {</p>
+
+<pre><code>public BeanDefinition parse(Element element, ParserContext parserContext) {
+    // ...
+    ManagedList&lt;?&gt; messageConverters = getMessageConverters(element, source, parserContext);
+    // ...
+    handlerAdapterDef.getPropertyValues().add("messageConverters", messageConverters);
+}
+
+private ManagedList&lt;?&gt; getMessageConverters(Element element, Object source, ParserContext parserContext) {
+    // ...
+    if (jackson2Present) {
+        messageConverters.add(createConverterDefinition(MappingJackson2HttpMessageConverter.class, source));
+    }
+    // ...
+}
+</code></pre>
+
+<p>}
+<code>
+看到这里，我们发现了一些苗头了。在getMessageConverters里面，它会判断是否jackson2Present，如果是，则会默认地把MappingJackson2HttpMessageConverter添加到messageConverters列表中。而MappingJackson2HttpMessageConverter就会用到jackson包去做解释json的工作了。所以现在关键就是看看jackson2Present这个判断了。
+</code>java
+private static final boolean jackson2Present =</p>
+
+<pre><code>        ClassUtils.isPresent("com.fasterxml.jackson.databind.ObjectMapper", AnnotationDrivenBeanDefinitionParser.class.getClassLoader()) &amp;&amp;
+                ClassUtils.isPresent("com.fasterxml.jackson.core.JsonGenerator", AnnotationDrivenBeanDefinitionParser.class.getClassLoader());
+</code></pre>
+
+<p><code>
+看到这行代码，我恍然大悟了(哈哈)。原来它是通过判断有没有加载到与jackson相关的包来决定是否把MappingJackson2HttpMessageConverter添加到转换器队列中的。接下来，我们再稍微看看它是如何写信息的。
+</code>java
+public abstract class AbstractMessageConverterMethodProcessor extends AbstractMessageConverterMethodArgumentResolver implements HandlerMethodReturnValueHandler {</p>
+
+<pre><code>protected &lt;T&gt; void writeWithMessageConverters(T returnValue, MethodParameter returnType, ServletServerHttpRequest inputMessage, ServletServerHttpResponse outputMessage) throws IOException, HttpMediaTypeNotAcceptableException {
+
+    // ...
+    List&lt;MediaType&gt; requestedMediaTypes = getAcceptableMediaTypes(servletRequest);
+    List&lt;MediaType&gt; producibleMediaTypes = getProducibleMediaTypes(servletRequest, returnValueClass);
+    // ...
+    if (selectedMediaType != null) {
+        selectedMediaType = selectedMediaType.removeQualityValue();
+        for (HttpMessageConverter&lt;?&gt; messageConverter : this.messageConverters) {
+            if (messageConverter.canWrite(returnValueClass, selectedMediaType)) {
+                ((HttpMessageConverter&lt;T&gt;) messageConverter).write(returnValue, selectedMediaType, outputMessage);
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Written [" + returnValue + "] as \"" + selectedMediaType + "\" using [" +
+                            messageConverter + "]");
+                }
+                return;
+            }
+        }
+    }
+    // ...
+}
+</code></pre>
+
+<p>}     <br/>
+<code>
+这里我只是简单地带过一下(因为我也没有太深入地去追踪到里面)。这个方法其实就是把信息转换器列表的每一个信息转换器与MediaType做一个匹配，匹配上了就用匹配的信息转换器来写返回信息。开始的时候，已经默认地带上了一些requestedMediaTypes了。
+</code>java
+text/html
+image/gif
+image/jpeg
+<em>/</em>;q=.2
+<code>
+这里主要看的是最后一个，wildcard（通配符形式）的。再看看producibleMediaTypes，就是要产出的mediaType是怎么生成的。
+</code>java
+protected List<MediaType> getProducibleMediaTypes(HttpServletRequest request, Class&lt;?> returnValueClass) {</p>
+
+<pre><code>// ...
+List&lt;MediaType&gt; result = new ArrayList&lt;MediaType&gt;();
+for (HttpMessageConverter&lt;?&gt; converter : messageConverters) {
+    if (converter.canWrite(returnValueClass, null)) {
+        result.addAll(converter.getSupportedMediaTypes());
+    }
+}
+// ...
+</code></pre>
+
+<p>}
+<code>
+它主要是通过判断你的返回值的类型去作判断的。我这里的例子用的是下面这个返回类
+</code>java
+public class JsonResult {</p>
+
+<pre><code>private int code;
+private String msg;
+</code></pre>
+
+<p>}
+```
+spring会用一系列的方法去判断当前这个converter是否能以返回值的类型正确输出(校验很多，没细看，大家可以去研究一下，反正大概就是这个样子了)。如果可以就把这个转换器的自身的SupportedMediaTypes加入到producibleMediaTypes中。后面还会再循环判断一次，但后面的判断是，一旦遇到了合适的转换器就会使用它来写返回信息。假如后面还有与producibleMediaTypes匹配的converter，就被忽略了(这里会有一个简单的默认排序和优先规则在这里)。</p>
+
+<p>时间仓促，讲得比较粗略，这篇文章以后还会继续完善。希望文章对大家有所帮助。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Ibatis_faq]]></title>
+    <link href="http://youngjd.com/blog/2014/07/25/ibatis-faq/"/>
+    <updated>2014-07-25T13:04:05+08:00</updated>
+    <id>http://youngjd.com/blog/2014/07/25/ibatis-faq</id>
+    <content type="html"><![CDATA[<blockquote><p>怎样表述一个命题才算是科学的？按照证伪派，它必须有可能被证明是错误的。
+比如“所有的乌鸦都是黑的”，那么你只要找到一只不是黑色的乌鸦，就可以证明这
+个命题的错误，因此这个命题没有问题。相反，如果非要“证实”才接受这个论断的
+话，那可就困难了，而且实际上是不可能的！除非你把所有的乌鸦都抓来看过，但你
+又怎么能知道你已经抓尽了天下所有的乌鸦呢？ &mdash; <a href="http://book.douban.com/subject/1467022/">《上帝掷骰子吗》</a></p></blockquote>
+
+<!-- more -->
+
+
+<hr />
+
+<br>
+
+
+<h2>ibatis中#与$的区别</h2>
+
+<p>案例
+```java
+/<strong>
+* Spring Controller
+* 访问的url &ndash;> <a href="http://localhost:8080/promotions?start=1&amp;limit=0">http://localhost:8080/promotions?start=1&amp;limit=0</a>
+</strong>/
+@RequestMapping(method = RequestMethod.GET)
+public JsonResult list(@RequestParam Map&lt;String, Object> params) {</p>
+
+<pre><code>List&lt;Promotion&gt; promotions = promotionMapper.list(params);
+// remaining code here
+</code></pre>
+
+<p>}</p>
+
+<p>/<strong>
+* Mapper接口
+</strong>/
+public interface PromotionMapper {</p>
+
+<pre><code>List&lt;Promotion&gt; list(Map&lt;String, Object&gt; params);
+</code></pre>
+
+<p>}
+```</p>
+
+<p>```xml
+<select id="list" resultType="Promotion"></p>
+
+<pre><code>SELECT id, productId, imgUrls
+FROM limitedtimediscount WHERE status = 1 AND endDate &gt;= now()
+ORDER BY beginDate DESC
+&lt;if test="start != null and limit != null"&gt;
+    LIMIT #{start}, #{limit}
+&lt;/if&gt;
+</code></pre>
+
+<p></select>
+```</p>
+
+<p>上面的代码中，我用了#号来获取map参数集合中的对应的start和limit值。运行报错
+```</p>
+
+<h3>The error may involve defaultParameterMap</h3>
+
+<h3>The error occurred while setting parameters</h3>
+
+<h3>SQL: SELECT id, productId, imgUrls         FROM limitedtimediscount WHERE status = 1 AND endDate >= now()  ORDER BY beginDate DESC  LIMIT ?, ?</h3>
+
+<h3>Cause: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near &lsquo;'1&rsquo;, &lsquo;0&rsquo;&lsquo; at line 5</h3>
+
+<p>; bad SQL grammar []; nested exception is com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near &lsquo;'1&rsquo;, &lsquo;0&rsquo;&lsquo; at line 5
+<code>
+从log可以看出，我传进来的1和0被当成了字符串'1'和'0'了，在mysql limit的语法中，这显然是错误的。
+这时候我想到的是能不能转型，所以我又把sql改成下面这样子
+</code>xml
+<select id="list" resultType="Promotion"></p>
+
+<pre><code>SELECT id, productId, imgUrls
+FROM limitedtimediscount WHERE status = 1 AND endDate &gt;= now()
+ORDER BY beginDate DESC
+&lt;if test="start != null and limit != null"&gt;
+    LIMIT #{start, javaType=int}, #{limit, javaType=int}
+&lt;/if&gt;
+</code></pre>
+
+<p></select>
+<code>
+运行后又报了不一样的错误
+</code></p>
+
+<h3>Error querying database.  Cause: java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Integer</h3>
+
+<h3>The error may exist in sqlmap/PromotionMapper.xml</h3>
+
+<h3>The error may involve defaultParameterMap</h3>
+
+<h3>The error occurred while setting parameters</h3>
+
+<h3>SQL: SELECT id, productId, imgUrls         FROM limitedtimediscount WHERE status = 1 AND endDate >= now()         ORDER BY beginDate DESC                       LIMIT ?, ?</h3>
+
+<h3>Cause: java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Integer</h3>
+
+<p><code>
+这次是说String不能转换成Integer
+接着我在网上搜索资料，找到了这么一篇[文章](http://shenzhenchufa.blog.51cto.com/730213/254561)，哦，原来ibatis中#和$是不一样的，引用原文的话
+</code>
+1.#是把传入的数据当作字符串，如#field#传入的是id,则sql语句生成是这样，order by &ldquo;id&rdquo;,这当然会报错.
+2.$传入的数据直接生成在sql里，如#field#传入的是id,则sql语句生成是这样，order by id, 这就对了.
+<code>
+因此，只要把#{start}, #{limit}改成${start}, ${limit}就可以返回正确的结果。但在这个案例中，还存在另外一个问题。根据原文提到的。
+</code>
+$方式一般用于传入数据库对象．例如传入表名.</p>
+
+<h1>方式一般用于传入插入/更新的值或查询/删除的where条件</h1>
+
+<p><code>
+他的说法我基本认同，因此在我的案例中使用$解决问题只是一个trick，我觉得还是不够科学。下面我写了几行代码验证了几个基础知识
+</code>java
+public static void main(String[] args) {</p>
+
+<pre><code>Map&lt;String, Object&gt; map = new java.util.HashMap&lt;String, Object&gt;();
+map.put("1", 1);
+map.put("2", "2");
+map.put("3", 2.1);
+System.out.println("---------------check int--------------");
+System.out.println("1 instanceof Integer:" + (map.get("1") instanceof Integer));
+System.out.println("1 instanceof String:" + (map.get("1") instanceof String));
+System.out.println("1 instanceof Object:" + (map.get("1") instanceof Object));
+
+System.out.println("---------------check string--------------");
+System.out.println("'2' instanceof Double:" + (map.get("2") instanceof String));
+System.out.println("'2' instanceof Integer:" + (map.get("2") instanceof Integer));
+System.out.println("'2' instanceof Object:" + (map.get("2") instanceof Object));
+
+System.out.println("---------------check double--------------");
+System.out.println("2.1 instanceof Double:" + (map.get("3") instanceof Double));
+System.out.println("2.1 instanceof Integer:" + (map.get("3") instanceof Integer));
+System.out.println("2.1 instanceof String:" + (map.get("3") instanceof String));
+System.out.println("2.1 instanceof Object:" + (map.get("3") instanceof Object));
+</code></pre>
+
+<p>}</p>
+
+<p>output:
+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;-check int&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;
+1 instanceof Integer:true
+1 instanceof String:false
+1 instanceof Object:true</p>
+
+<p>&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;-check string&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;
+&ldquo;2&rdquo; instanceof Double:true
+&ldquo;2&rdquo; instanceof Integer:false
+&ldquo;2&rdquo; instanceof Object:true</p>
+
+<p>&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;-check double&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;
+2.1 instanceof Double:true
+2.1 instanceof Integer:false
+2.1 instanceof String:false
+2.1 instanceof Object:true
+```</p>
+
+<p>```java
+@RequestMapping(method = RequestMethod.GET)
+public JsonResult list(@RequestParam Map&lt;String, Object> params) {</p>
+
+<pre><code>System.out.println("start instanceof Integer:" + params.get("start"));
+System.out.println("start instanceof String:" + params.get("start"));
+// remaining code here
+</code></pre>
+
+<p>}</p>
+
+<p>output:
+start instanceof Integer:false
+start instanceof String:true
+```</p>
+
+<p>没写完&hellip;&hellip;&hellip;&hellip;.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Java: Getters and Setters]]></title>
@@ -144,7 +527,7 @@ public Screen getById(String id) {
 
 <p>所有的属性都应该保持私有,当只有把对象设置成不可变的时候,setter方法才有那么一点能够被理解.增加一个没啥必要的getter方法,揭露了类的内部信息,增加了产生耦合的可能性.</p>
 
-<p><strong>所以啊,为了规避上述这些脑子被门缝夹过后才有可能会干出的鸟事,大伙在使用快捷键愉快地自动生成get/set方法,在妹子面前炫耀你牛A闪闪的手速的之前,还是先多拍几下自己的脑袋,也许能够拍出个更美妙的封装方法也说不定哦.</strong></p>
+<p><strong>所以啊,为了规避上述这些脑子被门缝夹过后才有可能会干出的鸟事,大伙在使用快捷键愉快地自动生成get/set方法,在妹子面前炫耀你牛A闪闪的手速之前,还是先多拍几下自己的脑袋,也许能够拍出个更美妙的封装方法也说不定哦.</strong></p>
 
 <p>最后一个例子了,
 ```java
@@ -341,66 +724,6 @@ javac -version
 
 <ul>
 <li><a href="http://docs.spring.io/spring-webflow/docs/2.4.0.RELEASE/reference/html/defining-flows.html">spring-webflow</a></li>
-</ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Markdown]]></title>
-    <link href="http://youngjd.com/blog/2014/07/14/markdown/"/>
-    <updated>2014-07-14T17:06:40+08:00</updated>
-    <id>http://youngjd.com/blog/2014/07/14/markdown</id>
-    <content type="html"><![CDATA[<blockquote><p>所谓设计就是，以非现有逻辑的逻辑，解决现有逻辑不能解决的问题。 &mdash; <a href="http://baike.baidu.com/view/548853.htm?fr=aladdin">蒋友柏</a></p></blockquote>
-
-<!--More-->
-
-
-<hr />
-
-<br>
-
-
-<p>这篇文章主要记录Markdown的基础语法。</p>
-
-<blockquote><p>Markdown 是一种轻量级标记语言，创始人为约翰·格鲁伯（John Gruber）。它允许人们“使用易读易写的纯文本格式编写文档，然后转换成有效的XHTML(或者HTML)文档”。&mdash; <a href="http://zh.wikipedia.org/wiki/Markdown">wikipedia</a></p></blockquote>
-
-<h2>标题</h2>
-
-<pre><code># 这是标题1
-## 这是标题2
-### 这是标题3
-###### 这是标题6
-</code></pre>
-
-<h2>引用</h2>
-
-<pre><code>&gt; 这是引用
-&gt; 还是引用
-&gt; 也是引用
-</code></pre>
-
-<h2>清单</h2>
-
-<pre><code>* 鼠标
-* 键盘
-* 耳机
-</code></pre>
-
-<h2>链接</h2>
-
-<pre><code>[链接名](url)
-</code></pre>
-
-<hr />
-
-<br>
-
-
-<p>参考链接</p>
-
-<ul>
-<li><a href="http://markdown.tw/">http://markdown.tw/</a></li>
 </ul>
 
 ]]></content>

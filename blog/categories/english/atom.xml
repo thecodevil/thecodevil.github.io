@@ -4,7 +4,7 @@
   <title><![CDATA[Category: English | battousai's blog]]></title>
   <link href="http://youngjd.com/blog/categories/english/atom.xml" rel="self"/>
   <link href="http://youngjd.com/"/>
-  <updated>2014-07-25T11:20:36+08:00</updated>
+  <updated>2014-07-28T09:41:16+08:00</updated>
   <id>http://youngjd.com/</id>
   <author>
     <name><![CDATA[battousai]]></name>
@@ -144,7 +144,7 @@ public Screen getById(String id) {
 
 <p>所有的属性都应该保持私有,当只有把对象设置成不可变的时候,setter方法才有那么一点能够被理解.增加一个没啥必要的getter方法,揭露了类的内部信息,增加了产生耦合的可能性.</p>
 
-<p><strong>所以啊,为了规避上述这些脑子被门缝夹过后才有可能会干出的鸟事,大伙在使用快捷键愉快地自动生成get/set方法,在妹子面前炫耀你牛A闪闪的手速的之前,还是先多拍几下自己的脑袋,也许能够拍出个更美妙的封装方法也说不定哦.</strong></p>
+<p><strong>所以啊,为了规避上述这些脑子被门缝夹过后才有可能会干出的鸟事,大伙在使用快捷键愉快地自动生成get/set方法,在妹子面前炫耀你牛A闪闪的手速之前,还是先多拍几下自己的脑袋,也许能够拍出个更美妙的封装方法也说不定哦.</strong></p>
 
 <p>最后一个例子了,
 ```java

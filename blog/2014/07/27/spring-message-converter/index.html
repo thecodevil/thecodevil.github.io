@@ -1,0 +1,514 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Spring_message_converter - battousai's blog</title>
+  <meta name="author" content="battousai">
+
+  
+  <meta name="description" content="与其说星巴克是在卖咖啡，不如说是在卖预先定制好的体验。如果考虑星巴克顾客实际消费的产品，就会发现咖啡其实并不是关键产品。实际上，星巴克希望自己成为你的另一个家。星巴克在其2004年的年报中解释道，公司的目标是成为人们除了家庭和工作场所之外的第三个场所，让人在其中感到舒适并保持忠诚。&mdash &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://youngjd.com/blog/2014/07/27/spring-message-converter">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+   <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="battousai's blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts 
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+-->
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">battousai's blog</a></h1>
+  
+    <h2>“倘若我此刻封刀，以前所杀的人便死得毫无意义。人人都苦心经营渺小的幸福，在能缔造更大幸福的新时代建立前……我仍会继续挥剑” -- 绯村剑心</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:youngjd.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/aboutme">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Spring_message_converter</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-27T23:21:19+08:00" pubdate data-updated="true">2014-07-27</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><blockquote><p>与其说星巴克是在卖咖啡，不如说是在卖预先定制好的体验。如果考虑星巴克顾客实际消费的产品，就会发现咖啡其实并不是关键产品。实际上，星巴克希望自己成为你的另一个家。星巴克在其2004年的年报中解释道，公司的目标是成为人们除了家庭和工作场所之外的第三个场所，让人在其中感到舒适并保持忠诚。&mdash; <a href="http://book.douban.com/subject/19934344/">《交互设计沉思录》</a></p></blockquote>
+
+<!-- more -->
+
+
+<hr />
+
+<p>工作的时候有个同事提出了这样一个疑问。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="c">&lt;!-- 省略了namespace --&gt;</span>
+</span><span class='line'><span class="nt">&lt;beans&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;mvc:annotation-driven/&gt;</span>  
+</span><span class='line'>    <span class="nt">&lt;context:component-scan</span> <span class="na">base-package=</span><span class="s">&quot;com.springapp.mvc&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.springframework.web.servlet.view.InternalResourceViewResolver&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;prefix&quot;</span> <span class="na">value=</span><span class="s">&quot;/WEB-INF/pages/&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;suffix&quot;</span> <span class="na">value=</span><span class="s">&quot;.jsp&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/bean&gt;</span>
+</span><span class='line'><span class="nt">&lt;/beans&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Controller</span>
+</span><span class='line'><span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&quot;/&quot;</span><span class="o">)</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloController</span> <span class="o">{</span>
+</span><span class='line'>  <span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">method</span> <span class="o">=</span> <span class="n">RequestMethod</span><span class="o">.</span><span class="na">GET</span><span class="o">)</span>
+</span><span class='line'>    <span class="nd">@ResponseBody</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="n">JsonResult</span> <span class="nf">printWelcome</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="k">new</span> <span class="nf">JsonResult</span><span class="o">(</span><span class="mi">1001</span><span class="o">,</span> <span class="s">&quot;test&quot;</span><span class="o">).</span><span class="na">putData</span><span class="o">(</span><span class="s">&quot;name&quot;</span><span class="o">,</span> <span class="s">&quot;imyoung&quot;</span><span class="o">);</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>为什么这么简单的配置，spring就能够识别到你返回的是一个Json，从配置里压根就看不到任何头绪。我头一蒙，原来自己还真没有考虑过这个问题，所以就去捣腾了一下。我还记得以前spring的COC(convention over configuration)还没有成风潮，那时候配置这个的时候，我翻阅了一下资料，有两行配置大概是这个样子的。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter&quot;</span> <span class="nt">/&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>查看一下RequestMappingHandlerAdapter的源码</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="nf">RequestMappingHandlerAdapter</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">this</span><span class="o">.</span><span class="na">messageConverters</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">ByteArrayHttpMessageConverter</span><span class="o">());</span>
+</span><span class='line'>  <span class="k">this</span><span class="o">.</span><span class="na">messageConverters</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">stringHttpMessageConverter</span><span class="o">);</span>
+</span><span class='line'>  <span class="k">this</span><span class="o">.</span><span class="na">messageConverters</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">SourceHttpMessageConverter</span><span class="o">&lt;</span><span class="n">Source</span><span class="o">&gt;());</span>
+</span><span class='line'>  <span class="k">this</span><span class="o">.</span><span class="na">messageConverters</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">AllEncompassingFormHttpMessageConverter</span><span class="o">());</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>按照这种配置，RequestMappingHandlerAdapter就只是注册了4个信息转换器，清晰的看到，这里面并没有我们熟悉的mappingJacksonHttpMessageConverter。所以我们以前配置这个的时候，还会加上mappingJacksonHttpMessageConverter的bean注入。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="o">&lt;</span><span class="n">bean</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="n">property</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;messageConverters&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>      <span class="o">&lt;</span><span class="n">list</span><span class="o">&gt;</span>
+</span><span class='line'>          <span class="o">&lt;</span><span class="n">ref</span> <span class="n">bean</span><span class="o">=</span><span class="s">&quot;mappingJacksonHttpMessageConverter&quot;</span><span class="o">/&gt;</span>
+</span><span class='line'>      <span class="o">&lt;/</span><span class="n">list</span><span class="o">&gt;</span>
+</span><span class='line'>  <span class="o">&lt;/</span><span class="n">property</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">bean</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个配置方式就是我那个同事以前常看到的一种比较传统的配置方式。随着spring的发展，spring越来越重视这种约定大于配置的能够减少很多代码量的风格。就会有了文章开头的那种简洁的配置</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="c">&lt;!-- 这个配置其实还包含了很多东西,我这里写的只是其中一小项 --&gt;</span>
+</span><span class='line'><span class="nt">&lt;mvc:annotation-driven/&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>假如我们在配置文件里面使用了这种配置方式，来看看spring大概做了些什么。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'> <span class="o">*/</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MvcNamespaceHandler</span> <span class="kd">extends</span> <span class="n">NamespaceHandlerSupport</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nd">@Override</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">init</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">registerBeanDefinitionParser</span><span class="o">(</span><span class="s">&quot;annotation-driven&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="n">AnnotationDrivenBeanDefinitionParser</span><span class="o">());</span>
+</span><span class='line'>      <span class="n">registerBeanDefinitionParser</span><span class="o">(</span><span class="s">&quot;default-servlet-handler&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="n">DefaultServletHandlerBeanDefinitionParser</span><span class="o">());</span>
+</span><span class='line'>      <span class="n">registerBeanDefinitionParser</span><span class="o">(</span><span class="s">&quot;interceptors&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="n">InterceptorsBeanDefinitionParser</span><span class="o">());</span>
+</span><span class='line'>      <span class="n">registerBeanDefinitionParser</span><span class="o">(</span><span class="s">&quot;resources&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="n">ResourcesBeanDefinitionParser</span><span class="o">());</span>
+</span><span class='line'>      <span class="n">registerBeanDefinitionParser</span><span class="o">(</span><span class="s">&quot;view-controller&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="n">ViewControllerBeanDefinitionParser</span><span class="o">());</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在这个类里面，init方法里面的第一行就是注册一个bean的对于annotation-driven这个定义的解释器，再来看看解释器的几个方法</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="c1">//我抽取了我们关注的代码</span>
+</span><span class='line'><span class="kd">class</span> <span class="nc">AnnotationDrivenBeanDefinitionParser</span> <span class="kd">implements</span> <span class="n">BeanDefinitionParser</span> <span class="o">{</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="n">BeanDefinition</span> <span class="nf">parse</span><span class="o">(</span><span class="n">Element</span> <span class="n">element</span><span class="o">,</span> <span class="n">ParserContext</span> <span class="n">parserContext</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="c1">// ...</span>
+</span><span class='line'>      <span class="n">ManagedList</span><span class="o">&lt;?&gt;</span> <span class="n">messageConverters</span> <span class="o">=</span> <span class="n">getMessageConverters</span><span class="o">(</span><span class="n">element</span><span class="o">,</span> <span class="n">source</span><span class="o">,</span> <span class="n">parserContext</span><span class="o">);</span>
+</span><span class='line'>      <span class="c1">// ...</span>
+</span><span class='line'>      <span class="n">handlerAdapterDef</span><span class="o">.</span><span class="na">getPropertyValues</span><span class="o">().</span><span class="na">add</span><span class="o">(</span><span class="s">&quot;messageConverters&quot;</span><span class="o">,</span> <span class="n">messageConverters</span><span class="o">);</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">private</span> <span class="n">ManagedList</span><span class="o">&lt;?&gt;</span> <span class="n">getMessageConverters</span><span class="o">(</span><span class="n">Element</span> <span class="n">element</span><span class="o">,</span> <span class="n">Object</span> <span class="n">source</span><span class="o">,</span> <span class="n">ParserContext</span> <span class="n">parserContext</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="c1">// ...</span>
+</span><span class='line'>      <span class="k">if</span> <span class="o">(</span><span class="n">jackson2Present</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="n">messageConverters</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">createConverterDefinition</span><span class="o">(</span><span class="n">MappingJackson2HttpMessageConverter</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">source</span><span class="o">));</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>      <span class="c1">// ...</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>看到这里，我们发现了一些苗头了。在getMessageConverters里面，它会判断是否jackson2Present，如果是，则会默认地把MappingJackson2HttpMessageConverter添加到messageConverters列表中。而MappingJackson2HttpMessageConverter就会用到jackson包去做解释json的工作了。所以现在关键就是看看jackson2Present这个判断了。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">boolean</span> <span class="n">jackson2Present</span> <span class="o">=</span>
+</span><span class='line'>          <span class="n">ClassUtils</span><span class="o">.</span><span class="na">isPresent</span><span class="o">(</span><span class="s">&quot;com.fasterxml.jackson.databind.ObjectMapper&quot;</span><span class="o">,</span> <span class="n">AnnotationDrivenBeanDefinitionParser</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getClassLoader</span><span class="o">())</span> <span class="o">&amp;&amp;</span>
+</span><span class='line'>                  <span class="n">ClassUtils</span><span class="o">.</span><span class="na">isPresent</span><span class="o">(</span><span class="s">&quot;com.fasterxml.jackson.core.JsonGenerator&quot;</span><span class="o">,</span> <span class="n">AnnotationDrivenBeanDefinitionParser</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getClassLoader</span><span class="o">());</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>看到这行代码，我恍然大悟了(哈哈)。原来它是通过判断有没有加载到与jackson相关的包来决定是否把MappingJackson2HttpMessageConverter添加到转换器队列中的。接下来，我们再稍微看看它是如何写信息的。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">AbstractMessageConverterMethodProcessor</span> <span class="kd">extends</span> <span class="n">AbstractMessageConverterMethodArgumentResolver</span> <span class="kd">implements</span> <span class="n">HandlerMethodReturnValueHandler</span> <span class="o">{</span>
+</span><span class='line'>  <span class="kd">protected</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="kt">void</span> <span class="n">writeWithMessageConverters</span><span class="o">(</span><span class="n">T</span> <span class="n">returnValue</span><span class="o">,</span> <span class="n">MethodParameter</span> <span class="n">returnType</span><span class="o">,</span> <span class="n">ServletServerHttpRequest</span> <span class="n">inputMessage</span><span class="o">,</span> <span class="n">ServletServerHttpResponse</span> <span class="n">outputMessage</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">HttpMediaTypeNotAcceptableException</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">// ...</span>
+</span><span class='line'>      <span class="n">List</span><span class="o">&lt;</span><span class="n">MediaType</span><span class="o">&gt;</span> <span class="n">requestedMediaTypes</span> <span class="o">=</span> <span class="n">getAcceptableMediaTypes</span><span class="o">(</span><span class="n">servletRequest</span><span class="o">);</span>
+</span><span class='line'>      <span class="n">List</span><span class="o">&lt;</span><span class="n">MediaType</span><span class="o">&gt;</span> <span class="n">producibleMediaTypes</span> <span class="o">=</span> <span class="n">getProducibleMediaTypes</span><span class="o">(</span><span class="n">servletRequest</span><span class="o">,</span> <span class="n">returnValueClass</span><span class="o">);</span>
+</span><span class='line'>      <span class="c1">// ...</span>
+</span><span class='line'>      <span class="k">if</span> <span class="o">(</span><span class="n">selectedMediaType</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="n">selectedMediaType</span> <span class="o">=</span> <span class="n">selectedMediaType</span><span class="o">.</span><span class="na">removeQualityValue</span><span class="o">();</span>
+</span><span class='line'>          <span class="k">for</span> <span class="o">(</span><span class="n">HttpMessageConverter</span><span class="o">&lt;?&gt;</span> <span class="n">messageConverter</span> <span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="na">messageConverters</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>              <span class="k">if</span> <span class="o">(</span><span class="n">messageConverter</span><span class="o">.</span><span class="na">canWrite</span><span class="o">(</span><span class="n">returnValueClass</span><span class="o">,</span> <span class="n">selectedMediaType</span><span class="o">))</span> <span class="o">{</span>
+</span><span class='line'>                  <span class="o">((</span><span class="n">HttpMessageConverter</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;)</span> <span class="n">messageConverter</span><span class="o">).</span><span class="na">write</span><span class="o">(</span><span class="n">returnValue</span><span class="o">,</span> <span class="n">selectedMediaType</span><span class="o">,</span> <span class="n">outputMessage</span><span class="o">);</span>
+</span><span class='line'>                  <span class="k">if</span> <span class="o">(</span><span class="n">logger</span><span class="o">.</span><span class="na">isDebugEnabled</span><span class="o">())</span> <span class="o">{</span>
+</span><span class='line'>                      <span class="n">logger</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">&quot;Written [&quot;</span> <span class="o">+</span> <span class="n">returnValue</span> <span class="o">+</span> <span class="s">&quot;] as \&quot;&quot;</span> <span class="o">+</span> <span class="n">selectedMediaType</span> <span class="o">+</span> <span class="s">&quot;\&quot; using [&quot;</span> <span class="o">+</span>
+</span><span class='line'>                              <span class="n">messageConverter</span> <span class="o">+</span> <span class="s">&quot;]&quot;</span><span class="o">);</span>
+</span><span class='line'>                  <span class="o">}</span>
+</span><span class='line'>                  <span class="k">return</span><span class="o">;</span>
+</span><span class='line'>              <span class="o">}</span>
+</span><span class='line'>          <span class="o">}</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>      <span class="c1">// ...</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>      
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这里我只是简单地带过一下(因为我也没有太深入地去追踪到里面)。这个方法其实就是把信息转换器列表的每一个信息转换器与MediaType做一个匹配，匹配上了就用匹配的信息转换器来写返回信息。开始的时候，已经默认地带上了一些requestedMediaTypes了。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">text</span><span class="o">/</span><span class="n">html</span>
+</span><span class='line'><span class="n">image</span><span class="o">/</span><span class="n">gif</span>
+</span><span class='line'><span class="n">image</span><span class="o">/</span><span class="n">jpeg</span>
+</span><span class='line'><span class="o">*/*;</span><span class="n">q</span><span class="o">=.</span><span class="mi">2</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这里主要看的是最后一个，wildcard（通配符形式）的。再看看producibleMediaTypes，就是要产出的mediaType是怎么生成的。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">protected</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">MediaType</span><span class="o">&gt;</span> <span class="nf">getProducibleMediaTypes</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">returnValueClass</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>  <span class="c1">// ...</span>
+</span><span class='line'>  <span class="n">List</span><span class="o">&lt;</span><span class="n">MediaType</span><span class="o">&gt;</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">MediaType</span><span class="o">&gt;();</span>
+</span><span class='line'>  <span class="k">for</span> <span class="o">(</span><span class="n">HttpMessageConverter</span><span class="o">&lt;?&gt;</span> <span class="n">converter</span> <span class="o">:</span> <span class="n">messageConverters</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">if</span> <span class="o">(</span><span class="n">converter</span><span class="o">.</span><span class="na">canWrite</span><span class="o">(</span><span class="n">returnValueClass</span><span class="o">,</span> <span class="kc">null</span><span class="o">))</span> <span class="o">{</span>
+</span><span class='line'>          <span class="n">result</span><span class="o">.</span><span class="na">addAll</span><span class="o">(</span><span class="n">converter</span><span class="o">.</span><span class="na">getSupportedMediaTypes</span><span class="o">());</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>  <span class="c1">// ...</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>它主要是通过判断你的返回值的类型去作判断的。我这里的例子用的是下面这个返回类</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">JsonResult</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="kt">int</span> <span class="n">code</span><span class="o">;</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="n">String</span> <span class="n">msg</span><span class="o">;</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>spring会用一系列的方法去判断当前这个converter是否能以返回值的类型正确输出(校验很多，没细看，大家可以去研究一下，反正大概就是这个样子了)。如果可以就把这个转换器的自身的SupportedMediaTypes加入到producibleMediaTypes中。后面还会再循环判断一次，但后面的判断是，一旦遇到了合适的转换器就会使用它来写返回信息。假如后面还有与producibleMediaTypes匹配的converter，就被忽略了(这里会有一个简单的默认排序和优先规则在这里)。</p>
+
+<p>时间仓促，讲得比较粗略，这篇文章以后还会继续完善。希望文章对大家有所帮助。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">battousai</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-27T23:21:19+08:00" pubdate data-updated="true">2014-07-27</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/java/'>java</a>, <a class='category' href='/blog/categories/program/'>program</a>, <a class='category' href='/blog/categories/spring/'>spring</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/07/25/ibatis-faq/" title="Previous Post: ibatis_faq">&laquo; ibatis_faq</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/07/27/spring-message-converter/">Spring_message_converter</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/25/ibatis-faq/">Ibatis_faq</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/25/java-getters-and-setters/">Java: Getters and Setters</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/20/the-docker-user-guide/">The_docker_user_guide</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/16/install-jdk-on-ubuntu/">Install-jdk-on-ubuntu</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - battousai -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <script type="text/javascript">
+	;(function($) {
+	    $(function() {
+	        var url=document.referrer;
+	        if ( url && url.search("http://")>-1) {
+	            var refurl =  url.match(/:\/\/(.[^/]+)/)[1];
+	            if(refurl.indexOf("baidu.com")>-1){
+	                alert('sayno to baidu');
+	            }
+	        }
+	    });
+
+	})(jQuery);
+   </script>
+</body>
+</html>

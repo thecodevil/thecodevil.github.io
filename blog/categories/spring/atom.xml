@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Spring | battousai's blog]]></title>
   <link href="http://youngjd.com/blog/categories/spring/atom.xml" rel="self"/>
   <link href="http://youngjd.com/"/>
-  <updated>2014-07-25T11:20:36+08:00</updated>
+  <updated>2014-07-28T09:41:16+08:00</updated>
   <id>http://youngjd.com/</id>
   <author>
     <name><![CDATA[battousai]]></name>
@@ -12,6 +12,206 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Spring_message_converter]]></title>
+    <link href="http://youngjd.com/blog/2014/07/27/spring-message-converter/"/>
+    <updated>2014-07-27T23:21:19+08:00</updated>
+    <id>http://youngjd.com/blog/2014/07/27/spring-message-converter</id>
+    <content type="html"><![CDATA[<blockquote><p>与其说星巴克是在卖咖啡，不如说是在卖预先定制好的体验。如果考虑星巴克顾客实际消费的产品，就会发现咖啡其实并不是关键产品。实际上，星巴克希望自己成为你的另一个家。星巴克在其2004年的年报中解释道，公司的目标是成为人们除了家庭和工作场所之外的第三个场所，让人在其中感到舒适并保持忠诚。&mdash; <a href="http://book.douban.com/subject/19934344/">《交互设计沉思录》</a></p></blockquote>
+
+<!-- more -->
+
+
+<hr />
+
+<p>工作的时候有个同事提出了这样一个疑问。
+```xml</p>
+
+<!-- 省略了namespace -->
+
+
+<p><beans></p>
+
+<pre><code>&lt;mvc:annotation-driven/&gt;    
+&lt;context:component-scan base-package="com.springapp.mvc"/&gt;
+
+&lt;bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"&gt;
+    &lt;property name="prefix" value="/WEB-INF/pages/"/&gt;
+    &lt;property name="suffix" value=".jsp"/&gt;
+&lt;/bean&gt;
+</code></pre>
+
+<p></beans>
+<code>
+</code>java
+@Controller
+@RequestMapping(&ldquo;/&rdquo;)
+public class HelloController {</p>
+
+<pre><code>@RequestMapping(method = RequestMethod.GET)
+@ResponseBody
+public JsonResult printWelcome() {
+    return new JsonResult(1001, "test").putData("name", "imyoung");
+}
+</code></pre>
+
+<p>}
+<code>
+为什么这么简单的配置，spring就能够识别到你返回的是一个Json，从配置里压根就看不到任何头绪。我头一蒙，原来自己还真没有考虑过这个问题，所以就去捣腾了一下。我还记得以前spring的COC(convention over configuration)还没有成风潮，那时候配置这个的时候，我翻阅了一下资料，有两行配置大概是这个样子的。
+</code>xml
+<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />
+<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter" />
+<code>
+查看一下RequestMappingHandlerAdapter的源码
+</code>java
+public RequestMappingHandlerAdapter() {</p>
+
+<pre><code>this.messageConverters.add(new ByteArrayHttpMessageConverter());
+this.messageConverters.add(stringHttpMessageConverter);
+this.messageConverters.add(new SourceHttpMessageConverter&lt;Source&gt;());
+this.messageConverters.add(new AllEncompassingFormHttpMessageConverter());
+</code></pre>
+
+<p>}
+<code>
+按照这种配置，RequestMappingHandlerAdapter就只是注册了4个信息转换器，清晰的看到，这里面并没有我们熟悉的mappingJacksonHttpMessageConverter。所以我们以前配置这个的时候，还会加上mappingJacksonHttpMessageConverter的bean注入。
+</code>java
+<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"></p>
+
+<pre><code>&lt;property name="messageConverters"&gt;
+    &lt;list&gt;
+        &lt;ref bean="mappingJacksonHttpMessageConverter"/&gt;
+    &lt;/list&gt;
+&lt;/property&gt;
+</code></pre>
+
+<p></bean>
+<code>
+这个配置方式就是我那个同事以前常看到的一种比较传统的配置方式。随着spring的发展，spring越来越重视这种约定大于配置的能够减少很多代码量的风格。就会有了文章开头的那种简洁的配置
+</code>xml</p>
+
+<!-- 这个配置其实还包含了很多东西,我这里写的只是其中一小项 -->
+
+
+<p>&lt;mvc:annotation-driven/>
+<code>
+假如我们在配置文件里面使用了这种配置方式，来看看spring大概做了些什么。
+</code>java
+ */
+public class MvcNamespaceHandler extends NamespaceHandlerSupport {</p>
+
+<pre><code>@Override
+public void init() {
+    registerBeanDefinitionParser("annotation-driven", new AnnotationDrivenBeanDefinitionParser());
+    registerBeanDefinitionParser("default-servlet-handler", new DefaultServletHandlerBeanDefinitionParser());
+    registerBeanDefinitionParser("interceptors", new InterceptorsBeanDefinitionParser());
+    registerBeanDefinitionParser("resources", new ResourcesBeanDefinitionParser());
+    registerBeanDefinitionParser("view-controller", new ViewControllerBeanDefinitionParser());
+}
+</code></pre>
+
+<p>}
+<code>
+在这个类里面，init方法里面的第一行就是注册一个bean的对于annotation-driven这个定义的解释器，再来看看解释器的几个方法
+</code>java
+//我抽取了我们关注的代码
+class AnnotationDrivenBeanDefinitionParser implements BeanDefinitionParser {</p>
+
+<pre><code>public BeanDefinition parse(Element element, ParserContext parserContext) {
+    // ...
+    ManagedList&lt;?&gt; messageConverters = getMessageConverters(element, source, parserContext);
+    // ...
+    handlerAdapterDef.getPropertyValues().add("messageConverters", messageConverters);
+}
+
+private ManagedList&lt;?&gt; getMessageConverters(Element element, Object source, ParserContext parserContext) {
+    // ...
+    if (jackson2Present) {
+        messageConverters.add(createConverterDefinition(MappingJackson2HttpMessageConverter.class, source));
+    }
+    // ...
+}
+</code></pre>
+
+<p>}
+<code>
+看到这里，我们发现了一些苗头了。在getMessageConverters里面，它会判断是否jackson2Present，如果是，则会默认地把MappingJackson2HttpMessageConverter添加到messageConverters列表中。而MappingJackson2HttpMessageConverter就会用到jackson包去做解释json的工作了。所以现在关键就是看看jackson2Present这个判断了。
+</code>java
+private static final boolean jackson2Present =</p>
+
+<pre><code>        ClassUtils.isPresent("com.fasterxml.jackson.databind.ObjectMapper", AnnotationDrivenBeanDefinitionParser.class.getClassLoader()) &amp;&amp;
+                ClassUtils.isPresent("com.fasterxml.jackson.core.JsonGenerator", AnnotationDrivenBeanDefinitionParser.class.getClassLoader());
+</code></pre>
+
+<p><code>
+看到这行代码，我恍然大悟了(哈哈)。原来它是通过判断有没有加载到与jackson相关的包来决定是否把MappingJackson2HttpMessageConverter添加到转换器队列中的。接下来，我们再稍微看看它是如何写信息的。
+</code>java
+public abstract class AbstractMessageConverterMethodProcessor extends AbstractMessageConverterMethodArgumentResolver implements HandlerMethodReturnValueHandler {</p>
+
+<pre><code>protected &lt;T&gt; void writeWithMessageConverters(T returnValue, MethodParameter returnType, ServletServerHttpRequest inputMessage, ServletServerHttpResponse outputMessage) throws IOException, HttpMediaTypeNotAcceptableException {
+
+    // ...
+    List&lt;MediaType&gt; requestedMediaTypes = getAcceptableMediaTypes(servletRequest);
+    List&lt;MediaType&gt; producibleMediaTypes = getProducibleMediaTypes(servletRequest, returnValueClass);
+    // ...
+    if (selectedMediaType != null) {
+        selectedMediaType = selectedMediaType.removeQualityValue();
+        for (HttpMessageConverter&lt;?&gt; messageConverter : this.messageConverters) {
+            if (messageConverter.canWrite(returnValueClass, selectedMediaType)) {
+                ((HttpMessageConverter&lt;T&gt;) messageConverter).write(returnValue, selectedMediaType, outputMessage);
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Written [" + returnValue + "] as \"" + selectedMediaType + "\" using [" +
+                            messageConverter + "]");
+                }
+                return;
+            }
+        }
+    }
+    // ...
+}
+</code></pre>
+
+<p>}     <br/>
+<code>
+这里我只是简单地带过一下(因为我也没有太深入地去追踪到里面)。这个方法其实就是把信息转换器列表的每一个信息转换器与MediaType做一个匹配，匹配上了就用匹配的信息转换器来写返回信息。开始的时候，已经默认地带上了一些requestedMediaTypes了。
+</code>java
+text/html
+image/gif
+image/jpeg
+<em>/</em>;q=.2
+<code>
+这里主要看的是最后一个，wildcard（通配符形式）的。再看看producibleMediaTypes，就是要产出的mediaType是怎么生成的。
+</code>java
+protected List<MediaType> getProducibleMediaTypes(HttpServletRequest request, Class&lt;?> returnValueClass) {</p>
+
+<pre><code>// ...
+List&lt;MediaType&gt; result = new ArrayList&lt;MediaType&gt;();
+for (HttpMessageConverter&lt;?&gt; converter : messageConverters) {
+    if (converter.canWrite(returnValueClass, null)) {
+        result.addAll(converter.getSupportedMediaTypes());
+    }
+}
+// ...
+</code></pre>
+
+<p>}
+<code>
+它主要是通过判断你的返回值的类型去作判断的。我这里的例子用的是下面这个返回类
+</code>java
+public class JsonResult {</p>
+
+<pre><code>private int code;
+private String msg;
+</code></pre>
+
+<p>}
+```
+spring会用一系列的方法去判断当前这个converter是否能以返回值的类型正确输出(校验很多，没细看，大家可以去研究一下，反正大概就是这个样子了)。如果可以就把这个转换器的自身的SupportedMediaTypes加入到producibleMediaTypes中。后面还会再循环判断一次，但后面的判断是，一旦遇到了合适的转换器就会使用它来写返回信息。假如后面还有与producibleMediaTypes匹配的converter，就被忽略了(这里会有一个简单的默认排序和优先规则在这里)。</p>
+
+<p>时间仓促，讲得比较粗略，这篇文章以后还会继续完善。希望文章对大家有所帮助。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Spring-webflow]]></title>

@@ -1,0 +1,480 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Ibatis_faq - battousai's blog</title>
+  <meta name="author" content="battousai">
+
+  
+  <meta name="description" content="怎样表述一个命题才算是科学的？按照证伪派，它必须有可能被证明是错误的。
+比如“所有的乌鸦都是黑的”，那么你只要找到一只不是黑色的乌鸦，就可以证明这
+个命题的错误，因此这个命题没有问题。相反，如果非要“证实”才接受这个论断的
+话，那可就困难了，而且实际上是不可能的！除非你把所有的乌鸦都抓来看过，但你 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://youngjd.com/blog/2014/07/25/ibatis-faq">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+   <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="battousai's blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts 
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+-->
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">battousai's blog</a></h1>
+  
+    <h2>“倘若我此刻封刀，以前所杀的人便死得毫无意义。人人都苦心经营渺小的幸福，在能缔造更大幸福的新时代建立前……我仍会继续挥剑” -- 绯村剑心</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:youngjd.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/aboutme">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Ibatis_faq</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-25T13:04:05+08:00" pubdate data-updated="true">2014-07-25</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><blockquote><p>怎样表述一个命题才算是科学的？按照证伪派，它必须有可能被证明是错误的。
+比如“所有的乌鸦都是黑的”，那么你只要找到一只不是黑色的乌鸦，就可以证明这
+个命题的错误，因此这个命题没有问题。相反，如果非要“证实”才接受这个论断的
+话，那可就困难了，而且实际上是不可能的！除非你把所有的乌鸦都抓来看过，但你
+又怎么能知道你已经抓尽了天下所有的乌鸦呢？ &mdash; <a href="http://book.douban.com/subject/1467022/">《上帝掷骰子吗》</a></p></blockquote>
+
+<!-- more -->
+
+
+<hr />
+
+<br>
+
+
+<h2>ibatis中#与$的区别</h2>
+
+<p>案例</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="cm">/** </span>
+</span><span class='line'><span class="cm">* Spring Controller </span>
+</span><span class='line'><span class="cm">* 访问的url -&gt; http://localhost:8080/promotions?start=1&amp;limit=0</span>
+</span><span class='line'><span class="cm">**/</span>
+</span><span class='line'><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">method</span> <span class="o">=</span> <span class="n">RequestMethod</span><span class="o">.</span><span class="na">GET</span><span class="o">)</span>
+</span><span class='line'><span class="kd">public</span> <span class="n">JsonResult</span> <span class="nf">list</span><span class="o">(</span><span class="nd">@RequestParam</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">params</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>  <span class="n">List</span><span class="o">&lt;</span><span class="n">Promotion</span><span class="o">&gt;</span> <span class="n">promotions</span> <span class="o">=</span> <span class="n">promotionMapper</span><span class="o">.</span><span class="na">list</span><span class="o">(</span><span class="n">params</span><span class="o">);</span>
+</span><span class='line'>  <span class="c1">// remaining code here</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm">* Mapper接口</span>
+</span><span class='line'><span class="cm">**/</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">PromotionMapper</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">List</span><span class="o">&lt;</span><span class="n">Promotion</span><span class="o">&gt;</span> <span class="nf">list</span><span class="o">(</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">params</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&quot;list&quot;</span> <span class="na">resultType=</span><span class="s">&quot;Promotion&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  SELECT id, productId, imgUrls
+</span><span class='line'>  FROM limitedtimediscount WHERE status = 1 AND endDate &gt;= now()
+</span><span class='line'>  ORDER BY beginDate DESC
+</span><span class='line'>  <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&quot;start != null and limit != null&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      LIMIT #{start}, #{limit}
+</span><span class='line'>  <span class="nt">&lt;/if&gt;</span>
+</span><span class='line'><span class="nt">&lt;/select&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上面的代码中，我用了#号来获取map参数集合中的对应的start和limit值。运行报错</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'>### The error may involve defaultParameterMap
+</span><span class='line'>### The error occurred while setting parameters
+</span><span class='line'>### SQL: SELECT id, productId, imgUrls         FROM limitedtimediscount WHERE status = 1 AND endDate &gt;= now()  ORDER BY beginDate DESC  LIMIT ?, ?
+</span><span class='line'>### Cause: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near &#39;&#39;1&#39;, &#39;0&#39;&#39; at line 5
+</span><span class='line'>; bad SQL grammar []; nested exception is com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near &#39;&#39;1&#39;, &#39;0&#39;&#39; at line 5
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>从log可以看出，我传进来的1和0被当成了字符串&#8217;1&#8217;和&#8217;0&#8217;了，在mysql limit的语法中，这显然是错误的。
+这时候我想到的是能不能转型，所以我又把sql改成下面这样子</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&quot;list&quot;</span> <span class="na">resultType=</span><span class="s">&quot;Promotion&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  SELECT id, productId, imgUrls
+</span><span class='line'>  FROM limitedtimediscount WHERE status = 1 AND endDate &gt;= now()
+</span><span class='line'>  ORDER BY beginDate DESC
+</span><span class='line'>  <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&quot;start != null and limit != null&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      LIMIT #{start, javaType=int}, #{limit, javaType=int}
+</span><span class='line'>  <span class="nt">&lt;/if&gt;</span>
+</span><span class='line'><span class="nt">&lt;/select&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>运行后又报了不一样的错误</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'>### Error querying database.  Cause: java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Integer
+</span><span class='line'>### The error may exist in sqlmap/PromotionMapper.xml
+</span><span class='line'>### The error may involve defaultParameterMap
+</span><span class='line'>### The error occurred while setting parameters
+</span><span class='line'>### SQL: SELECT id, productId, imgUrls         FROM limitedtimediscount WHERE status = 1 AND endDate &gt;= now()         ORDER BY beginDate DESC                       LIMIT ?, ?
+</span><span class='line'>### Cause: java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Integer
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这次是说String不能转换成Integer
+接着我在网上搜索资料，找到了这么一篇<a href="http://shenzhenchufa.blog.51cto.com/730213/254561">文章</a>，哦，原来ibatis中#和$是不一样的，引用原文的话</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'>1.#是把传入的数据当作字符串，如#field#传入的是id,则sql语句生成是这样，order by &quot;id&quot;,这当然会报错.
+</span><span class='line'>2.$传入的数据直接生成在sql里，如#field#传入的是id,则sql语句生成是这样，order by id, 这就对了.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>因此，只要把#{start}, #{limit}改成${start}, ${limit}就可以返回正确的结果。但在这个案例中，还存在另外一个问题。根据原文提到的。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'>$方式一般用于传入数据库对象．例如传入表名.
+</span><span class='line'>#方式一般用于传入插入/更新的值或查询/删除的where条件
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>他的说法我基本认同，因此在我的案例中使用$解决问题只是一个trick，我觉得还是不够科学。下面我写了几行代码验证了几个基础知识</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>  <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;();</span>
+</span><span class='line'>  <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;1&quot;</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+</span><span class='line'>  <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;2&quot;</span><span class="o">,</span> <span class="s">&quot;2&quot;</span><span class="o">);</span>
+</span><span class='line'>  <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;3&quot;</span><span class="o">,</span> <span class="mf">2.1</span><span class="o">);</span>
+</span><span class='line'>  <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;---------------check int--------------&quot;</span><span class="o">);</span>
+</span><span class='line'>  <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;1 instanceof Integer:&quot;</span> <span class="o">+</span> <span class="o">(</span><span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&quot;1&quot;</span><span class="o">)</span> <span class="k">instanceof</span> <span class="n">Integer</span><span class="o">));</span>
+</span><span class='line'>  <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;1 instanceof String:&quot;</span> <span class="o">+</span> <span class="o">(</span><span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&quot;1&quot;</span><span class="o">)</span> <span class="k">instanceof</span> <span class="n">String</span><span class="o">));</span>
+</span><span class='line'>  <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;1 instanceof Object:&quot;</span> <span class="o">+</span> <span class="o">(</span><span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&quot;1&quot;</span><span class="o">)</span> <span class="k">instanceof</span> <span class="n">Object</span><span class="o">));</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;---------------check string--------------&quot;</span><span class="o">);</span>
+</span><span class='line'>  <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;&#39;2&#39; instanceof Double:&quot;</span> <span class="o">+</span> <span class="o">(</span><span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&quot;2&quot;</span><span class="o">)</span> <span class="k">instanceof</span> <span class="n">String</span><span class="o">));</span>
+</span><span class='line'>  <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;&#39;2&#39; instanceof Integer:&quot;</span> <span class="o">+</span> <span class="o">(</span><span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&quot;2&quot;</span><span class="o">)</span> <span class="k">instanceof</span> <span class="n">Integer</span><span class="o">));</span>
+</span><span class='line'>  <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;&#39;2&#39; instanceof Object:&quot;</span> <span class="o">+</span> <span class="o">(</span><span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&quot;2&quot;</span><span class="o">)</span> <span class="k">instanceof</span> <span class="n">Object</span><span class="o">));</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;---------------check double--------------&quot;</span><span class="o">);</span>
+</span><span class='line'>  <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;2.1 instanceof Double:&quot;</span> <span class="o">+</span> <span class="o">(</span><span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&quot;3&quot;</span><span class="o">)</span> <span class="k">instanceof</span> <span class="n">Double</span><span class="o">));</span>
+</span><span class='line'>  <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;2.1 instanceof Integer:&quot;</span> <span class="o">+</span> <span class="o">(</span><span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&quot;3&quot;</span><span class="o">)</span> <span class="k">instanceof</span> <span class="n">Integer</span><span class="o">));</span>
+</span><span class='line'>  <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;2.1 instanceof String:&quot;</span> <span class="o">+</span> <span class="o">(</span><span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&quot;3&quot;</span><span class="o">)</span> <span class="k">instanceof</span> <span class="n">String</span><span class="o">));</span>
+</span><span class='line'>  <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;2.1 instanceof Object:&quot;</span> <span class="o">+</span> <span class="o">(</span><span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&quot;3&quot;</span><span class="o">)</span> <span class="k">instanceof</span> <span class="n">Object</span><span class="o">));</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nl">output:</span>
+</span><span class='line'><span class="o">---------------</span><span class="n">check</span> <span class="kt">int</span><span class="o">--------------</span>
+</span><span class='line'><span class="mi">1</span> <span class="k">instanceof</span> <span class="nl">Integer:</span><span class="kc">true</span>
+</span><span class='line'><span class="mi">1</span> <span class="k">instanceof</span> <span class="nl">String:</span><span class="kc">false</span>
+</span><span class='line'><span class="mi">1</span> <span class="k">instanceof</span> <span class="nl">Object:</span><span class="kc">true</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">---------------</span><span class="n">check</span> <span class="n">string</span><span class="o">--------------</span>
+</span><span class='line'><span class="s">&quot;2&quot;</span> <span class="k">instanceof</span> <span class="nl">Double:</span><span class="kc">true</span>
+</span><span class='line'><span class="s">&quot;2&quot;</span> <span class="k">instanceof</span> <span class="nl">Integer:</span><span class="kc">false</span>
+</span><span class='line'><span class="s">&quot;2&quot;</span> <span class="k">instanceof</span> <span class="nl">Object:</span><span class="kc">true</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">---------------</span><span class="n">check</span> <span class="kt">double</span><span class="o">--------------</span>
+</span><span class='line'><span class="mf">2.1</span> <span class="k">instanceof</span> <span class="nl">Double:</span><span class="kc">true</span>
+</span><span class='line'><span class="mf">2.1</span> <span class="k">instanceof</span> <span class="nl">Integer:</span><span class="kc">false</span>
+</span><span class='line'><span class="mf">2.1</span> <span class="k">instanceof</span> <span class="nl">String:</span><span class="kc">false</span>
+</span><span class='line'><span class="mf">2.1</span> <span class="k">instanceof</span> <span class="nl">Object:</span><span class="kc">true</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">method</span> <span class="o">=</span> <span class="n">RequestMethod</span><span class="o">.</span><span class="na">GET</span><span class="o">)</span>
+</span><span class='line'><span class="kd">public</span> <span class="n">JsonResult</span> <span class="nf">list</span><span class="o">(</span><span class="nd">@RequestParam</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">params</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>  <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;start instanceof Integer:&quot;</span> <span class="o">+</span> <span class="n">params</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&quot;start&quot;</span><span class="o">));</span>
+</span><span class='line'>  <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;start instanceof String:&quot;</span> <span class="o">+</span> <span class="n">params</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&quot;start&quot;</span><span class="o">));</span>
+</span><span class='line'>  <span class="c1">// remaining code here</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nl">output:</span>
+</span><span class='line'><span class="n">start</span> <span class="k">instanceof</span> <span class="nl">Integer:</span><span class="kc">false</span>
+</span><span class='line'><span class="n">start</span> <span class="k">instanceof</span> <span class="nl">String:</span><span class="kc">true</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>没写完&hellip;&hellip;&hellip;&hellip;.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">battousai</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-25T13:04:05+08:00" pubdate data-updated="true">2014-07-25</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/database/'>database</a>, <a class='category' href='/blog/categories/ibatis/'>ibatis</a>, <a class='category' href='/blog/categories/program/'>program</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/07/25/java-getters-and-setters/" title="Previous Post: Java: Getters and Setters">&laquo; Java: Getters and Setters</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/07/27/spring-message-converter/" title="Next Post: spring_message_converter">spring_message_converter &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/07/27/spring-message-converter/">Spring_message_converter</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/25/ibatis-faq/">Ibatis_faq</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/25/java-getters-and-setters/">Java: Getters and Setters</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/20/the-docker-user-guide/">The_docker_user_guide</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/16/install-jdk-on-ubuntu/">Install-jdk-on-ubuntu</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - battousai -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <script type="text/javascript">
+	;(function($) {
+	    $(function() {
+	        var url=document.referrer;
+	        if ( url && url.search("http://")>-1) {
+	            var refurl =  url.match(/:\/\/(.[^/]+)/)[1];
+	            if(refurl.indexOf("baidu.com")>-1){
+	                alert('sayno to baidu');
+	            }
+	        }
+	    });
+
+	})(jQuery);
+   </script>
+</body>
+</html>
