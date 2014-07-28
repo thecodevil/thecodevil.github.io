@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Program | battousai's blog]]></title>
   <link href="http://youngjd.com/blog/categories/program/atom.xml" rel="self"/>
   <link href="http://youngjd.com/"/>
-  <updated>2014-07-28T12:48:30+08:00</updated>
+  <updated>2014-07-28T12:50:22+08:00</updated>
   <id>http://youngjd.com/</id>
   <author>
     <name><![CDATA[battousai]]></name>
@@ -82,7 +82,7 @@ this.messageConverters.add(new AllEncompassingFormHttpMessageConverter());
 
 <p></bean>
 <code>
-这个配置方式就是我那个同事以前常看到的一种比较传统的配置方式。随着spring的发展，spring越来越重视这种约定大于配置的能够减少很多代码量的风格。就会有了文章开头的那种简洁的配置
+这个配置方式就是以前常看到的一种比较传统的配置方式。随着spring的发展，spring越来越重视这种约定大于配置的能够减少很多代码量的风格。就会有了文章开头的那种简洁的配置
 </code>xml</p>
 
 <!-- 这个配置其实还包含了很多东西,我这里写的只是其中一小项 -->
