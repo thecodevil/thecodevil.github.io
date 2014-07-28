@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | battousai's blog]]></title>
   <link href="http://youngjd.com/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://youngjd.com/"/>
-  <updated>2014-07-28T09:41:16+08:00</updated>
+  <updated>2014-07-28T12:48:30+08:00</updated>
   <id>http://youngjd.com/</id>
   <author>
     <name><![CDATA[battousai]]></name>
@@ -33,13 +33,7 @@
 
 <p><beans></p>
 
-<pre><code>&lt;mvc:annotation-driven/&gt;    
-&lt;context:component-scan base-package="com.springapp.mvc"/&gt;
-
-&lt;bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"&gt;
-    &lt;property name="prefix" value="/WEB-INF/pages/"/&gt;
-    &lt;property name="suffix" value=".jsp"/&gt;
-&lt;/bean&gt;
+<pre><code>&lt;mvc:annotation-driven/&gt;
 </code></pre>
 
 <p></beans>
