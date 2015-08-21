@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Docker | battousai's blog]]></title>
   <link href="http://youngjd.com/blog/categories/docker/atom.xml" rel="self"/>
   <link href="http://youngjd.com/"/>
-  <updated>2017-01-18T21:20:27+08:00</updated>
+  <updated>2015-08-22T00:00:35+08:00</updated>
   <id>http://youngjd.com/</id>
   <author>
     <name><![CDATA[battousai]]></name>
@@ -28,13 +28,17 @@
 <br>
 
 
-<p>标题之所以取名为杀鸡用牛刀，并不是指进行微服务架构的时候，使用docker和springboot是杀鸡用牛刀。而是指结合这些比较复杂的技术仅仅是为了写个demo。</p>
+<p>标题之所以取名为杀鸡用牛刀，并不是指进行微服务架构的时候，使用docker和springboot是杀鸡用牛刀。而是指结合这些比较复杂的技术仅仅只是为了写个demo，确实有点小题大作了，哈哈！！</p>
+
+<p>PS：本文章基于读者已经对docker，springboot，springcloud有一定了解的基础上阅读。</p>
 
 <p>demo的简单架构图如下。</p>
 
+<hr />
+
 <h3>1.使用SpringBoot编写helloworld</h3>
 
-<p>使用springboot的方式构建后项目，然后写一个简单的controller，进行helloworld的输出。</p>
+<p>使用springboot的方式构建好项目，写一个简单的controller进行"helloworld"的输出。</p>
 
 <p>启动类代码如下：</p>
 
@@ -60,27 +64,22 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 <pre><code>package yjd.demo.springboot.helloworld.controller;
 
-import yjd.demo.springboot.helloworld.controller.base.ApiResult;
-import yjd.demo.springboot.helloworld.controller.base.BaseController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import yjd.demo.springboot.helloworld.controller.base.ApiResult;
 
 /**
  * @author yjd
  * @since 2017/1/18
  */
 @RestController
-public class IndexController extends BaseController {
+public class IndexController {
 
     @RequestMapping("/index")
     ApiResult index() {
-        try {
-            return ApiResult.success().addData("msg", "helloWorld");
-        } catch (Exception e) {
-            logger.error(e);
-        }
-        return ApiResult.success().addData("msg", "");
+        return ApiResult.success().addData("msg", "helloWorld");
     }
+
 }
 </code></pre>
 
@@ -107,20 +106,6 @@ public class IndexController extends BaseController {
         &lt;dependency&gt;
             &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
             &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-boot-starter-redis&lt;/artifactId&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
-            &lt;scope&gt;test&lt;/scope&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;com.jayway.jsonpath&lt;/groupId&gt;
-            &lt;artifactId&gt;json-path&lt;/artifactId&gt;
-            &lt;scope&gt;test&lt;/scope&gt;
         &lt;/dependency&gt;
     &lt;/dependencies&gt;
 
@@ -153,39 +138,136 @@ public class IndexController extends BaseController {
 &lt;/project&gt;
 </code></pre>
 
-<p>打包应用成jar包，然后上传到服务器上。新建一个目录，简单命名为app。把jar包上传到此目录，并新建一个dockerfile文件，文件内容如：</p>
+<p>打包应用成jar包，然后上传到服务器上。新建一个目录，把jar包上传到此目录，并新建一个Dockerfile文件。</p>
 
-<p>然后使用docker命令构建镜像。</p>
+<p><img src="/images/20170120-1.png" alt="Alt text" /></p>
 
-<p>镜像构建成功后，启动容器。输入ip地址+端口测试访问是否正确。</p>
+<p>Dockerfile文件内容如下：</p>
 
-<h3>使用openresty作为负载均衡</h3>
-
-<pre><code>首先重复上述步骤，更改映射端口，再启动一个同样功能的springboot应用（修改controlle的输出内容），构成一个集群。然后使用openresty反向代理这两个helloworld应用。
-
-新建一个目录，简单命名为openresty，并新建一个dockerfile文件，文件内容如下：
-
-然后使用docker命令构建镜像。
-
-镜像构建成功后，启动容器。输入ip地址测试访问是否正确。
-
-配置host后，访问网址，刷新重复访问，测试是否成功负载到不同的helloworld应用上
+<pre><code>FROM openjdk
+MAINTAINER yjd
+ADD helloworld-1.0.0.jar helloworld.jar
+EXPOSE 8080
+ENTRYPOINT ["java","-jar","/helloworld.jar"]
 </code></pre>
 
-<h3>使用mysql作为数据存储</h3>
+<p>然后使用docker build命令构建镜像。</p>
 
-<pre><code>现在再加上简单地持久化功能，为了简便和尝新，springboot的orm这里使用了BeetlSql。新增配置如下：
+<p><img src="/images/20170120-2.png" alt="Alt text" /></p>
 
-持久化代码如下：
+<p>镜像构建成功后，启动容器。</p>
 
-重新打包
-
-现在进入服务器，这次直接使用了官方docker hub上的mariadb镜像源。启动mysql容器，启动命令如下：
+<pre><code>sudo docker run --name helloworld1 -p 50001:8080 -d yjd/helloworld
 </code></pre>
 
-<h3>配置mysql主从，并使用docker包装一个mycat中间件进行读写分离</h3>
+<p>输入docker ps查看容器已经成功启动。</p>
 
-<h3>使用springcloud微服务化helloworld应用</h3>
+<p><img src="/images/20170120-3.png" alt="Alt text" /></p>
+
+<p>输入ip地址+端口测试访问是否正确。<a href="http://xxx.xxx.xxx.xxx:50001/index">http://xxx.xxx.xxx.xxx:50001/index</a></p>
+
+<pre><code>{
+    "success": true,
+    "message": "",
+    "apiVersion": "1.0.0",
+    "apiCode": "OK",
+    "data": {
+        "msg": "helloWorld"
+    }
+}
+</code></pre>
+
+<hr />
+
+<h3>2.使用openresty作为负载均衡</h3>
+
+<p>首先重复上述步骤，启动一个同样功能的springboot应用，构成一个小集群。注意修改容器运行时暴露的端口(50002)和容器名字(helloworld2)</p>
+
+<pre><code>sudo docker run --name helloworld2 -p 50002:8080 -d yjd/helloworld
+</code></pre>
+
+<p>两个helloworld容器已经成功启动，访问测试也OK！</p>
+
+<p><img src="/images/20170120-4.png" alt="Alt text" /></p>
+
+<p>新建一个目录，命名为openresty，目录结构如下(conf.d和logs两个目录将会以数据卷的形式挂载到容器对应的目录，nginx.conf将拷贝覆盖容器中对应的配置文件)：</p>
+
+<p><img src="/images/20170121-1.png" alt="Alt text" /></p>
+
+<p>新建一个dockerfile文件，文件内容如下：</p>
+
+<pre><code>FROM debian
+
+MAINTAINER yjd
+
+RUN apt-get -y update
+RUN apt-get install -y libreadline-dev libncurses5-dev libpcre3-dev \
+    libssl-dev perl make build-essential
+RUN apt-get install -y wget
+
+RUN wget https://openresty.org/download/openresty-1.11.2.1.tar.gz &amp;&amp; tar -zxvf openresty-1.11.2.1.tar.gz -C /usr/local
+
+RUN cd /usr/local/openresty-1.11.2.1 &amp;&amp; ./configure --with-luajit --prefix=/opt/openresty &amp;&amp; make &amp;&amp; make install
+RUN rm -rf /opt/openresty/nginx/conf/nginx.conf
+
+COPY ./nginx.conf /opt/openresty/nginx/conf
+
+VOLUME ["/opt/openresty/nginx/conf/conf.d", "/opt/openresty/nginx/logs"]
+
+EXPOSE 80
+
+CMD ["/opt/openresty/nginx/sbin/nginx", "-g", "daemon off;"]
+#nginx需要以非守护程序运行，即不能后台运行，否则容器运行后又会马上停止
+</code></pre>
+
+<p>使用docker build命令构建镜像，镜像构建成功后就可以启动容器了。</p>
+
+<pre><code>sudo docker run --name openresty --link helloworld2:helloworld2 --link helloworld1:helloworld1 -p 80:80 -v /home/op/dev/openresty/logs:/opt/openresty/nginx/logs -v /home/op/dev/openresty/conf.d:/opt/openresty/nginx/conf/conf.d -d yjd/openresty
+</code></pre>
+
+<p>如果nginx是搭建在宿主机上的话，upstream的配置直接用127.0.0.1:PORT的方式既可以，但是由于这个实验是单独把nginx服务包装成容器，容器之间的访问需要用到docker的link功能，有两个helloworld服务，则link两次。link成功后，在openresty容器查看hosts，显示如下:</p>
+
+<p><img src="/images/20170121-2.png" alt="Alt text" /></p>
+
+<p>再来看看对应的nginx配置。主要是upstream的配置，直接用docker的主机名进行配置，也可以用host对应的ip，只不过docker容器是无状态的，每次重新启动，ip都可能变，而因为link的时候指定了被链接容器的别名，所以helloworld1和helloworld2就不变了。PS：注意这里不是用的容器暴露给宿主机的IP，而是用的容器内部运行的后台程序的端口，springboot默认是8080(使用link就是为了容器间的内部访问)。这里我自己坑了自己很久，一直用的50001和50002，nginx一直502。还以为要去捣腾各种网络桥接的问题，各种百度谷歌都找不到解决办法。结果洗了个热水澡出来就发现是自己傻x了！！</p>
+
+<pre><code>upstream yjd.helloworld.com {
+    server helloworld1:8080 weight=5;
+    server helloworld2:8080 weight=5;
+}
+
+log_format helloworld '$remote_addr - $remote_user [$time_local] $request '
+              '"$status" $body_bytes_sent "$http_referer" '
+              '"$http_user_agent" "$http_x_forwarded_for" "$request_time" "$request_body" ';                          
+server {
+        listen  80;
+        server_name xxx.xxx.xxx.xxx; # 由于没有备案域名可用，此处就用IP代替
+        access_log /opt/openresty/nginx/logs/helloworld.com-access.log helloworld;
+
+        location / {
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_pass http://yjd.helloworld.com;
+        }
+}
+</code></pre>
+
+<p>浏览器直接访问IP，输出结果同样。查看宿主机的logs挂载目录，nginx的日志也成功输出到此目录，查看日志内容也正常，测试OK！！</p>
+
+<p><img src="/images/20170121-3.png" alt="Alt text" /></p>
+
+<hr />
+
+<h3>3.使用mysql作为数据存储</h3>
+
+<hr />
+
+<h3>4.配置mysql主从，并使用docker包装一个mycat中间件进行读写分离</h3>
+
+<hr />
+
+<h3>5.使用springcloud微服务化helloworld应用</h3>
 ]]></content>
   </entry>
   
