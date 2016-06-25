@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 集群 | battousai's blog]]></title>
   <link href="http://youngjd.com/blog/categories/ji-qun/atom.xml" rel="self"/>
   <link href="http://youngjd.com/"/>
-  <updated>2016-06-25T17:26:03+08:00</updated>
+  <updated>2016-06-25T17:28:34+08:00</updated>
   <id>http://youngjd.com/</id>
   <author>
     <name><![CDATA[battousai]]></name>
@@ -181,7 +181,7 @@ ECS2:
 [2016-06-25 16:55:36,688][WARN ][index.search.slowlog.query] [node2] [test_index][3] took[519.1micros], took_millis[0], types[tag], stats[], search_type[DFS_QUERY_THEN_FETCH], total_shards[5], source[{"from":0,"size":1000,"query":{"bool":{"must":{"term":{"id":1}}}},"explain":false,"facets":{"typeFacetName":{"terms":{"field":"pidvids","size":2147483647},"facet_filter":{"query":{"bool":{"must":{"term":{"id":1}}}}}}}}], extra_source[],
 </code></pre>
 
-<p>从日志来看可以验证集群已经配置成功，我们可以安装es的head plugin，从浏览器视图更直观的管擦两个集群节点的状态和健康情况。直接浏览器访问<a href="http://host:httpport/_plugin/head">http://host:httpport/_plugin/head</a></p>
+<p>从日志来看可以验证集群已经配置成功，我们可以安装es的head plugin，从浏览器视图更直观的观察两个集群节点的状态和健康情况。直接浏览器访问<a href="http://host:pport/_plugin/head">http://host:pport/_plugin/head</a></p>
 
 <p>节点1
 <img src="/images/node1.png" alt="Alt text" /></p>
