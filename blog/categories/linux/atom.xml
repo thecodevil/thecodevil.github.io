@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | battousai's blog]]></title>
   <link href="http://youngjd.com/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://youngjd.com/"/>
-  <updated>2016-06-25T12:15:30+08:00</updated>
+  <updated>2016-06-25T12:18:48+08:00</updated>
   <id>http://youngjd.com/</id>
   <author>
     <name><![CDATA[battousai]]></name>
@@ -30,7 +30,7 @@
 
 <h3>安装ruby</h3>
 
-<h4>1. 到ruby官网下载页面 <a href="https://www.ruby-lang.org/zh_cn/downloads/%EF%BC%8C">https://www.ruby-lang.org/zh_cn/downloads/%EF%BC%8C</a> 找到最新的版本，复制下载链接</h4>
+<h4>1. 到ruby官网<a href="https://www.ruby-lang.org/zh_cn/downloads/">下载页面</a>，找到最新的版本，复制下载链接</h4>
 
 <h4>2. wget <a href="https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.1.tar.gz%EF%BC%88%E4%B8%8B%E8%BD%BD%E9%93%BE%E6%8E%A5%EF%BC%89">https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.1.tar.gz%EF%BC%88%E4%B8%8B%E8%BD%BD%E9%93%BE%E6%8E%A5%EF%BC%89</a></h4>
 
@@ -48,7 +48,7 @@
 
 <h3>安装rubygem</h3>
 
-<h4>1. 到rubygem 官网<a href="https://rubygems.org/pages/download">https://rubygems.org/pages/download</a> 复制最新下载链接</h4>
+<h4>1. 到rubygem官网<a href="https://rubygems.org/pages/download">下载页面</a>，复制最新下载链接</h4>
 
 <h4>2. 下载rubygem wget <a href="https://rubygems.org/rubygems/rubygems-2.6.4.zip">https://rubygems.org/rubygems/rubygems-2.6.4.zip</a></h4>
 
