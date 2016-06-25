@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Sql | battousai's blog]]></title>
+  <link href="http://youngjd.com/blog/categories/sql/atom.xml" rel="self"/>
+  <link href="http://youngjd.com/"/>
+  <updated>2016-06-25T12:01:36+08:00</updated>
+  <id>http://youngjd.com/</id>
+  <author>
+    <name><![CDATA[battousai]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Sql语法相关子查询与非相关子查询]]></title>
+    <link href="http://youngjd.com/blog/2015/08/07/sql/"/>
+    <updated>2015-08-07T10:42:52+08:00</updated>
+    <id>http://youngjd.com/blog/2015/08/07/sql</id>
+    <content type="html"><![CDATA[<blockquote><p><p>问：员工为什么要离职？
+ <p>答：钱少事多离家远，位低权轻责任重。</p></blockquote>
+
+<!-- more -->
+
+
+
+]]></content>
+  </entry>
+  
+</feed>
