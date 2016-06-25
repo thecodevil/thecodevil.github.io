@@ -4,7 +4,7 @@
   <title><![CDATA[battousai's blog]]></title>
   <link href="http://youngjd.com/atom.xml" rel="self"/>
   <link href="http://youngjd.com/"/>
-  <updated>2016-06-25T17:35:53+08:00</updated>
+  <updated>2016-06-25T17:39:12+08:00</updated>
   <id>http://youngjd.com/</id>
   <author>
     <name><![CDATA[battousai]]></name>
@@ -34,17 +34,17 @@
 
 <pre><code>ECS1：
 外网IP：120.XXX.XXX.1 
-内网网IP：10.XXX.XXX.1
+内网IP：10.XXX.XXX.1
 (http port:9200, tcp port:9300)
 ECS2：
 外网IP：120.XXX.XXX.2 
-内网网IP：10.XXX.XXX.2
+内网IP：10.XXX.XXX.2
 (http port:9200, tcp port:9300)
 </code></pre>
 
 <p>修改两台搜索引擎的配置文件：/elasticsearch/config/elasticsearch.yml</p>
 
-<pre><code>ECS1：
+<pre><code>节点1：
 #集群名字默认是elasticsearch，但是最好是用特定的前缀标识下
 cluster.name: xxx_elasticsearch
 node.name: es_node1
@@ -54,7 +54,7 @@ node.data: true
 
 #默认也是不采用多播
 discovery.zen.ping.multicast.enabled: false
-#配置单播发现，这里配置ECS2的ip和tcp端口，如果有还有其它机器则用逗号分开
+#配置单播发现，这里配置节点2的ip和tcp端口，如果有还有其它节点则用逗号分开
 discovery.zen.ping.unicast.hosts: ["10.XXX.XXX.2:9300"]
 
 #下面这段是日志打印的配置，query和fetch都配置上，主要是用于测试搜索请求是否真的有效地动态负载到两台机器上
@@ -75,24 +75,24 @@ index.search.slowlog.threshold.fetch.trace: 0ms
 
 
 <pre><code>#两台集群的配置基本无异
-ECS2：
-#集群名字和ECS1的集群名字相同
+节点2：
+#集群名字和节点1的集群名字相同
 cluster.name: xxx_elasticsearch 
 node.name: es_node2
 
 #这里需要稍微提一下，这个配置完全是根据具体的业务量来配置的。因为目前我们的数据量只有2G多，还不大，所以大
-#部分开销用于数据的聚合等处理上，为了简单并尽量不影响原来的，ECS2并不设置成主节点和数据节点，不设置数据节点的
-#问题就是ECS2并不会保存索引数据，一旦ECS1当掉了搜索引擎就搜不出数据了，但鉴于es相对比较稳定，所以把数据处理
+#部分开销用于数据的聚合等处理上，为了简单并尽量不影响原来的，节点2并不设置成主节点和数据节点，不设置数据节点的
+#问题就是节点2并不会保存索引数据，一旦节点1当掉了搜索引擎就搜不出数据了，但鉴于es相对比较稳定，所以把数据处理
 #的压力负载到ECS2上减轻ECS1的es CPU负载就已经达到第一阶段的目的
 node.master: false 
 node.data: false
 
 #默认也是不采用多播
 discovery.zen.ping.multicast.enabled: false 
-#配置单播发现，这里配置ECS1的ip和tcp端口，如果有还有其它机器则用逗号分开
+#配置单播发现，这里配置节点1的ip和tcp端口，如果有还有其它节点则用逗号分开
 discovery.zen.ping.unicast.hosts: ["10.XXX.XXX.1:9300"]
 
-#日志配置同ECS1
+#日志配置同节点1
 index.search.slowlog.threshold.query.warn: 0ms
 index.search.slowlog.threshold.query.info: 0ms
 index.search.slowlog.threshold.query.debug: 0ms
