@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: 搜索引擎 | battousai's blog]]></title>
+  <link href="http://youngjd.com/blog/categories/sou-suo-yin-qing/atom.xml" rel="self"/>
+  <link href="http://youngjd.com/"/>
+  <updated>2016-06-25T17:09:05+08:00</updated>
+  <id>http://youngjd.com/</id>
+  <author>
+    <name><![CDATA[battousai]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Elasticsearch集群配置]]></title>
+    <link href="http://youngjd.com/blog/2016/06/25/elasticsearch-cluster/"/>
+    <updated>2016-06-25T15:28:52+08:00</updated>
+    <id>http://youngjd.com/blog/2016/06/25/elasticsearch-cluster</id>
+    <content type="html"><![CDATA[<blockquote><p>如果你半夜醒来发现自己已经好长时间没读书，而且没有任何负罪感的时候，你就必须知道，你已经堕落了。不是说书本本身特了不起，而是读书这个行为意味着你没有完全认同于这个现世和现实，你还有追求，还在奋斗，你还有不满，你还在寻找另一种可能性，另一种生活方式</p></blockquote>
+
+<!-- more -->
+
+
+<hr />
+
+<br>
+
+
+<p>由于业务大量的使用了elasticsearch来做各种的数据查询，导致在年中促销的时候单机出现了300以上的CPU负载。Client端凡是通过调用搜索引擎获取数据的请求响应都变得异常的慢并且一度出现超时。所以需要做一下搜索引擎的集群，把压力进行负载均衡。由于服务器资源有限又是在云服务器上(无法在单台ECS上再虚拟机器出来)，所以目前先使用两台机ECS进行简单的集群化，后面再一步步优化并根据业务考虑是否需要再扩展机器。</p>
+
+<p>elasticsearch集群的配置比较简单，网上资料都比较详细。下面是两台即将进行集群的机器。</p>
+
+<pre><code>ECS1：
+外网IP：120.XXX.XXX.1 
+内网网IP：10.XXX.XXX.1
+(http port:9200, tcp port:9300)
+ECS2：
+外网IP：120.XXX.XXX.2 
+内网网IP：10.XXX.XXX.2
+(http port:9200, tcp port:9300)
+</code></pre>
+
+<p>修改两台搜索引擎的配置文件：/elasticsearch/config/elasticsearch.yml</p>
+
+<pre><code>ECS1：
+#集群名字默认是elasticsearch，但是最好是用特定的前缀标识下
+cluster.name: xxx_elasticsearch
+node.name: es_node1
+#默认是同时为主节点和数据节点
+node.master: true
+node.data: true
+
+#默认也是不采用多播
+discovery.zen.ping.multicast.enabled: false
+#配置单播发现，这里配置ECS2的ip和tcp端口，如果有还有其它机器则用逗号分开
+discovery.zen.ping.unicast.hosts: ["10.XXX.XXX.2:9300"]
+
+#下面这段是日志打印的配置，query和fetch都配置上，主要是用于测试搜索请求是否真的有效地动态负载到两台机器上
+#为了测试方便，时间阈值都设置成0ms，这样基本所有的搜索请求都能打印出来
+#对应的logging.yml也需要有相应的日志配置信息，下面会有提及
+index.search.slowlog.threshold.query.warn: 0ms
+index.search.slowlog.threshold.query.info: 0ms
+index.search.slowlog.threshold.query.debug: 0ms
+index.search.slowlog.threshold.query.trace: 0ms
+
+index.search.slowlog.threshold.fetch.warn: 0ms
+index.search.slowlog.threshold.fetch.info: 0ms
+index.search.slowlog.threshold.fetch.debug: 0ms
+index.search.slowlog.threshold.fetch.trace: 0ms
+</code></pre>
+
+<br/>
+
+
+<pre><code>#两台集群的配置基本无异
+ECS2：
+#集群名字和ECS1的集群名字相同
+cluster.name: xxx_elasticsearch 
+node.name: es_node2
+
+#这里需要稍微提一下，这个配置完全是根据具体的业务量来配置的。因为目前我们的数据量只有2G多，还不大，所以大
+#部分开销用于数据的聚合等处理上，为了简单并尽量不影响原来的，ECS2并不设置成主节点和数据节点，不设置数据节点的
+#问题就是ECS2并不会保存索引数据，一旦ECS1当掉了搜索引擎就搜不出数据了，但鉴于es相对比较稳定，所以把数据处理
+#的压力负载到ECS2上减轻ECS1的es CPU负载就已经达到第一阶段的目的
+node.master: false 
+node.data: false
+
+#默认也是不采用多播
+discovery.zen.ping.multicast.enabled: false 
+#配置单播发现，这里配置ECS1的ip和tcp端口，如果有还有其它机器则用逗号分开
+discovery.zen.ping.unicast.hosts: ["10.XXX.XXX.1:9300"]
+
+#日志配置同ECS1
+index.search.slowlog.threshold.query.warn: 0ms
+index.search.slowlog.threshold.query.info: 0ms
+index.search.slowlog.threshold.query.debug: 0ms
+index.search.slowlog.threshold.query.trace: 0ms
+
+index.search.slowlog.threshold.fetch.warn: 0ms
+index.search.slowlog.threshold.fetch.info: 0ms
+index.search.slowlog.threshold.fetch.debug: 0ms
+index.search.slowlog.threshold.fetch.trace: 0ms
+</code></pre>
+
+<p>修改两台搜索引擎的日志配置文件：/elasticsearch/config/logging.yml</p>
+
+<pre><code># 这里只贴出主要的几段配置
+index.search.slowlog: DEBUG, index_search_slow_log_file
+# 打开index.search.slowlog
+additivity:
+  index.search.slowlog: true
+#添加appender
+appender:
+    index_search_slow_log_file:
+    type: dailyRollingFile
+    file: ${path.logs}/${cluster.name}_index_search_slowlog.log
+    datePattern: "'.'yy-MM-dd"
+    layout:
+      type: pattern
+      conversionPattern: "[%d{ISO8601}][%-5p][%-25c] %m%n"
+</code></pre>
+
+<p>Java API集群调用</p>
+
+<pre><code>public static Client newClient(String clusterName, boolean clientTransportSniff, 
+                            int port, String... hosts) {
+    Settings settings = ImmutableSettings.settingsBuilder()
+            .put("cluster.name", clusterName)
+            // 不知道为什么配置了这个就会很慢，暂时先关闭，因为短时间内不会出现动态添加机器的情况
+            //.put("client.transport.sniff", clientTransportSniff) 
+            .build();
+
+    TransportClient transportClient = new TransportClient(settings);
+    if(hosts != null) {
+        for (String host: hosts) {
+            transportClient.addTransportAddress(new InetSocketTransportAddress(host, port));
+        }
+    }
+    return transportClient;
+}
+</code></pre>
+
+<p>然后跑多次单元测试，观察两台es的slowlog，看看请求有否有效地动态负载到两台机器上</p>
+
+<p>请求1：有3个query负载到了节点1的3个分片(0,3,1), 有2个query负载到了节点2的2个分片(2,4), 最后由节点2做fetch操作</p>
+
+<pre><code>ECS1：
+[2016-06-25 16:49:49,346][WARN ][index.search.slowlog.query] [node1] [test_index][0] took[1.7ms], took_millis[1], types[tag], stats[], search_type[DFS_QUERY_THEN_FETCH], total_shards[5], source[{"from":0,"size":1000,"query":{"bool":{"must":{"term":{"id":1}}}},"explain":false,"facets":{"typeFacetName":{"terms":{"field":"pidvids","size":2147483647},"facet_filter":{"query":{"bool":{"must":{"term":{"id":1}}}}}}}}], extra_source[], 
+
+[2016-06-25 16:49:49,348][WARN ][index.search.slowlog.query] [node1] [test_index][3] took[3.7ms], took_millis[3], types[tag], stats[], search_type[DFS_QUERY_THEN_FETCH], total_shards[5], source[{"from":0,"size":1000,"query":{"bool":{"must":{"term":{"id":1}}}},"explain":false,"facets":{"typeFacetName":{"terms":{"field":"pidvids","size":2147483647},"facet_filter":{"query":{"bool":{"must":{"term":{"id":1}}}}}}}}], extra_source[], 
+
+[2016-06-25 16:49:49,349][WARN ][index.search.slowlog.query] [node1] [test_index][1] took[4.9ms], took_millis[4], types[tag], stats[], search_type[DFS_QUERY_THEN_FETCH], total_shards[5], source[{"from":0,"size":1000,"query":{"bool":{"must":{"term":{"id":1}}}},"explain":false,"facets":{"typeFacetName":{"terms":{"field":"pidvids","size":2147483647},"facet_filter":{"query":{"bool":{"must":{"term":{"id":1}}}}}}}}], extra_source[], 
+
+ECS2：
+[2016-06-25 16:49:49,347][WARN ][index.search.slowlog.query] [node2] [test_index][2] took[2.9ms], took_millis[2], types[tag], stats[], search_type[DFS_QUERY_THEN_FETCH], total_shards[5], source[{"from":0,"size":1000,"query":{"bool":{"must":{"term":{"id":1}}}},"explain":false,"facets":{"typeFacetName":{"terms":{"field":"pidvids","size":2147483647},"facet_filter":{"query":{"bool":{"must":{"term":{"id":1}}}}}}}}], extra_source[], 
+
+[2016-06-25 16:49:49,348][WARN ][index.search.slowlog.query] [node2] [test_index][4] took[3.1ms], took_millis[3], types[tag], stats[], search_type[DFS_QUERY_THEN_FETCH], total_shards[5], source[{"from":0,"size":1000,"query":{"bool":{"must":{"term":{"id":1}}}},"explain":false,"facets":{"typeFacetName":{"terms":{"field":"pidvids","size":2147483647},"facet_filter":{"query":{"bool":{"must":{"term":{"id":1}}}}}}}}], extra_source[], 
+
+[2016-06-25 16:49:49,350][WARN ][index.search.slowlog.fetch] [node2] [test_index][2] took[460.3micros], took_millis[0], types[tag], stats[], search_type[DFS_QUERY_THEN_FETCH], total_shards[5], source[{"from":0,"size":1000,"query":{"bool":{"must":{"term":{"id":1}}}},"explain":false,"facets":{"typeFacetName":{"terms":{"field":"pidvids","size":2147483647},"facet_filter":{"query":{"bool":{"must":{"term":{"id":1}}}}}}}}], extra_source[], 
+</code></pre>
+
+<br/>
+
+
+<p>请求2：有2个query负载到了节点3的分片(2,4), 有3个query负载到了节点2的2个分片(0,3,1), 最后由节点1做fetch操作</p>
+
+<pre><code>ECS1:
+[2016-06-25 16:55:36,687][WARN ][index.search.slowlog.query] [node1] [test_index][4] took[729micros], took_millis[0], types[tag], stats[], search_type[DFS_QUERY_THEN_FETCH], total_shards[5], source[{"from":0,"size":1000,"query":{"bool":{"must":{"term":{"id":1}}}},"explain":false,"facets":{"typeFacetName":{"terms":{"field":"pidvids","size":2147483647},"facet_filter":{"query":{"bool":{"must":{"term":{"id":1}}}}}}}}], extra_source[], 
+
+[2016-06-25 16:55:36,687][WARN ][index.search.slowlog.query] [node1] [test_index][2] took[1.4ms], took_millis[1], types[tag], stats[], search_type[DFS_QUERY_THEN_FETCH], total_shards[5], source[{"from":0,"size":1000,"query":{"bool":{"must":{"term":{"id":1}}}},"explain":false,"facets":{"typeFacetName":{"terms":{"field":"pidvids","size":2147483647},"facet_filter":{"query":{"bool":{"must":{"term":{"id":1}}}}}}}}], extra_source[], 
+
+[2016-06-25 16:55:36,689][WARN ][index.search.slowlog.fetch] [node1] [test_index][2] took[286.7micros], took_millis[0], types[tag], stats[], search_type[DFS_QUERY_THEN_FETCH], total_shards[5], source[{"from":0,"size":1000,"query":{"bool":{"must":{"term":{"id":1}}}},"explain":false,"facets":{"typeFacetName":{"terms":{"field":"pidvids","size":2147483647},"facet_filter":{"query":{"bool":{"must":{"term":{"id":1}}}}}}}}], extra_source[], 
+
+ECS2:
+[2016-06-25 16:55:36,687][WARN ][index.search.slowlog.query] [node2] [test_index][1] took[705.4micros], took_millis[0], types[tag], stats[], search_type[DFS_QUERY_THEN_FETCH], total_shards[5], source[{"from":0,"size":1000,"query":{"bool":{"must":{"term":{"id":1}}}},"explain":false,"facets":{"typeFacetName":{"terms":{"field":"pidvids","size":2147483647},"facet_filter":{"query":{"bool":{"must":{"term":{"id":1}}}}}}}}], extra_source[], 
+
+[2016-06-25 16:55:36,687][WARN ][index.search.slowlog.query] [node2] [test_index][0] took[874.9micros], took_millis[0], types[tag], stats[], search_type[DFS_QUERY_THEN_FETCH], total_shards[5], source[{"from":0,"size":1000,"query":{"bool":{"must":{"term":{"id":1}}}},"explain":false,"facets":{"typeFacetName":{"terms":{"field":"pidvids","size":2147483647},"facet_filter":{"query":{"bool":{"must":{"term":{"id":1}}}}}}}}], extra_source[], 
+
+[2016-06-25 16:55:36,688][WARN ][index.search.slowlog.query] [node2] [test_index][3] took[519.1micros], took_millis[0], types[tag], stats[], search_type[DFS_QUERY_THEN_FETCH], total_shards[5], source[{"from":0,"size":1000,"query":{"bool":{"must":{"term":{"id":1}}}},"explain":false,"facets":{"typeFacetName":{"terms":{"field":"pidvids","size":2147483647},"facet_filter":{"query":{"bool":{"must":{"term":{"id":1}}}}}}}}], extra_source[],
+</code></pre>
+
+<p>从日志来看可以验证集群已经配置成功，我们可以安装es的head plugin，从浏览器视图更直观的管擦两个集群节点的状态和健康情况。直接浏览器访问<a href="http://host:httpport/_plugin/head">http://host:httpport/_plugin/head</a></p>
+
+<p>节点1
+<img src="../images/node1.png" alt="Alt text" /></p>
+
+<p>节点2
+<img src="../images/node2.png" alt="Alt text" /></p>
+]]></content>
+  </entry>
+  
+</feed>
