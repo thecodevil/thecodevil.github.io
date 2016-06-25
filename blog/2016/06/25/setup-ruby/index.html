@@ -9,7 +9,8 @@
   <meta name="author" content="battousai">
 
   
-  <meta name="description" content="人生有一百次谨小慎微，你要有一次拍案而起；人生有一百次放浪形骸，也要认真的爱一次；人生有一百次不越雷池一步，你也要潇洒走一回 安装ruby 1. 到ruby官网下载页面，找到最新的版本，复制下载链接 2. wget https://cache.ruby-lang.org/pub/ruby/2.3/ &hellip;">
+  <meta name="description" content="人生有一百次谨小慎微，你要有一次拍案而起；人生有一百次放浪形骸，也要认真的爱一次；人生有一百次不越雷池一步，你也要潇洒走一回 安装ruby 1. [软件包链接下载地址](https://www.ruby-lang.org/zh_cn/downloads/)
+2. wget https:// &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -106,49 +107,38 @@
 
 <h3>安装ruby</h3>
 
-<h4>1. 到ruby官网<a href="https://www.ruby-lang.org/zh_cn/downloads/">下载页面</a>，找到最新的版本，复制下载链接</h4>
-
-<h4>2. wget <a href="https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.1.tar.gz%EF%BC%88%E4%B8%8B%E8%BD%BD%E9%93%BE%E6%8E%A5%EF%BC%89">https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.1.tar.gz%EF%BC%88%E4%B8%8B%E8%BD%BD%E9%93%BE%E6%8E%A5%EF%BC%89</a></h4>
-
-<h4>3. 解压 tar -zxvpf ruby-2.3.1.tar.gz</h4>
-
-<h4>4. su &ndash;</h4>
-
-<h4>5. cd ruby-2.3.1/</h4>
-
-<h4>6. /configure  &mdash;prefix=/usr/local/ruby</h4>
-
-<h4>7. make &amp;&amp; make install</h4>
-
-<h4>8. export PATH=/usr/local/ruby/bin:$PATH</h4>
+<pre><code>1. [软件包链接下载地址](https://www.ruby-lang.org/zh_cn/downloads/)
+2. wget https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.1.tar.gz
+3. tar -zxvpf ruby-2.3.1.tar.gz
+4. su -
+5. cd ruby-2.3.1/
+6. /configure  --prefix=/usr/local/ruby
+7. make &amp;&amp; make install
+8. export PATH=/usr/local/ruby/bin:$PATH
+</code></pre>
 
 <h3>安装rubygem</h3>
 
-<h4>1. 到rubygem官网<a href="https://rubygems.org/pages/download">下载页面</a>，复制最新下载链接</h4>
-
-<h4>2. 下载rubygem wget <a href="https://rubygems.org/rubygems/rubygems-2.6.4.zip">https://rubygems.org/rubygems/rubygems-2.6.4.zip</a></h4>
-
-<h4>3. unzip rubygems-2.6.4.zip</h4>
-
-<h4>4. cd ruby-2.3.1/</h4>
-
-<h4>5. ruby setup.rb</h4>
+<pre><code>1. [软件包链接下载地址](https://rubygems.org/pages/download)
+2. wget https://rubygems.org/rubygems/rubygems-2.6.4.zip
+3. unzip rubygems-2.6.4.zip
+4. cd ruby-2.3.1/
+5. ruby setup.rb
+</code></pre>
 
 <h3>安装bundle</h3>
 
-<h4>1. gem sources &mdash;remove <a href="https://rubygems.org/">https://rubygems.org/</a></h4>
-
-<h4>2. gem sources &mdash;add <a href="https://ruby.taobao.org/">https://ruby.taobao.org/</a></h4>
-
-<h4>3. gem sources (查看确认镜像)</h4>
-
-<h4>4. gem install bundler</h4>
+<pre><code>1. gem sources --remove https://rubygems.org/
+2. gem sources --add https://ruby.taobao.org/
+3. gem sources (查看确认镜像)
+4. gem install bundler
+</code></pre>
 
 <h3>安装redis-audit</h3>
 
-<h4>1. bundle install redis-audit</h4>
-
-<h4>2. bundle exec ruby redis-audit.rb 127.0.0.1 6379 0 10000</h4>
+<pre><code>1. bundle install redis-audit
+2. bundle exec ruby redis-audit.rb 127.0.0.1 6379 0 10000
+</code></pre>
 </div>
 
 
@@ -176,7 +166,7 @@
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
+    <a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/redis/'>redis</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
   
 </span>
 
