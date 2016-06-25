@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 集群 | battousai's blog]]></title>
   <link href="http://youngjd.com/blog/categories/ji-qun/atom.xml" rel="self"/>
   <link href="http://youngjd.com/"/>
-  <updated>2016-06-25T17:30:28+08:00</updated>
+  <updated>2016-06-25T17:31:32+08:00</updated>
   <id>http://youngjd.com/</id>
   <author>
     <name><![CDATA[battousai]]></name>
@@ -164,7 +164,7 @@ ECS2：
 <br/>
 
 
-<p>请求2：有2个query负载到了节点2的分片(2,4), 有3个query负载到了节点2的3个分片(0,3,1), 最后由节点1做fetch操作</p>
+<p>请求2：有2个query负载到了节点2的2个分片(2,4), 有3个query负载到了节点2的3个分片(0,3,1), 最后由节点1做fetch操作</p>
 
 <pre><code>ECS1:
 [2016-06-25 16:55:36,687][WARN ][index.search.slowlog.query] [node1] [test_index][4] took[729micros], took_millis[0], types[tag], stats[], search_type[DFS_QUERY_THEN_FETCH], total_shards[5], source[{"from":0,"size":1000,"query":{"bool":{"must":{"term":{"id":1}}}},"explain":false,"facets":{"typeFacetName":{"terms":{"field":"pidvids","size":2147483647},"facet_filter":{"query":{"bool":{"must":{"term":{"id":1}}}}}}}}], extra_source[], 
