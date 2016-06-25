@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 搜索引擎 | battousai's blog]]></title>
   <link href="http://youngjd.com/blog/categories/sou-suo-yin-qing/atom.xml" rel="self"/>
   <link href="http://youngjd.com/"/>
-  <updated>2016-06-25T17:32:54+08:00</updated>
+  <updated>2016-06-25T17:35:53+08:00</updated>
   <id>http://youngjd.com/</id>
   <author>
     <name><![CDATA[battousai]]></name>
@@ -28,7 +28,7 @@
 <br>
 
 
-<p>由于业务大量的使用了elasticsearch来做各种的数据查询，导致在年中促销的时候单机出现了300以上的CPU负载。Client端凡是通过调用搜索引擎获取数据的请求响应都变得异常的慢并且一度出现超时。所以需要做一下搜索引擎的集群，把压力进行负载均衡。由于服务器资源有限又是在云服务器上(无法在单台ECS上再虚拟机器出来)，所以目前先使用两台机ECS进行简单的集群化，后面再一步步优化并根据业务考虑是否需要再扩展机器。</p>
+<p>由于业务大量的使用了elasticsearch来做各种的数据查询，导致在年中促销的时候单机出现了300以上的CPU负载。Client端凡是通过调用搜索引擎获取数据的请求响应都变得异常的慢并且一度出现超时。所以需要做一下搜索引擎的集群，把压力进行负载均衡。由于服务器资源有限又是在云服务器上(无法在单台ECS上再虚拟机器出来)，所以目前先使用两台ECS主机进行简单的集群，后面再一步步优化并根据业务考虑是否需要再扩展机器。</p>
 
 <p>elasticsearch集群的配置比较简单，网上资料都比较详细。下面是两台即将进行集群的机器。</p>
 
