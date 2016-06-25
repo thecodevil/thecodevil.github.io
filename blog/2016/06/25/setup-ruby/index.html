@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Sql语法相关子查询与非相关子查询 - battousai's blog</title>
+  <title>Linux安装ruby,rubygem,bundle及redis插件 - battousai's blog</title>
   <meta name="author" content="battousai">
 
   
-  <meta name="description" content="问：员工为什么要离职？ 答：钱少事多离家远，位低权轻责任重。 ">
+  <meta name="description" content="人生有一百次谨小慎微，你要有一次拍案而起；人生有一百次放浪形骸，也要认真的爱一次；人生有一百次不越雷池一步，你也要潇洒走一回 安装ruby 1. 到ruby官网下载页面 https://www.ruby-lang.org/zh_cn/downloads/%EF%BC%8C 找到最新的版本， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://youngjd.com/blog/2015/08/07/sql">
+  <link rel="canonical" href="http://youngjd.com/blog/2016/06/25/setup-ruby">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
@@ -71,7 +71,7 @@
   
   <header>
     
-      <h1 class="entry-title">Sql语法相关子查询与非相关子查询</h1>
+      <h1 class="entry-title">Linux安装ruby,rubygem,bundle及redis插件</h1>
     
     
       <p class="meta">
@@ -87,20 +87,68 @@
   
 
 
-<time datetime="2015-08-07T10:42:52+08:00" pubdate data-updated="true">2015-08-07</time>
+<time datetime="2016-06-25T10:42:52+08:00" pubdate data-updated="true">2016-06-25</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><blockquote><p><p>问：员工为什么要离职？
- <p>答：钱少事多离家远，位低权轻责任重。</p></blockquote>
+<div class="entry-content"><blockquote><p>人生有一百次谨小慎微，你要有一次拍案而起；人生有一百次放浪形骸，也要认真的爱一次；人生有一百次不越雷池一步，你也要潇洒走一回</p></blockquote>
 
 <!-- more -->
 
 
+<hr />
 
+<br>
+
+
+<h3>安装ruby</h3>
+
+<h4>1. 到ruby官网下载页面 <a href="https://www.ruby-lang.org/zh_cn/downloads/%EF%BC%8C">https://www.ruby-lang.org/zh_cn/downloads/%EF%BC%8C</a> 找到最新的版本，复制下载链接</h4>
+
+<h4>2. wget <a href="https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.1.tar.gz%EF%BC%88%E4%B8%8B%E8%BD%BD%E9%93%BE%E6%8E%A5%EF%BC%89">https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.1.tar.gz%EF%BC%88%E4%B8%8B%E8%BD%BD%E9%93%BE%E6%8E%A5%EF%BC%89</a></h4>
+
+<h4>3. 解压 tar -zxvpf ruby-2.3.1.tar.gz</h4>
+
+<h4>4. su &ndash;</h4>
+
+<h4>5. cd ruby-2.3.1/</h4>
+
+<h4>6. /configure  &mdash;prefix=/usr/local/ruby</h4>
+
+<h4>7. make &amp;&amp; make install</h4>
+
+<h4>8. export PATH=/usr/local/ruby/bin:$PATH</h4>
+
+<h3>安装rubygem</h3>
+
+<h4>1. 到rubygem 官网<a href="https://rubygems.org/pages/download">https://rubygems.org/pages/download</a> 复制最新下载链接</h4>
+
+<h4>2. 下载rubygem wget <a href="https://rubygems.org/rubygems/rubygems-2.6.4.zip">https://rubygems.org/rubygems/rubygems-2.6.4.zip</a></h4>
+
+<h4>3. unzip rubygems-2.6.4.zip</h4>
+
+<h4>4. cd ruby-2.3.1/</h4>
+
+<h4>5. ruby setup.rb</h4>
+
+<h3>安装bundle</h3>
+
+<h4>1. gem sources &mdash;remove <a href="https://rubygems.org/">https://rubygems.org/</a></h4>
+
+<h4>2. gem sources &mdash;add <a href="https://ruby.taobao.org/">https://ruby.taobao.org/</a></h4>
+
+<h4>3. gem sources (查看确认镜像)</h4>
+
+<h4>4. gem install bundler</h4>
+
+<h3>安装redis-audit</h3>
+
+<h4>1. bundle install redis-audit</h4>
+
+<h4>2. bundle exec ruby redis-audit.rb 127.0.0.1 6379 0 10000</h4>
 </div>
 
 
@@ -123,12 +171,12 @@
   
 
 
-<time datetime="2015-08-07T10:42:52+08:00" pubdate data-updated="true">2015-08-07</time>
+<time datetime="2016-06-25T10:42:52+08:00" pubdate data-updated="true">2016-06-25</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/database/'>database</a>, <a class='category' href='/blog/categories/program/'>program</a>, <a class='category' href='/blog/categories/sql/'>sql</a>
+    <a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
   
 </span>
 
@@ -160,7 +208,7 @@
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2015/08/07/sql/">Sql语法相关子查询与非相关子查询</a>
+        <a href="/blog/2016/06/25/setup-ruby/">Linux安装ruby,rubygem,bundle及redis插件</a>
       </li>
     
       <li class="post">
