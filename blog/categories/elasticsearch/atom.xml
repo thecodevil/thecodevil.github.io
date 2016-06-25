@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Elasticsearch | battousai's blog]]></title>
   <link href="http://youngjd.com/blog/categories/elasticsearch/atom.xml" rel="self"/>
   <link href="http://youngjd.com/"/>
-  <updated>2016-06-25T17:09:05+08:00</updated>
+  <updated>2016-06-25T17:16:23+08:00</updated>
   <id>http://youngjd.com/</id>
   <author>
     <name><![CDATA[battousai]]></name>
@@ -184,10 +184,10 @@ ECS2:
 <p>从日志来看可以验证集群已经配置成功，我们可以安装es的head plugin，从浏览器视图更直观的管擦两个集群节点的状态和健康情况。直接浏览器访问<a href="http://host:httpport/_plugin/head">http://host:httpport/_plugin/head</a></p>
 
 <p>节点1
-<img src="../images/node1.png" alt="Alt text" /></p>
+<img src="/images/node1.png" alt="Alt text" /></p>
 
 <p>节点2
-<img src="../images/node2.png" alt="Alt text" /></p>
+<img src="/images/node2.png" alt="Alt text" /></p>
 ]]></content>
   </entry>
   
