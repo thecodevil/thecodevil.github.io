@@ -5,12 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Linux安装ruby,rubygem,bundle及redis插件 - battousai's blog</title>
+  <title>Category: Leetcode - battousai's blog</title>
   <meta name="author" content="battousai">
 
   
-  <meta name="description" content="人生有一百次谨小慎微，你要有一次拍案而起；人生有一百次放浪形骸，也要认真的爱一次；人生有一百次不越雷池一步，你也要潇洒走一回 安装ruby 1. [软件包链接下载地址](https://www.ruby-lang.org/zh_cn/downloads/)
-2. wget https:// &hellip;">
+  <meta name="description" content="Category: leetcode">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://youngjd.com/blog/2016/04/25/setup-ruby">
+  <link rel="canonical" href="http://youngjd.comblog/categories/leetcode">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
@@ -68,127 +67,35 @@
   <div id="main">
     <div id="content">
       <div>
-<article class="hentry" role="article">
+<article role="article">
   
   <header>
-    
-      <h1 class="entry-title">Linux安装ruby,rubygem,bundle及redis插件</h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2016-04-25T10:42:52+08:00" pubdate data-updated="true">2016-04-25</time>
-        
-      </p>
+    <h1 class="entry-title">Category: Leetcode</h1>
     
   </header>
+  
+  <div id="blog-archives" class="category">
 
 
-<div class="entry-content"><blockquote><p>人生有一百次谨小慎微，你要有一次拍案而起；人生有一百次放浪形骸，也要认真的爱一次；人生有一百次不越雷池一步，你也要潇洒走一回</p></blockquote>
 
-<!-- more -->
+  
+  <h2>2016</h2>
+
+<article>
+  
+<h1><a href="/blog/2016/07/06/leetcode-sql/">leetcode-Database Problems</a></h1>
+<time datetime="2016-07-06T14:34:52+08:00" pubdate><span class='month'>Jul</span> <span class='day'>06</span> <span class='year'>2016</span></time>
+
+<footer>
+  <span class="categories">posted in <a class='category' href='/blog/categories/leetcode/'>leetcode</a>, <a class='category' href='/blog/categories/sql/'>sql</a></span>
+</footer>
 
 
-<hr />
+</article>
 
-<br>
-
-
-<h3>安装ruby</h3>
-
-<pre><code>1. [软件包链接下载地址](https://www.ruby-lang.org/zh_cn/downloads/)
-2. wget https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.1.tar.gz
-3. tar -zxvpf ruby-2.3.1.tar.gz
-4. su -
-5. cd ruby-2.3.1/
-6. /configure  --prefix=/usr/local/ruby
-7. make &amp;&amp; make install
-8. export PATH=/usr/local/ruby/bin:$PATH
-</code></pre>
-
-<h3>安装rubygem</h3>
-
-<pre><code>1. [软件包链接下载地址](https://rubygems.org/pages/download)
-2. wget https://rubygems.org/rubygems/rubygems-2.6.4.zip
-3. unzip rubygems-2.6.4.zip
-4. cd ruby-2.3.1/
-5. ruby setup.rb
-</code></pre>
-
-<h3>安装bundle</h3>
-
-<pre><code>1. gem sources --remove https://rubygems.org/
-2. gem sources --add https://ruby.taobao.org/
-3. gem sources (查看确认镜像)
-4. gem install bundler
-</code></pre>
-
-<h3>安装redis-audit</h3>
-
-<pre><code>1. bundle install redis-audit
-2. bundle exec ruby redis-audit.rb 127.0.0.1 6379 0 10000
-</code></pre>
 </div>
 
-
-  <footer>
-    <p class="meta">
-      
   
-
-<span class="byline author vcard">Posted by <span class="fn">battousai</span></span>
-
-      
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2016-04-25T10:42:52+08:00" pubdate data-updated="true">2016-04-25</time>
-      
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/redis/'>redis</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
-  
-</span>
-
-
-    </p>
-    
-      <div class="sharing">
-  
-  
-  
-</div>
-
-    
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2014/07/27/spring-message-converter/" title="Previous Post: spring_message_converter">&laquo; spring_message_converter</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2016/06/25/elasticsearch-cluster/" title="Next Post: elasticsearch集群配置">elasticsearch集群配置 &raquo;</a>
-      
-    </p>
-  </footer>
 </article>
 
 </div>
@@ -228,6 +135,8 @@
 
   
 </aside>
+
+
 
 
     </div>

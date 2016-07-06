@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Leetcode | battousai's blog]]></title>
+  <link href="http://youngjd.com/blog/categories/leetcode/atom.xml" rel="self"/>
+  <link href="http://youngjd.com/"/>
+  <updated>2016-07-06T14:59:48+08:00</updated>
+  <id>http://youngjd.com/</id>
+  <author>
+    <name><![CDATA[battousai]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[leetcode-Database Problems]]></title>
+    <link href="http://youngjd.com/blog/2016/07/06/leetcode-sql/"/>
+    <updated>2016-07-06T14:34:52+08:00</updated>
+    <id>http://youngjd.com/blog/2016/07/06/leetcode-sql</id>
+    <content type="html"><![CDATA[<blockquote><p>人是为了活着本身而活着，而不是为了活着之外的任何事物而活着。 &mdash; 余华《活着》</p></blockquote>
+
+<!-- more -->
+
+
+<hr />
+
+<br>
+
+
+<p>| 262        | Trips and Users           | Hard  |
+```
+select t1.Day,
+case</p>
+
+<pre><code>when t2.sub is null then 0.00
+</code></pre>
+
+<p>  else round(t2.sub/t1.total,2) end as &lsquo;Cancellation Rate&rsquo;
+ from (
+select a.Request_at as Day, count(<em>) as total
+from Trips a join Users b
+on a.Client_Id=b.Users_Id where b.Banned=&lsquo;No&rsquo; group by Request_at ) t1 left join (
+select a.Request_at as Day, count(</em>) as sub
+from Trips a join Users b
+on a.Client_Id=b.Users_Id where
+a.Status in (&lsquo;cancelled_by_client&rsquo;,&lsquo;cancelled_by_driver&rsquo;)
+and b.Banned=&lsquo;No&rsquo; group by Request_at
+) t2 on t1.Day=t2.Day where t1.Day >= &lsquo;2013-10-01&rsquo; and t1.Day &lt;= &lsquo;2013-10-03&rsquo;
+```</p>
+
+<p>| 197        | Rising Temperature          | Easy  |
+<code>
+select a.Id from Weather a join Weather b
+on DATE_ADD(b.Date,INTERVAL 1 Day)=a.Date where a.Temperature&gt;b.Temperature
+</code></p>
+
+<p>| 196        | Delete Duplicate Emails          | Easy  |
+<code>
+delete from Person where Id not in (
+select mid from (select min(Id) mid from Person group by Email) t1
+)
+</code></p>
+
+<p>| 185        | Department Top Three Salaries          | Hard  |
+```
+select a.Name as Department, b.Name as Employee, b.Salary from Department a join (</p>
+
+<pre><code>select t3.id,t3.DepartmentId,t3.Name,t3.Salary from Employee t3 
+where (
+    select count(distinct t2.Salary) from Employee as t1 left join Employee as t2
+    on t1.DepartmentId=t2.DepartmentId and t1.Salary&lt;=t2.Salary where t1.id=t3.id
+) &lt;=3
+</code></pre>
+
+<p>) b on a.Id=b.DepartmentId order by a.Name, b.Salary desc
+```</p>
+
+<p>| 184        | Department Highest Salary          | Medium  |
+```
+select t2.Name as &lsquo;Department&rsquo;, t1.Name as &lsquo;Employee&rsquo;, t1.Salary as Salary
+from Employee t1 join (</p>
+
+<pre><code>select b.Id as deptId, b.Name, max(Salary) as Salary 
+from Employee a join Department b on a.DepartmentId = b.Id group by b.Id 
+</code></pre>
+
+<p>) t2 on t1.Salary=t2.Salary and t2.deptId=t1.DepartmentId;
+```</p>
+
+<p>| 183        | Customers Who Never Order          | Easy  |
+<code>
+select a.Name as Customers
+from Customers a left join Orders b on a.Id=b.CustomerId where b.Id is null;
+</code></p>
+
+<p>| 182        | Duplicate Emails          | Easy  |
+<code>
+select Email from Person group by Email having count(Email)&gt;1;
+</code></p>
+
+<p>| 181        | Employees Earning More Than Their Managers         | Easy  |
+<code>
+select a.Name as 'Employee' from Employee  a join Employee  b
+on a.ManagerId=b.Id where a.ManagerId is not null and a.Salary&gt;b.Salary;
+</code></p>
+
+<p>| 180        | Consecutive Numbers         | Medium  |
+```
+select distinct Num as ConsecutiveNums from (</p>
+
+<pre><code>select
+    Num,
+    case
+        when @prevNum = Num then @count := @count + 1
+        when (@prevNum := Num) is not null then @count := 1
+    end n, select (@preNum := null) r
+from Logs
+</code></pre>
+
+<p>) a where n >= 3
+```</p>
+
+<p>| 178        | Rank Scores         | Medium  |
+<code>
+select o1.Score, o2.total-o1.gn as Rank from
+(select m0.Score,ifnull(m1.tn,0) gn from Scores m0 left join
+(select t.s1,count(*) tn from (
+select a.Score s1, b.Score s2 from Scores a join Scores b
+on a.Score &gt; b.Score group by s1,s2
+) t group by t.s1) m1 on m0.Score=m1.s1) o1,
+(select count(*) total from (
+select count(*) from Scores group by Score ) cc) o2 order by o1.Score desc
+</code></p>
+
+<p>| 177        | Nth Highest Salary         | Medium  |
+```
+CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
+BEGIN
+  declare startIndex int;
+  set startIndex = N &ndash; 1;
+  RETURN (</p>
+
+<pre><code>  # Write your MySQL query statement below.
+
+  select Salary from Employee group by Salary order by Salary desc limit startIndex, 1
+</code></pre>
+
+<p>  );
+END
+```</p>
+
+<p>| 176        | Second Highest Salary         | Easy  |
+```
+select case when b.Salary  is null then null else a.Salary end as SecondHighestSalary
+from Employee a left join
+(</p>
+
+<pre><code>select Salary  from Employee group by Salary  order by Salary  desc limit 1,1
+</code></pre>
+
+<p>) b on a.Salary=b.Salary<br/>
+order by b.Salary  desc limit 1
+```</p>
+
+<p><code>
+select max(Salary) as SecondHighestSalary  
+from Employee
+where salary &lt; (select max(Salary) from Employee)
+</code></p>
+
+<p>| 175        | Combine Two Tables         | Easy  |
+<code>
+select a.FirstName,a.LastName,b.City,b.State
+from Person a left join Address b on a.PersonId=b.PersonId;
+</code></p>
+]]></content>
+  </entry>
+  
+</feed>

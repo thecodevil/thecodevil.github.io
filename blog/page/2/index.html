@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Linux安装ruby,rubygem,bundle及redis插件 - battousai's blog</title>
+  <title>battousai's blog</title>
   <meta name="author" content="battousai">
 
   
-  <meta name="description" content="人生有一百次谨小慎微，你要有一次拍案而起；人生有一百次放浪形骸，也要认真的爱一次；人生有一百次不越雷池一步，你也要潇洒走一回 安装ruby 1. [软件包链接下载地址](https://www.ruby-lang.org/zh_cn/downloads/)
-2. wget https:// &hellip;">
+  <meta name="description" content="WARNING
+If you are reading this then this warning is for you. Every word you read of this useless fine print is another second off you life. Do not &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://youngjd.com/blog/2016/04/25/setup-ruby">
+  <link rel="canonical" href="http://youngjd.com/blog/page/2">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
@@ -67,12 +67,15 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div>
-<article class="hentry" role="article">
+      <div class="blog-index">
   
+  
+  
+    <article>
+      
   <header>
     
-      <h1 class="entry-title">Linux安装ruby,rubygem,bundle及redis插件</h1>
+      <h1 class="entry-title"><a href="/blog/2014/07/13/first-blog/">Tyler&#8217;s WARNING</a></h1>
     
     
       <p class="meta">
@@ -88,111 +91,47 @@
   
 
 
-<time datetime="2016-04-25T10:42:52+08:00" pubdate data-updated="true">2016-04-25</time>
+<time datetime="2014-07-13T16:26:55+08:00" pubdate data-updated="true">2014-07-13</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><blockquote><p>人生有一百次谨小慎微，你要有一次拍案而起；人生有一百次放浪形骸，也要认真的爱一次；人生有一百次不越雷池一步，你也要潇洒走一回</p></blockquote>
+  <div class="entry-content"><blockquote><p>WARNING<br>
+If you are reading this then this warning is for you. <br>
+Every word you read of this useless fine print is another second off you life. <br>
+Do not you have other thing to do? <br>
+Is your life so empty that you honestly can&rsquo;t think of a better way to spend these moments？ <br>
+Or are you so impressed with authority that you give respect and credence to all who claim it？Do you read everything you are supposed read？ <br>
+Do you think everything you are supposed think？ <br>
+Buy what you are told you should want？ <br>
+Get out of your apartment. Meet a member of the opposite sex. <br>
+Stop the excessive shopping and masturbation. <br>
+Quit your job. Start a fight. Prove you are alive. <br>
+If you do not claim your humanity you will become a statistic. <br>
+You have been warned&hellip;&hellip; <br>
+Tyler.  &mdash;<a href="http://movie.douban.com/subject/1292000/">《搏击俱乐部》</a></p></blockquote>
 
-<!-- more -->
-
-
-<hr />
-
-<br>
-
-
-<h3>安装ruby</h3>
-
-<pre><code>1. [软件包链接下载地址](https://www.ruby-lang.org/zh_cn/downloads/)
-2. wget https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.1.tar.gz
-3. tar -zxvpf ruby-2.3.1.tar.gz
-4. su -
-5. cd ruby-2.3.1/
-6. /configure  --prefix=/usr/local/ruby
-7. make &amp;&amp; make install
-8. export PATH=/usr/local/ruby/bin:$PATH
-</code></pre>
-
-<h3>安装rubygem</h3>
-
-<pre><code>1. [软件包链接下载地址](https://rubygems.org/pages/download)
-2. wget https://rubygems.org/rubygems/rubygems-2.6.4.zip
-3. unzip rubygems-2.6.4.zip
-4. cd ruby-2.3.1/
-5. ruby setup.rb
-</code></pre>
-
-<h3>安装bundle</h3>
-
-<pre><code>1. gem sources --remove https://rubygems.org/
-2. gem sources --add https://ruby.taobao.org/
-3. gem sources (查看确认镜像)
-4. gem install bundler
-</code></pre>
-
-<h3>安装redis-audit</h3>
-
-<pre><code>1. bundle install redis-audit
-2. bundle exec ruby redis-audit.rb 127.0.0.1 6379 0 10000
-</code></pre>
 </div>
-
-
-  <footer>
-    <p class="meta">
-      
   
-
-<span class="byline author vcard">Posted by <span class="fn">battousai</span></span>
-
-      
-
-
-
-
-
-
-
-
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/07/13/first-blog/">Read more &rarr;</a>
+    </footer>
   
 
 
-<time datetime="2016-04-25T10:42:52+08:00" pubdate data-updated="true">2016-04-25</time>
-      
-
-<span class="categories">
+    </article>
   
-    <a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/redis/'>redis</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
-  
-</span>
-
-
-    </p>
+  <div class="pagination">
     
-      <div class="sharing">
-  
-  
-  
-</div>
-
+    <a href="/blog/archives">Blog Archives</a>
     
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2014/07/27/spring-message-converter/" title="Previous Post: spring_message_converter">&laquo; spring_message_converter</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2016/06/25/elasticsearch-cluster/" title="Next Post: elasticsearch集群配置">elasticsearch集群配置 &raquo;</a>
-      
-    </p>
-  </footer>
-</article>
-
+    <a class="next" href="/">Newer &rarr;</a>
+    
+  </div>
 </div>
-
 <aside class="sidebar">
   
     <section>
@@ -228,7 +167,6 @@
 
   
 </aside>
-
 
     </div>
   </div>

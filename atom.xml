@@ -4,7 +4,7 @@
   <title><![CDATA[battousai's blog]]></title>
   <link href="http://youngjd.com/atom.xml" rel="self"/>
   <link href="http://youngjd.com/"/>
-  <updated>2016-06-25T18:17:13+08:00</updated>
+  <updated>2016-07-06T14:59:48+08:00</updated>
   <id>http://youngjd.com/</id>
   <author>
     <name><![CDATA[battousai]]></name>
@@ -12,6 +12,227 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[leetcode-Database Problems]]></title>
+    <link href="http://youngjd.com/blog/2016/07/06/leetcode-sql/"/>
+    <updated>2016-07-06T14:34:52+08:00</updated>
+    <id>http://youngjd.com/blog/2016/07/06/leetcode-sql</id>
+    <content type="html"><![CDATA[<blockquote><p>人是为了活着本身而活着，而不是为了活着之外的任何事物而活着。 &mdash; 余华《活着》</p></blockquote>
+
+<!-- more -->
+
+
+<hr />
+
+<br>
+
+
+<p>| 262        | Trips and Users           | Hard  |</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>select t1.Day,
+</span><span class='line'>case 
+</span><span class='line'>  when t2.sub is null then 0.00
+</span><span class='line'>  else round(t2.sub/t1.total,2) end as 'Cancellation Rate'
+</span><span class='line'> from (
+</span><span class='line'>select a.Request_at as Day, count(*) as total
+</span><span class='line'>from Trips a join Users b 
+</span><span class='line'>on a.Client_Id=b.Users_Id where b.Banned='No' group by Request_at ) t1 left join (
+</span><span class='line'>select a.Request_at as Day, count(*) as sub 
+</span><span class='line'>from Trips a join Users b 
+</span><span class='line'>on a.Client_Id=b.Users_Id where 
+</span><span class='line'>a.Status in ('cancelled_by_client','cancelled_by_driver')
+</span><span class='line'>and b.Banned='No' group by Request_at
+</span><span class='line'>) t2 on t1.Day=t2.Day where t1.Day &gt;= '2013-10-01' and t1.Day &lt;= '2013-10-03'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>| 197        | Rising Temperature          | Easy  |</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>select a.Id from Weather a join Weather b 
+</span><span class='line'>on DATE_ADD(b.Date,INTERVAL 1 Day)=a.Date where a.Temperature&gt;b.Temperature</span></code></pre></td></tr></table></div></figure>
+
+
+<p>| 196        | Delete Duplicate Emails          | Easy  |</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>delete from Person where Id not in (
+</span><span class='line'>select mid from (select min(Id) mid from Person group by Email) t1
+</span><span class='line'>)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>| 185        | Department Top Three Salaries          | Hard  |</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>select a.Name as Department, b.Name as Employee, b.Salary from Department a join (
+</span><span class='line'>  select t3.id,t3.DepartmentId,t3.Name,t3.Salary from Employee t3 
+</span><span class='line'>  where (
+</span><span class='line'>      select count(distinct t2.Salary) from Employee as t1 left join Employee as t2
+</span><span class='line'>      on t1.DepartmentId=t2.DepartmentId and t1.Salary&lt;=t2.Salary where t1.id=t3.id
+</span><span class='line'>  ) &lt;=3
+</span><span class='line'>) b on a.Id=b.DepartmentId order by a.Name, b.Salary desc</span></code></pre></td></tr></table></div></figure>
+
+
+<p>| 184        | Department Highest Salary          | Medium  |</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>select t2.Name as 'Department', t1.Name as 'Employee', t1.Salary as Salary 
+</span><span class='line'>from Employee t1 join (
+</span><span class='line'>  select b.Id as deptId, b.Name, max(Salary) as Salary 
+</span><span class='line'>  from Employee a join Department b on a.DepartmentId = b.Id group by b.Id 
+</span><span class='line'>) t2 on t1.Salary=t2.Salary and t2.deptId=t1.DepartmentId; </span></code></pre></td></tr></table></div></figure>
+
+
+<p>| 183        | Customers Who Never Order          | Easy  |</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>select a.Name as Customers 
+</span><span class='line'>from Customers a left join Orders b on a.Id=b.CustomerId where b.Id is null;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>| 182        | Duplicate Emails          | Easy  |</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>select Email from Person group by Email having count(Email)&gt;1;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>| 181        | Employees Earning More Than Their Managers         | Easy  |</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>select a.Name as 'Employee' from Employee  a join Employee  b
+</span><span class='line'>on a.ManagerId=b.Id where a.ManagerId is not null and a.Salary&gt;b.Salary;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>| 180        | Consecutive Numbers         | Medium  |</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>select distinct Num as ConsecutiveNums from (
+</span><span class='line'>    select
+</span><span class='line'>        Num,
+</span><span class='line'>        case
+</span><span class='line'>            when @prevNum = Num then @count := @count + 1
+</span><span class='line'>            when (@prevNum := Num) is not null then @count := 1
+</span><span class='line'>        end n, select (@preNum := null) r
+</span><span class='line'>    from Logs
+</span><span class='line'>) a where n &gt;= 3</span></code></pre></td></tr></table></div></figure>
+
+
+<p>| 178        | Rank Scores         | Medium  |</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>select o1.Score, o2.total-o1.gn as Rank from 
+</span><span class='line'>(select m0.Score,ifnull(m1.tn,0) gn from Scores m0 left join
+</span><span class='line'>(select t.s1,count(*) tn from (
+</span><span class='line'>select a.Score s1, b.Score s2 from Scores a join Scores b 
+</span><span class='line'>on a.Score &gt; b.Score group by s1,s2
+</span><span class='line'>) t group by t.s1) m1 on m0.Score=m1.s1) o1,
+</span><span class='line'>(select count(*) total from (
+</span><span class='line'>select count(*) from Scores group by Score ) cc) o2 order by o1.Score desc</span></code></pre></td></tr></table></div></figure>
+
+
+<p>| 177        | Nth Highest Salary         | Medium  |</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
+</span><span class='line'>BEGIN
+</span><span class='line'>  declare startIndex int;
+</span><span class='line'>  set startIndex = N - 1;
+</span><span class='line'>  RETURN (
+</span><span class='line'>      # Write your MySQL query statement below.
+</span><span class='line'>      
+</span><span class='line'>      select Salary from Employee group by Salary order by Salary desc limit startIndex, 1
+</span><span class='line'>  );
+</span><span class='line'>END</span></code></pre></td></tr></table></div></figure>
+
+
+<p>| 176        | Second Highest Salary         | Easy  |</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>select case when b.Salary  is null then null else a.Salary end as SecondHighestSalary 
+</span><span class='line'>from Employee a left join 
+</span><span class='line'>(
+</span><span class='line'>  select Salary  from Employee group by Salary  order by Salary  desc limit 1,1
+</span><span class='line'>) b on a.Salary=b.Salary  
+</span><span class='line'>order by b.Salary  desc limit 1</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>select max(Salary) as SecondHighestSalary  
+</span><span class='line'>from Employee 
+</span><span class='line'>where salary &lt; (select max(Salary) from Employee)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>| 175        | Combine Two Tables         | Easy  |</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>select a.FirstName,a.LastName,b.City,b.State 
+</span><span class='line'>from Person a left join Address b on a.PersonId=b.PersonId;</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Elasticsearch集群配置]]></title>
