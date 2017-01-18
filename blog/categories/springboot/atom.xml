@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Docker | battousai's blog]]></title>
-  <link href="http://youngjd.com/blog/categories/docker/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Springboot | battousai's blog]]></title>
+  <link href="http://youngjd.com/blog/categories/springboot/atom.xml" rel="self"/>
   <link href="http://youngjd.com/"/>
   <updated>2017-01-18T21:08:19+08:00</updated>
   <id>http://youngjd.com/</id>
@@ -186,48 +186,6 @@ public class IndexController extends BaseController {
 <h3>配置mysql主从，并使用docker包装一个mycat中间件进行读写分离</h3>
 
 <h3>使用springcloud微服务化helloworld应用</h3>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[The_docker_user_guide]]></title>
-    <link href="http://youngjd.com/blog/2014/07/20/the-docker-user-guide/"/>
-    <updated>2014-07-20T19:29:31+08:00</updated>
-    <id>http://youngjd.com/blog/2014/07/20/the-docker-user-guide</id>
-    <content type="html"><![CDATA[<p>没翻译完</p>
-
-<!-- more -->
-
-
-<h3>Docker用户指南</h3>
-
-<p>在介绍篇中你已经了解了什么事Docker和如何利用它来工作。在这篇指南我们将带着你学习
-使用Docker和如何把它集成到你的环境中的基础知识。</p>
-
-<p>我们将指导你如何使用Docker：</p>
-
-<ul>
-<li>使用的应用Docker化</li>
-<li>运行你自己的容器</li>
-<li>建立Docker的镜像</li>
-<li>分享你的Docker镜像</li>
-<li>还有更多</li>
-</ul>
-
-
-<p>我们把这个指南分成了几个主要的部分来让你了解Docker的生命周期</p>
-
-<h3>让我们开始学习Docker Hub</h3>
-
-<p>如何使用Docker Hub?
-Docker Hub是Docker中心。它存放公共的Docke镜像并提供服务来帮助你建立和管理你的Docker环境。想了解更多：
-请阅读 (User Docker Hub)[]</p>
-
-<h3>让你的应用Docker起来：A &ldquo;Hello world&rdquo;</h3>
-
-<p>如何在容器内部运行应用?</p>
-
-<p>Docker提供了一个基于容器的虚拟化平台来运行你的应用。</p>
 ]]></content>
   </entry>
   
