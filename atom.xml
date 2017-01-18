@@ -4,7 +4,7 @@
   <title><![CDATA[battousai's blog]]></title>
   <link href="http://youngjd.com/atom.xml" rel="self"/>
   <link href="http://youngjd.com/"/>
-  <updated>2017-01-18T21:15:34+08:00</updated>
+  <updated>2017-01-18T21:17:10+08:00</updated>
   <id>http://youngjd.com/</id>
   <author>
     <name><![CDATA[battousai]]></name>
@@ -18,17 +18,14 @@
     <link href="http://youngjd.com/blog/2017/01/18/docker-demo/"/>
     <updated>2017-01-18T17:44:42+08:00</updated>
     <id>http://youngjd.com/blog/2017/01/18/docker-demo</id>
-    <content type="html"><![CDATA[<blockquote><p>很多事情，必须要在亲身经历和体验它的多样性之后，再去确定它的唯一性。我要一些简单和重要的东西。尝试为身边的人服务，放低自己，有所付出。也许我所做的一切，不过是滴水之力，对身边的世间推进并不大，这个世界将依旧由权利和欲望来颠覆。但我成全自己所感受到的指引。这仅是属于我自己的微小而真实的信念。 《莲花》by 庆山（安妮宝贝）</p></blockquote>
-
-<!-- more -->
-
-
-<hr />
+    <content type="html"><![CDATA[<blockquote><h2>很多事情，必须要在亲身经历和体验它的多样性之后，再去确定它的唯一性。我要一些简单和重要的东西。尝试为身边的人服务，放低自己，有所付出。也许我所做的一切，不过是滴水之力，对身边的世间推进并不大，这个世界将依旧由权利和欲望来颠覆。但我成全自己所感受到的指引。这仅是属于我自己的微小而真实的信念。 《莲花》by 庆山（安妮宝贝）</h2></blockquote>
 
 <br>
 
 
-<p>标题之所以取名为杀鸡用牛刀，并不是指进行微服务架构的时候，使用docker和springboot是杀鸡用牛刀。而是指结合这些比较复杂的技术仅仅是为了写个demo。:bowtie:</p>
+<p>标题之所以取名为杀鸡用牛刀，并不是指进行微服务架构的时候，使用docker和springboot是杀鸡用牛刀。而是指结合这些比较复杂的技术仅仅是为了写个demo。</p>
+
+<blockquote><p>0&lt;</p></blockquote>
 
 <p>demo的简单架构图如下。</p>
 

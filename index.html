@@ -97,14 +97,173 @@
   </header>
 
 
-  <div class="entry-content"><blockquote><p>很多事情，必须要在亲身经历和体验它的多样性之后，再去确定它的唯一性。我要一些简单和重要的东西。尝试为身边的人服务，放低自己，有所付出。也许我所做的一切，不过是滴水之力，对身边的世间推进并不大，这个世界将依旧由权利和欲望来颠覆。但我成全自己所感受到的指引。这仅是属于我自己的微小而真实的信念。 《莲花》by 庆山（安妮宝贝）</p></blockquote>
+  <div class="entry-content"><blockquote><h2>很多事情，必须要在亲身经历和体验它的多样性之后，再去确定它的唯一性。我要一些简单和重要的东西。尝试为身边的人服务，放低自己，有所付出。也许我所做的一切，不过是滴水之力，对身边的世间推进并不大，这个世界将依旧由权利和欲望来颠覆。但我成全自己所感受到的指引。这仅是属于我自己的微小而真实的信念。 《莲花》by 庆山（安妮宝贝）</h2></blockquote>
 
+<br>
+
+
+<p>标题之所以取名为杀鸡用牛刀，并不是指进行微服务架构的时候，使用docker和springboot是杀鸡用牛刀。而是指结合这些比较复杂的技术仅仅是为了写个demo。</p>
+
+<blockquote><p>0&lt;</p></blockquote>
+
+<p>demo的简单架构图如下。</p>
+
+<h3>1.使用SpringBoot编写helloworld</h3>
+
+<p>使用springboot的方式构建后项目，然后写一个简单的controller，进行helloworld的输出。</p>
+
+<p>启动类代码如下：</p>
+
+<pre><code>package yjd.demo.springboot.helloworld;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+/**
+ * @author yjd
+ * @since 2017/1/18
+ */
+@SpringBootApplication
+ public class Application {
+
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
+}
+</code></pre>
+
+<p>Controller代码如下：</p>
+
+<pre><code>package yjd.demo.springboot.helloworld.controller;
+
+import yjd.demo.springboot.helloworld.controller.base.ApiResult;
+import yjd.demo.springboot.helloworld.controller.base.BaseController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ * @author yjd
+ * @since 2017/1/18
+ */
+@RestController
+public class IndexController extends BaseController {
+
+    @RequestMapping("/index")
+    ApiResult index() {
+        try {
+            return ApiResult.success().addData("msg", "helloWorld");
+        } catch (Exception e) {
+            logger.error(e);
+        }
+        return ApiResult.success().addData("msg", "");
+    }
+}
+</code></pre>
+
+<p>pom.xml代码如下：</p>
+
+<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"&gt;
+    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+
+    &lt;groupId&gt;yjd.demo.springboot&lt;/groupId&gt;
+    &lt;artifactId&gt;helloworld&lt;/artifactId&gt;
+    &lt;version&gt;0.1.0&lt;/version&gt;
+
+    &lt;packaging&gt;jar&lt;/packaging&gt;
+
+    &lt;parent&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+        &lt;version&gt;1.4.2.RELEASE&lt;/version&gt;
+    &lt;/parent&gt;
+
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-starter-redis&lt;/artifactId&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+            &lt;scope&gt;test&lt;/scope&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;com.jayway.jsonpath&lt;/groupId&gt;
+            &lt;artifactId&gt;json-path&lt;/artifactId&gt;
+            &lt;scope&gt;test&lt;/scope&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+
+    &lt;properties&gt;
+        &lt;java.version&gt;1.8&lt;/java.version&gt;
+    &lt;/properties&gt;
+
+
+    &lt;build&gt;
+        &lt;plugins&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+                &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
+            &lt;/plugin&gt;
+        &lt;/plugins&gt;
+    &lt;/build&gt;
+
+    &lt;repositories&gt;
+        &lt;repository&gt;
+            &lt;id&gt;spring-releases&lt;/id&gt;
+            &lt;url&gt;https://repo.spring.io/libs-release&lt;/url&gt;
+        &lt;/repository&gt;
+    &lt;/repositories&gt;
+    &lt;pluginRepositories&gt;
+        &lt;pluginRepository&gt;
+            &lt;id&gt;spring-releases&lt;/id&gt;
+            &lt;url&gt;https://repo.spring.io/libs-release&lt;/url&gt;
+        &lt;/pluginRepository&gt;
+    &lt;/pluginRepositories&gt;
+&lt;/project&gt;
+</code></pre>
+
+<p>打包应用成jar包，然后上传到服务器上。新建一个目录，简单命名为app。把jar包上传到此目录，并新建一个dockerfile文件，文件内容如：</p>
+
+<p>然后使用docker命令构建镜像。</p>
+
+<p>镜像构建成功后，启动容器。输入ip地址+端口测试访问是否正确。</p>
+
+<h3>使用openresty作为负载均衡</h3>
+
+<pre><code>首先重复上述步骤，更改映射端口，再启动一个同样功能的springboot应用（修改controlle的输出内容），构成一个集群。然后使用openresty反向代理这两个helloworld应用。
+
+新建一个目录，简单命名为openresty，并新建一个dockerfile文件，文件内容如下：
+
+然后使用docker命令构建镜像。
+
+镜像构建成功后，启动容器。输入ip地址测试访问是否正确。
+
+配置host后，访问网址，刷新重复访问，测试是否成功负载到不同的helloworld应用上
+</code></pre>
+
+<h3>使用mysql作为数据存储</h3>
+
+<pre><code>现在再加上简单地持久化功能，为了简便和尝新，springboot的orm这里使用了BeetlSql。新增配置如下：
+
+持久化代码如下：
+
+重新打包
+
+现在进入服务器，这次直接使用了官方docker hub上的mariadb镜像源。启动mysql容器，启动命令如下：
+</code></pre>
+
+<h3>配置mysql主从，并使用docker包装一个mycat中间件进行读写分离</h3>
+
+<h3>使用springcloud微服务化helloworld应用</h3>
 </div>
   
-  
-    <footer>
-      <a rel="full-article" href="/blog/2017/01/18/docker-demo/">Read more &rarr;</a>
-    </footer>
   
 
 
