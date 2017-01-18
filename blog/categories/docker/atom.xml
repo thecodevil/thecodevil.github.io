@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Docker | battousai's blog]]></title>
   <link href="http://youngjd.com/blog/categories/docker/atom.xml" rel="self"/>
   <link href="http://youngjd.com/"/>
-  <updated>2017-01-18T21:17:10+08:00</updated>
+  <updated>2017-01-18T21:18:30+08:00</updated>
   <id>http://youngjd.com/</id>
   <author>
     <name><![CDATA[battousai]]></name>
@@ -24,8 +24,6 @@
 
 
 <p>标题之所以取名为杀鸡用牛刀，并不是指进行微服务架构的时候，使用docker和springboot是杀鸡用牛刀。而是指结合这些比较复杂的技术仅仅是为了写个demo。</p>
-
-<blockquote><p>0&lt;</p></blockquote>
 
 <p>demo的简单架构图如下。</p>
 
