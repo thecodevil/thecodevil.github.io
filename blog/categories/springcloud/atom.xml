@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Springcloud | battousai's blog]]></title>
   <link href="http://youngjd.com/blog/categories/springcloud/atom.xml" rel="self"/>
   <link href="http://youngjd.com/"/>
-  <updated>2015-08-23T02:19:42+08:00</updated>
+  <updated>2017-01-23T02:23:55+08:00</updated>
   <id>http://youngjd.com/</id>
   <author>
     <name><![CDATA[battousai]]></name>
@@ -383,6 +383,10 @@ sudo docker run --name helloworld2 --link mariadb-master:mariadb-master -p 50002
 <hr />
 
 <h3>5.使用springcloud微服务化helloworld应用</h3>
+
+<hr />
+
+<h3>6.使用docker-compose进行服务编排</h3>
 ]]></content>
   </entry>
   
