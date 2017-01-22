@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Springboot | battousai's blog]]></title>
   <link href="http://youngjd.com/blog/categories/springboot/atom.xml" rel="self"/>
   <link href="http://youngjd.com/"/>
-  <updated>2015-08-22T00:00:35+08:00</updated>
+  <updated>2015-08-23T02:19:42+08:00</updated>
   <id>http://youngjd.com/</id>
   <author>
     <name><![CDATA[battousai]]></name>
@@ -138,26 +138,33 @@ public class IndexController {
 &lt;/project&gt;
 </code></pre>
 
-<p>打包应用成jar包，然后上传到服务器上。新建一个目录，把jar包上传到此目录，并新建一个Dockerfile文件。</p>
+<p>服务器上新建一个目录，把打包好的jar包上传到target目录，并新建一个Dockerfile文件。</p>
 
 <p><img src="/images/20170120-1.png" alt="Alt text" /></p>
 
 <p>Dockerfile文件内容如下：</p>
 
 <pre><code>FROM openjdk
+
 MAINTAINER yjd
-ADD helloworld-1.0.0.jar helloworld.jar
+
+VOLUME ["/usr/local/app"]
+
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","/helloworld.jar"]
+
+ENTRYPOINT ["java","-jar","/usr/local/app/helloworld.jar"]
 </code></pre>
 
 <p>然后使用docker build命令构建镜像。</p>
 
+<pre><code>sudo docker build -t yjd/helloworld .
+</code></pre>
+
 <p><img src="/images/20170120-2.png" alt="Alt text" /></p>
 
-<p>镜像构建成功后，启动容器。</p>
+<p>镜像构建成功后，启动容器。PS：需要部署的文件通过挂载的方式和容器同步，这样代码更新后，替换jar包重新启动容器即可。</p>
 
-<pre><code>sudo docker run --name helloworld1 -p 50001:8080 -d yjd/helloworld
+<pre><code>sudo docker run --name helloworld1 -p 50001:8080 -v /home/op/dev/app/target:/usr/local/app -d yjd/helloworld
 </code></pre>
 
 <p>输入docker ps查看容器已经成功启动。</p>
@@ -183,7 +190,7 @@ ENTRYPOINT ["java","-jar","/helloworld.jar"]
 
 <p>首先重复上述步骤，启动一个同样功能的springboot应用，构成一个小集群。注意修改容器运行时暴露的端口(50002)和容器名字(helloworld2)</p>
 
-<pre><code>sudo docker run --name helloworld2 -p 50002:8080 -d yjd/helloworld
+<pre><code>sudo docker run --name helloworld2 -p 50002:8080 -v /home/op/dev/app/target:/usr/local/app -d yjd/helloworld
 </code></pre>
 
 <p>两个helloworld容器已经成功启动，访问测试也OK！</p>
@@ -260,6 +267,114 @@ server {
 <hr />
 
 <h3>3.使用mysql作为数据存储</h3>
+
+<p>mysql的docker镜像直接使用docker官方hub上的mariadb镜像。</p>
+
+<pre><code>docker pull mariadb
+</code></pre>
+
+<p><img src="/images/20170122-1.png" alt="Alt text" /></p>
+
+<p>在宿主机上新建一个mysql目录作为数据卷，启动mariadb容器时使用-v进行挂载：</p>
+
+<pre><code>sudo docker run --name mariadb-master -p 53306:3306 -v /home/op/dev/mysql/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 -d mariadb
+</code></pre>
+
+<p>容器启动成功后，data目录下就会同步出现mysql的数据文件</p>
+
+<p><img src="/images/20170122-2.png" alt="Alt text" /></p>
+
+<p>容器启动后，使用docker exec命令进入容器, 创建helloworld数据库和测试表数据：</p>
+
+<pre><code>sudo docker exec -ti mariadb-master /bin/bash
+</code></pre>
+
+<p>容器准备好后，回头修改springboot。pom文件增加mybatis和mysql驱动依赖：</p>
+
+<pre><code>&lt;dependency&gt;
+        &lt;groupId&gt;org.mybatis.spring.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;mybatis-spring-boot-starter&lt;/artifactId&gt;
+        &lt;version&gt;1.2.0&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;mysql&lt;/groupId&gt;
+    &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+    &lt;version&gt;6.0.5&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<p>配置application.yml数据源：</p>
+
+<pre><code>spring:
+    datasource:
+        name: helloworld
+        url: jdbc:mysql://mariadb-master:3306/helloworld?useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull&amp;autoReconnect=true&amp;serverTimezone=UTC
+        username: ???
+        password: ?????
+        driver-class-name: com.mysql.jdbc.Driver
+</code></pre>
+
+<p>增加mapper类：</p>
+
+<pre><code>package yjd.demo.springboot.helloworld.dao;
+
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import yjd.demo.springboot.helloworld.model.User;
+
+/**
+ * @author yjd
+ * @since 2017/1/22
+ */
+@Mapper
+public interface UserMapper {
+    @Select("SELECT * FROM user WHERE username = #{username}")
+    User getByUsername(@Param("username") String username);
+}
+</code></pre>
+
+<p>修改controller代码，新增如下代码：</p>
+
+<pre><code>@Autowired
+UserMapper userMapper;
+
+@RequestMapping("/user")
+ApiResult findUser(@RequestParam("username") String username) {
+    User user = userMapper.getByUsername(username);
+    if (user == null) {
+        return ApiResult.fail(ApiCode.NOT_FOUND);
+    }
+    return ApiResult.success().addData("user", user);
+}
+</code></pre>
+
+<p>修改完成后，重新打包并上传到服务器。此时，因为helloworld应用需要访问到mariadb容器中的数据库，所以同启动openresty一样需要用到link，helloworld容器需要link到mariadb容器，启动helloworld容器命令修改如下：</p>
+
+<pre><code># 服务1
+sudo docker run --name helloworld1 --link mariadb-master:mariadb-master -p 50001:8080 -v /home/op/dev/app/target:/usr/local/app -d yjd/helloworld
+
+# 服务2
+sudo docker run --name helloworld2 --link mariadb-master:mariadb-master -p 50002:8080 -v /home/op/dev/app/target:/usr/local/app -d yjd/helloworld
+</code></pre>
+
+<p>访问测试OK！！</p>
+
+<pre><code>curl http://xxx.xxx.xxx.xxx/user?username=young
+
+{
+    "success": true,
+    "message": "",
+    "apiVersion": "1.0.0",
+    "apiCode": "OK",
+    "data": {
+        "user": {
+            "id": 1,
+            "username": "young"
+        }
+    }
+}
+</code></pre>
 
 <hr />
 
