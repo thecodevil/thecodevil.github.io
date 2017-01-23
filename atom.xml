@@ -4,7 +4,7 @@
   <title><![CDATA[battousai's blog]]></title>
   <link href="http://youngjd.com/atom.xml" rel="self"/>
   <link href="http://youngjd.com/"/>
-  <updated>2017-01-23T02:23:55+08:00</updated>
+  <updated>2017-01-24T02:06:18+08:00</updated>
   <id>http://youngjd.com/</id>
   <author>
     <name><![CDATA[battousai]]></name>
@@ -28,15 +28,31 @@
 <br>
 
 
-<p>标题之所以取名为杀鸡用牛刀，并不是指进行微服务架构的时候，使用docker和springboot是杀鸡用牛刀。而是指结合这些比较复杂的技术仅仅只是为了写个demo，确实有点小题大作了，哈哈！！</p>
+<p>标题之所以取名为杀鸡用牛刀，并不是指进行微服务架构的时候，使用docker和springboot是杀鸡用牛刀。而是指结合这些技术仅仅只是为了写个demo，确实有点小题大作了，哈哈！！</p>
 
 <p>PS：本文章基于读者已经对docker，springboot，springcloud有一定了解的基础上阅读。</p>
 
 <p>demo的简单架构图如下。</p>
 
+<p>文章目录 <a name="000" id="000"></a></p>
+
+<h6>1. <a href="#001">使用SpringBoot编写helloworld</a></h6>
+
+<h6>2. <a href="#002">使用openresty作为负载均衡</a></h6>
+
+<h6>3. <a href="#003">使用mysql作为数据存储</a></h6>
+
+<h6>4. <a href="#004">配置mysql主从，并使用docker包装一个mycat中间件进行读写分离</a></h6>
+
+<h6>5. <a href="#005">使用springcloud微服务化helloworld应用</a></h6>
+
+<h6>6. <a href="#006">使用docker-compose进行服务编排</a></h6>
+
 <hr />
 
-<h3>1.使用SpringBoot编写helloworld</h3>
+<p><a name="001" id="001"></a></p>
+
+<h4>1.使用SpringBoot编写helloworld <a style="text-decoration:none;" href="#000">◥</a></h4>
 
 <p>使用springboot的方式构建好项目，写一个简单的controller进行&#8221;helloworld&#8221;的输出。</p>
 
@@ -186,7 +202,9 @@ ENTRYPOINT ["java","-jar","/usr/local/app/helloworld.jar"]
 
 <hr />
 
-<h3>2.使用openresty作为负载均衡</h3>
+<p><a name="002" id="002"></a></p>
+
+<h4>2.使用openresty作为负载均衡 <a style="text-decoration:none;" href="#000">◥</a></h4>
 
 <p>首先重复上述步骤，启动一个同样功能的springboot应用，构成一个小集群。注意修改容器运行时暴露的端口(50002)和容器名字(helloworld2)</p>
 
@@ -266,7 +284,9 @@ server {
 
 <hr />
 
-<h3>3.使用mysql作为数据存储</h3>
+<p><a name="003" id="003"></a></p>
+
+<h4>3.使用mysql作为数据存储 <a style="text-decoration:none;" href="#000">◥</a></h4>
 
 <p>mysql的docker镜像直接使用docker官方hub上的mariadb镜像。</p>
 
@@ -378,15 +398,72 @@ sudo docker run --name helloworld2 --link mariadb-master:mariadb-master -p 50002
 
 <hr />
 
-<h3>4.配置mysql主从，并使用docker包装一个mycat中间件进行读写分离</h3>
+<p><a name="004" id="004"></a></p>
+
+<h4>4.配置mysql主从，并使用docker包装一个mycat中间件进行读写分离 <a style="text-decoration:none;" href="#000">◥</a></h4>
+
+<p>首先按照上一步再启动一个mariadb-slave容器。PS:这里注意宿主机的数据目录也要新建一个，简单更改为mysql2，同事暴露的端口也要修改。如果了解mysql主从配置的读者应该知道，从服务器是需要和主服务器进行通信的，即从服务器会启用一个专门的线程通过网络通信去抓取主服务器的binlog来进行数据同步。由此可知，mariadb-slave容器需要link到mariadb-master容器，启动命令如下：</p>
+
+<pre><code>sudo docker run --name mariadb-slave --link mariadb-master:mariadb-master -p 53307:3306 -v /home/op/dev/mysql2/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 -d mariadb
+</code></pre>
+
+<p>容器启动后，就是按照通常的mysql主从配置进行配置即可，步骤如下：</p>
+
+<h5>STEP 1.修改master配置，然后重启容器（即重启数据库，使得配置生效）</h5>
+
+<pre><code>vi /etc/mysql/my.cnf
+
+[mysqld]
+server-id = 1
+log_bin = /var/log/mysql/mariadb-bin
+</code></pre>
+
+<h5>STEP 2.修改slave配置（修改server-id），然后重启容器（即重启数据库，使得配置生效）</h5>
+
+<pre><code>vi /etc/mysql/my.cnf
+
+[mysqld]
+server-id = 2
+log_bin = /var/log/mysql/mariadb-bin
+</code></pre>
+
+<h5>STEP 3.在master上创建和授权主从复制账号</h5>
+
+<pre><code>MariaDB [(none)]&gt; grant replication slave on *.* to 'rwsync'@'%' identified by 'rwsync';
+</code></pre>
+
+<p>查询master状态</p>
+
+<p><img src="http://youngjd.com/images/20170123-1.png" alt="Alt text" /></p>
+
+<h5>STEP 4.根据master状态，配置slave</h5>
+
+<pre><code>MariaDB [(none)]&gt; change master to master_host='mariadb-master',master_user='rwsync',master_password='rwsync',master_log_file='mariadb-bin.000001',master_log_pos=315; 
+</code></pre>
+
+<p>开启slave复制</p>
+
+<pre><code>MariaDB [(none)]&gt; start slave;
+</code></pre>
+
+<p>查看slave状态，Slave_IO_Running和Slave_SQL_Running均为YES则表示主从同步正常</p>
+
+<pre><code>MariaDB [(none)]&gt; show slave status;
+</code></pre>
+
+<p><img src="http://youngjd.com/images/20170123-2.png" alt="Alt text" /></p>
 
 <hr />
 
-<h3>5.使用springcloud微服务化helloworld应用</h3>
+<p><a name="005" id="005"></a></p>
+
+<h4>5.使用springcloud微服务化helloworld应用 <a style="text-decoration:none;" href="#000">◥</a></h4>
 
 <hr />
 
-<h3>6.使用docker-compose进行服务编排</h3>
+<p><a name="006" id="006"></a></p>
+
+<h4>6.使用docker-compose进行服务编排 <a style="text-decoration:none;" href="#000">◥</a></h4>
 ]]></content>
   </entry>
   
