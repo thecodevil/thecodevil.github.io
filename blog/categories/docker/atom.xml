@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Docker | YJD's blog]]></title>
   <link href="http://youngjd.com/blog/categories/docker/atom.xml" rel="self"/>
   <link href="http://youngjd.com/"/>
-  <updated>2017-01-24T18:32:49+08:00</updated>
+  <updated>2017-01-24T18:39:46+08:00</updated>
   <id>http://youngjd.com/</id>
   <author>
     <name><![CDATA[YJD]]></name>
@@ -538,7 +538,7 @@ void createUser(@Param("user") User user);
 
 <p>由于helloworld服务器由直接访问mariadb改成通过mycat中间件路由主从数据库，因此需要修改两处地方：</p>
 
-<p>1.修改hellworld数据源配置，主要修改连接host和端口：</p>
+<p>1.修改hellworld数据源配置，主要修改连接host(mycat)和端口(8066)：</p>
 
 <pre><code>spring:
 datasource:
@@ -558,7 +558,7 @@ sudo docker run --name helloworld1 --link mycat:mycat -p 50001:8080 -v /home/op/
 sudo docker run --name helloworld2 --link mycat:mycat -p 50002:8080 -v /home/op/dev/app/target:/usr/local/app -d yjd/helloworld
 </code></pre>
 
-<p>helloworld应用重新打包上传到服务器，重新用新的命令运行两个helloworld容器。现在来测试下是否成功进行读写分离：</p>
+<p>打包helloworld应用上传到服务器，用新的命令restart两个helloworld容器。现在来测试下是否成功进行读写分离：</p>
 
 <pre><code># 新增一个用户
 curl -d "username="Trump" http://106.14.60.228/user
