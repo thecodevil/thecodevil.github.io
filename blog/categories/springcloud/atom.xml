@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Springcloud | YJD's blog]]></title>
   <link href="http://youngjd.com/blog/categories/springcloud/atom.xml" rel="self"/>
   <link href="http://youngjd.com/"/>
-  <updated>2017-01-24T03:19:04+08:00</updated>
+  <updated>2017-01-24T18:32:49+08:00</updated>
   <id>http://youngjd.com/</id>
   <author>
     <name><![CDATA[YJD]]></name>
@@ -321,7 +321,7 @@ server {
 &lt;dependency&gt;
     &lt;groupId&gt;mysql&lt;/groupId&gt;
     &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
-    &lt;version&gt;6.0.5&lt;/version&gt;
+    &lt;version&gt;5.1.40&lt;/version&gt;
 &lt;/dependency&gt;
 </code></pre>
 
@@ -454,6 +454,154 @@ log_bin = /var/log/mysql/mariadb-bin
 </code></pre>
 
 <p><img src="/images/20170123-2.png" alt="Alt text" /></p>
+
+<p>接着部署mycat中间件。在官方网站下载mycat releasse版本安装包，上传至服务器新建的mycat目录，目录结构如下：</p>
+
+<p><img src="/images/20170124-2.png" alt="Alt text" /></p>
+
+<p>先在宿主机上解压，提取里面的配置文件到数据卷目录</p>
+
+<pre><code>tar -zxvpf Mycat-server-1.6-RELEASE-20161028204710-linux.tar.gz &amp;&amp; cp -R /home/op/dev/mycat/mycat/conf/. /home/op/dev/mycat/conf &amp;&amp; rm -rf /home/op/dev/mycat/mycat
+</code></pre>
+
+<p><img src="/images/20170124-1.png" alt="Alt text" /></p>
+
+<p>修改server.xml和schema.xml，代码如下：</p>
+
+<pre><code>// server.xml，其他配置不变，根据实际情况修改以下部分
+&lt;user name="root"&gt;
+        &lt;property name="password"&gt;123456&lt;/property&gt;
+        &lt;property name="schemas"&gt;helloworld&lt;/property&gt;
+&lt;/user&gt;
+
+// schema.xml
+// balance=3：所有读请求随机的路由到写库对应的读库上执行
+// writeType=0：所有写操作第一个写库上，即mariadb-master
+&lt;?xml version="1.0"?&gt;
+&lt;!DOCTYPE mycat:schema SYSTEM "schema.dtd"&gt;
+&lt;mycat:schema xmlns:mycat="http://io.mycat/"&gt;
+        &lt;schema name="helloworld" checkSQLschema="false" dataNode="dn1"&gt;&lt;/schema&gt;
+        &lt;dataNode name="dn1" dataHost="localhost1" database="helloworld" /&gt;
+        &lt;dataHost name="localhost1" maxCon="1000" minCon="10" balance="3"
+                          writeType="0" dbType="mysql" dbDriver="native" switchType="1"  slaveThreshold="100"&gt;
+                &lt;heartbeat&gt;select user()&lt;/heartbeat&gt;
+                &lt;!-- can have multi write hosts --&gt;
+                &lt;writeHost host="mariadb-master" url="mariadb-master:3306" user="root"
+                                   password="123456"&gt;
+                        &lt;!-- can have multi read hosts --&gt;
+                        &lt;readHost host="mariadb-slave" url="mariadb-slave:3306" user="root" password="123456" /&gt;
+                &lt;/writeHost&gt;
+        &lt;/dataHost&gt;
+&lt;/mycat:schema&gt;
+</code></pre>
+
+<p>Dockerfile内容如下：</p>
+
+<pre><code>FROM openjdk
+
+MAINTAINER yjd
+
+VOLUME ["/opt/mycat/conf"]
+
+ADD Mycat-server-1.6-RELEASE-20161028204710-linux.tar.gz /opt
+#使用ADD，docker会自动解压
+
+EXPOSE 8066 9066
+
+CMD ["/opt/mycat/bin/mycat","console"]
+</code></pre>
+
+<p>构建镜像：</p>
+
+<pre><code>sudo docker build -t yjd/mycat .
+</code></pre>
+
+<p>由于mycat中间件容器需要访问mariadb-master和mariadb-slave两个数据库容器，所以也需要用到link指令，启动命令如下：</p>
+
+<pre><code>sudo docker run --name mycat --link mariadb-master:mariadb-master --link mariadb-slave:mariadb-slave -v /home/op/dev/mycat/conf:/opt/mycat/conf -p 8066:8066 -p 9066:9066 yjd/mycat
+</code></pre>
+
+<p>在springboot代码里编写新增用户的代码逻辑:</p>
+
+<pre><code>// Controller
+@RequestMapping(value = "/user", method = RequestMethod.POST)
+ApiResult createUser(@ModelAttribute User user) {
+    userMapper.createUser(user);
+    return ApiResult.success().addData("new user ID", user.getId());
+}
+
+// Mapper
+@Insert("INSERT INTO user(username) VALUES (#{user.username})")
+@Options(useGeneratedKeys = true, keyProperty = "user.id")
+void createUser(@Param("user") User user);
+</code></pre>
+
+<p>由于helloworld服务器由直接访问mariadb改成通过mycat中间件路由主从数据库，因此需要修改两处地方：</p>
+
+<p>1.修改hellworld数据源配置，主要修改连接host和端口：</p>
+
+<pre><code>spring:
+datasource:
+    name: helloworld
+    url: jdbc:mysql://mycat:8066/helloworld?useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull&amp;autoReconnect=true&amp;serverTimezone=UTC
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+</code></pre>
+
+<p>2.helloworld容器需要从link到mariadb改成link到mycat，修改启动命令如下：</p>
+
+<pre><code># 服务1
+sudo docker run --name helloworld1 --link mycat:mycat -p 50001:8080 -v /home/op/dev/app/target:/usr/local/app -d yjd/helloworld
+
+# 服务2
+sudo docker run --name helloworld2 --link mycat:mycat -p 50002:8080 -v /home/op/dev/app/target:/usr/local/app -d yjd/helloworld
+</code></pre>
+
+<p>helloworld应用重新打包上传到服务器，重新用新的命令运行两个helloworld容器。现在来测试下是否成功进行读写分离：</p>
+
+<pre><code># 新增一个用户
+curl -d "username="Trump" http://106.14.60.228/user
+{
+    "success": true,
+    "message": "",
+    "apiVersion": "1.0.0",
+    "apiCode": "OK",
+    "data": {
+        "new user ID": 11
+    }
+}
+
+# 查询Trump用户
+curl http://106.14.60.228/user?username=Trump
+{
+    "success": true,
+    "message": "",
+    "apiVersion": "1.0.0",
+    "apiCode": "OK",
+    "data": {
+        "user": {
+            "id": 11,
+            "username": "Trump"
+        }
+    }
+}
+</code></pre>
+
+<p>进入mycat容器追踪mycat的日志(把log4j2.xml的日志级别改成DEBUG)</p>
+
+<pre><code>tail /opt/mycat/logs/mycat.log -f -n 30
+</code></pre>
+
+<p>新增用户日志，从红色划线部分即可看出，写操作已经成功路由到master上</p>
+
+<p><img src="/images/20170124-3.png" alt="Alt text" /></p>
+
+<p>查询用户日志，从红色划线部分即可看出，写操作已经成功路由到slave上</p>
+
+<p><img src="/images/20170124-4.png" alt="Alt text" /></p>
+
+<p>测试OK！！</p>
 
 <hr />
 
