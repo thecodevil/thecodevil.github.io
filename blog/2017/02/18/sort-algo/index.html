@@ -1,0 +1,540 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>算法学习笔记-插入排序 - 唯有修为常青树</title>
+  <meta name="author" content="YJD">
+
+  
+  <meta name="description" content="Surviving is not relevant.Living is. （生存本身没有意义，生活才有。) by 电影《机器纪元》 插入排序 &ndash; Insertion sort 以下是来自wikipedia的解释 1
+2
+3
+4
+5
+6
+7
+8
+9
+Insertion sort is a &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://youngjd.com/blog/2017/02/18/sort-algo">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+   <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="唯有修为常青树" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts 
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+-->
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <img src="http://youngjd.com/images/captcha.jpg" style="
+		width: 50px;
+		height: 50px;
+		border-radius: 50px;">
+  <h1><a href="/">唯有修为常青树</a></h1>
+  
+    <h2>“没有伴随着痛楚的教训，是毫无意义的。因为人若不牺牲些什么，是什么都无法得到的。但当忍受过这种痛楚，将其克服的时候，人就会得到不输给任何事的坚韧的心，没错，钢铁般坚韧的心。” -- 《钢之炼金术士》</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:youngjd.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/aboutme">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">算法学习笔记-插入排序</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2017-02-18T17:27:42+08:00" pubdate data-updated="true">2017-02-18</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><blockquote><p>Surviving is not relevant.Living is. （生存本身没有意义，生活才有。) by 电影《机器纪元》</p></blockquote>
+
+<!-- more -->
+
+
+<hr />
+
+<p>插入排序 &ndash; Insertion sort</p>
+
+<p>以下是来自wikipedia的解释</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Insertion sort is a simple sorting algorithm that builds the final sorted array (or list) one item at a time. It is much less efficient on large lists than more advanced algorithms such as quicksort, heapsort, or merge sort. However, insertion sort provides several advantages:
+</span><span class='line'>Simple implementation: Jon Bentley shows a three-line C version, and a five-line optimized version[1]:116
+</span><span class='line'>Efficient for (quite) small data sets, much like other quadratic sorting algorithms
+</span><span class='line'>More efficient in practice than most other simple quadratic (i.e., O(n2)) algorithms such as selection sort or bubble sort
+</span><span class='line'>Adaptive, i.e., efficient for data sets that are already substantially sorted: the time complexity is O(nk) when each element in the input is no more than k places away from its sorted position
+</span><span class='line'>Stable; i.e., does not change the relative order of elements with equal keys
+</span><span class='line'>In-place; i.e., only requires a constant amount O(1) of additional memory space
+</span><span class='line'>Online; i.e., can sort a list as it receives it
+</span><span class='line'>When people manually sort cards in a bridge hand, most use a method that is similar to insertion sort.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>插入排序就好像打扑克牌的时候，从牌堆中一张张牌依次取牌，然后和手上已有的牌大小比较，插入到适合的位置上。比如打大老二扑克游戏，通过发牌已经发了13张牌到你的位置上，现在你从这13张牌堆中一张张地依次拿到手上。比如13张牌堆是[5, 2, 9, 3, 6, 4, 13(K), 1(A), 12(Q), 7, 11(J), 8, 10]，假设是按照升序排序，那么整理手牌的顺序如下：</p>
+
+<h5>STEP 1：因为手上没有牌，所以5放到第一个位置</h5>
+
+<pre><code>5 - - - - - - - - - - - -
+</code></pre>
+
+<h5>STEP 2：手上是一张5，从牌堆拿到2，2比5小，所以2替换5放到第一个位置，5放到第二个位置</h5>
+
+<pre><code>2 5 - - - - - - - - - - -
+</code></pre>
+
+<h5>STEP 3: 从牌堆拿到9，9比5和2大，所以直接插入到5的后面</h5>
+
+<pre><code>2 5 9 - - - - - - - - - -
+</code></pre>
+
+<h5>STEP 4：现在手上是2，5，9顺序的手牌，从牌堆拿到3，3比5和9小，所以5，9顺延往后整理，3比2大，所以3就会插入到2的后面，5的前面</h5>
+
+<pre><code>2 3 5 9 - - - - - - - - -
+</code></pre>
+
+<p>如此类推直到取完牌堆上所有的牌。</p>
+
+<p>以下是wikipedia上插入排序的伪代码。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>for i ← 1 to length(A)
+</span><span class='line'>    j ← i
+</span><span class='line'>    while j &gt; 0 and A[j-1] &gt; A[j]
+</span><span class='line'>        swap A[j] and A[j-1]
+</span><span class='line'>        j ← j - 1
+</span><span class='line'>    end while
+</span><span class='line'>end for</span></code></pre></td></tr></table></div></figure>
+
+
+<p>但是刚开始看的时候看不太清楚这个思路，所以我按照上面整理扑克牌的思路写了一个易于自己理解的版本，然后再进行优化。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>  <span class="c1">// 定义和初始化13张扑克牌牌堆</span>
+</span><span class='line'>  <span class="kt">int</span><span class="o">[]</span> <span class="n">_13pokers</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]{</span><span class="mi">5</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">9</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">6</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">13</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">12</span><span class="o">,</span> <span class="mi">7</span><span class="o">,</span> <span class="mi">11</span><span class="o">,</span> <span class="mi">8</span><span class="o">,</span> <span class="mi">10</span><span class="o">};</span>
+</span><span class='line'>  <span class="n">sort1</span><span class="o">(</span><span class="n">_13pokers</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">sort1</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">_13pokers</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">_13pokers</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+</span><span class='line'>  <span class="c1">// 手牌数组</span>
+</span><span class='line'>  <span class="kt">int</span><span class="o">[]</span> <span class="n">handPokers</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">len</span><span class="o">];</span>
+</span><span class='line'>  <span class="c1">// 当前手牌数量</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">currentHandPokerNum</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+</span><span class='line'>  <span class="c1">// 依次从牌堆取牌</span>
+</span><span class='line'>  <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="c1">// 从牌堆取出的第i张牌</span>
+</span><span class='line'>      <span class="kt">int</span> <span class="n">newPokerVal</span> <span class="o">=</span> <span class="n">_13pokers</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+</span><span class='line'>      <span class="c1">// 新牌与手牌比较并获取插入位置</span>
+</span><span class='line'>      <span class="kt">int</span> <span class="n">insertIndex</span> <span class="o">=</span> <span class="n">getInsertPosition</span><span class="o">(</span><span class="n">newPokerVal</span><span class="o">,</span> <span class="n">currentHandPokerNum</span><span class="o">,</span> <span class="n">handPokers</span><span class="o">);</span>
+</span><span class='line'>      <span class="c1">// 插入新牌到手牌</span>
+</span><span class='line'>      <span class="n">handPokers</span><span class="o">[</span><span class="n">insertIndex</span><span class="o">]</span> <span class="o">=</span> <span class="n">newPokerVal</span><span class="o">;</span>
+</span><span class='line'>      <span class="c1">// 当前手牌数量加1</span>
+</span><span class='line'>      <span class="n">currentHandPokerNum</span> <span class="o">++;</span>
+</span><span class='line'>      <span class="n">PrintHelper</span><span class="o">.</span><span class="na">printArray</span><span class="o">(</span><span class="n">handPokers</span><span class="o">);</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">public</span> <span class="kd">static</span> <span class="kt">int</span> <span class="nf">getInsertPosition</span><span class="o">(</span><span class="kt">int</span> <span class="n">newPokerVal</span><span class="o">,</span> <span class="kt">int</span> <span class="n">currentHandPokerNum</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">handPokers</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>  <span class="c1">// 从手牌的尾端(大)至开头(小)进行比较</span>
+</span><span class='line'>  <span class="c1">// 末尾牌的下标即手牌数量-1，开始时手上没有牌，所以下标为-1</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">handIndex</span> <span class="o">=</span> <span class="n">currentHandPokerNum</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+</span><span class='line'>  <span class="k">do</span> <span class="o">{</span>
+</span><span class='line'>      <span class="c1">// 1. 没手牌时，不需要进行比较。所以新取到的手牌插入到第一个位置，即下标为0，所以handIndex+1</span>
+</span><span class='line'>      <span class="c1">// 2. 所有手牌比较完毕时，新牌依然没有找到插入位置，则说明，新牌是现在手牌当中最小的牌，所以插入到开头位置，即handIndex+1</span>
+</span><span class='line'>      <span class="k">if</span> <span class="o">(</span><span class="n">handIndex</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="k">return</span> <span class="n">handIndex</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>      <span class="c1">// 取出当前需要和新牌比较的手牌</span>
+</span><span class='line'>      <span class="kt">int</span> <span class="n">handIndexPokerVal</span> <span class="o">=</span> <span class="n">handPokers</span><span class="o">[</span><span class="n">handIndex</span><span class="o">];</span>
+</span><span class='line'>      <span class="c1">// 如果新牌的值比当前手牌的值小</span>
+</span><span class='line'>      <span class="k">if</span> <span class="o">(</span><span class="n">newPokerVal</span> <span class="o">&lt;</span> <span class="n">handIndexPokerVal</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="c1">// 把当前这张手牌往后移一位，腾出的空间或许给新手牌，或给下一张也比新牌大的手牌</span>
+</span><span class='line'>          <span class="n">handPokers</span><span class="o">[</span><span class="n">handIndex</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">handPokers</span><span class="o">[</span><span class="n">handIndex</span><span class="o">];</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>      <span class="c1">// 如果新牌的值比当前手牌的值大，则新牌应该插入到当前手牌的后一位，所以handIndex+1</span>
+</span><span class='line'>      <span class="k">else</span> <span class="o">{</span>
+</span><span class='line'>          <span class="k">return</span> <span class="n">handIndex</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>      <span class="c1">// 比较下一张手牌（方向往手牌开头，值小的一端 &lt;--- ）</span>
+</span><span class='line'>      <span class="n">handIndex</span> <span class="o">--;</span>
+</span><span class='line'>  <span class="o">}</span> <span class="k">while</span> <span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>运行结果：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="o">[</span><span class="mi">5</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span><span class="o">]</span>
+</span><span class='line'><span class="o">[</span><span class="mi">2</span> <span class="mi">5</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span><span class="o">]</span>
+</span><span class='line'><span class="o">[</span><span class="mi">2</span> <span class="mi">5</span> <span class="mi">9</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span><span class="o">]</span>
+</span><span class='line'><span class="o">[</span><span class="mi">2</span> <span class="mi">3</span> <span class="mi">5</span> <span class="mi">9</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span><span class="o">]</span>
+</span><span class='line'><span class="o">[</span><span class="mi">2</span> <span class="mi">3</span> <span class="mi">5</span> <span class="mi">6</span> <span class="mi">9</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span><span class="o">]</span>
+</span><span class='line'><span class="o">[</span><span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span> <span class="mi">5</span> <span class="mi">6</span> <span class="mi">9</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span><span class="o">]</span>
+</span><span class='line'><span class="o">[</span><span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span> <span class="mi">5</span> <span class="mi">6</span> <span class="mi">9</span> <span class="mi">13</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span><span class="o">]</span>
+</span><span class='line'><span class="o">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span> <span class="mi">5</span> <span class="mi">6</span> <span class="mi">9</span> <span class="mi">13</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span><span class="o">]</span>
+</span><span class='line'><span class="o">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span> <span class="mi">5</span> <span class="mi">6</span> <span class="mi">9</span> <span class="mi">12</span> <span class="mi">13</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span><span class="o">]</span>
+</span><span class='line'><span class="o">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span> <span class="mi">5</span> <span class="mi">6</span> <span class="mi">7</span> <span class="mi">9</span> <span class="mi">12</span> <span class="mi">13</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span><span class="o">]</span>
+</span><span class='line'><span class="o">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span> <span class="mi">5</span> <span class="mi">6</span> <span class="mi">7</span> <span class="mi">9</span> <span class="mi">11</span> <span class="mi">12</span> <span class="mi">13</span> <span class="mi">0</span> <span class="mi">0</span><span class="o">]</span>
+</span><span class='line'><span class="o">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span> <span class="mi">5</span> <span class="mi">6</span> <span class="mi">7</span> <span class="mi">8</span> <span class="mi">9</span> <span class="mi">11</span> <span class="mi">12</span> <span class="mi">13</span> <span class="mi">0</span><span class="o">]</span>
+</span><span class='line'><span class="o">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span> <span class="mi">5</span> <span class="mi">6</span> <span class="mi">7</span> <span class="mi">8</span> <span class="mi">9</span> <span class="mi">10</span> <span class="mi">11</span> <span class="mi">12</span> <span class="mi">13</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>写完第一个版本之后，思路清晰了一点，现在看看哪些地方可以进行简化和优化，直到接近伪代码的样子。</p>
+
+<h5>1.当前手牌数量就是从牌堆拿的数量，比如我现在从牌堆拿第一张牌，则当前手牌就是1。</h5>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kt">int</span> <span class="n">handIndex</span> <span class="o">=</span> <span class="n">currentHandPokerNum</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="o">=</span><span class="err">》</span> <span class="kt">int</span> <span class="n">handIndex</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>2.wiki中有一段解释，插入排序是一个in-place的算法，即不需要申请额外空间的算法，其前后结果没有依赖关系，从内存角度来说，可以直接原地覆盖掉。而第一个版本的算法明显的申请了一个额外的空间，即handPokers，它的大小和输入的数组一样。按照这个解释，这两个数组是可以共用的而不影响结果的计算。所以可以去掉handPokers，用原数组直接进行计算。PS：改成一个数组，从扑克牌的角度，就是原本是从牌堆依次取牌，现在改成把13张未排序的牌一次全部拿到手上，然后从第一张开始进行依次比较和插入。第一张牌同样地不需要比较，直接插入到手牌第一张，即什么都不做。第二张牌和第一张比较，如果第一张牌小，则第一张牌挪到第二张牌的位置上，然后当前牌插入到位置1。就是手牌的右半部份就相当于牌堆，左半部分相当于手牌。</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">sort1</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">_13pokers</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">_13pokers</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+</span><span class='line'>  <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="kt">int</span> <span class="n">newPokerVal</span> <span class="o">=</span> <span class="n">_13pokers</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+</span><span class='line'>      <span class="kt">int</span> <span class="n">insertIndex</span> <span class="o">=</span> <span class="n">getInsertPosition</span><span class="o">(</span><span class="n">newPokerVal</span><span class="o">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">,</span> <span class="n">_13pokers</span><span class="o">);</span>
+</span><span class='line'>      <span class="n">_13pokers</span><span class="o">[</span><span class="n">insertIndex</span><span class="o">]</span> <span class="o">=</span> <span class="n">newPokerVal</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>3. 把do-while改成while</h5>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">static</span> <span class="kt">int</span> <span class="nf">getInsertPosition</span><span class="o">(</span><span class="kt">int</span> <span class="n">newPokerVal</span><span class="o">,</span> <span class="kt">int</span> <span class="n">handIndex</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">handPokers</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">while</span> <span class="o">(</span><span class="n">handIndex</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">handPokers</span><span class="o">[</span><span class="n">handIndex</span><span class="o">]</span> <span class="o">&gt;</span> <span class="n">newPokerVal</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">handPokers</span><span class="o">[</span><span class="n">handIndex</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">handPokers</span><span class="o">[</span><span class="n">handIndex</span><span class="o">];</span>
+</span><span class='line'>      <span class="n">handIndex</span> <span class="o">--;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">handIndex</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>4. 合并代码并通用化常量</h5>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>  <span class="kt">int</span><span class="o">[]</span> <span class="n">array</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]{</span><span class="mi">5</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">9</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">6</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">13</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">12</span><span class="o">,</span> <span class="mi">7</span><span class="o">,</span> <span class="mi">11</span><span class="o">,</span> <span class="mi">8</span><span class="o">,</span> <span class="mi">10</span><span class="o">};</span>
+</span><span class='line'>  <span class="n">sort2</span><span class="o">(</span><span class="n">array</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">sort2</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">array</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+</span><span class='line'>  <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="kt">int</span> <span class="n">ai</span> <span class="o">=</span> <span class="n">array</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+</span><span class='line'>      <span class="kt">int</span> <span class="n">insertIndex</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+</span><span class='line'>      <span class="k">while</span> <span class="o">(</span><span class="n">insertIndex</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">array</span><span class="o">[</span><span class="n">insertIndex</span><span class="o">]</span> <span class="o">&gt;</span> <span class="n">ai</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="n">array</span><span class="o">[</span><span class="n">insertIndex</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">array</span><span class="o">[</span><span class="n">insertIndex</span><span class="o">];</span>
+</span><span class='line'>          <span class="n">insertIndex</span> <span class="o">--;</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>      <span class="n">array</span><span class="o">[</span><span class="n">insertIndex</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">ai</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>  <span class="n">PrintHelper</span><span class="o">.</span><span class="na">printArray</span><span class="o">(</span><span class="n">array</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>sort2基本就和伪代码差不多了。</p>
+
+<p>完！</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">YJD</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2017-02-18T17:27:42+08:00" pubdate data-updated="true">2017-02-18</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/pai-xu/'>排序</a>, <a class='category' href='/blog/categories/suan-fa/'>算法</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2017/02/16/kafka-study-record/" title="Previous Post: kafka集群部署与简单应用">&laquo; kafka集群部署与简单应用</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2017/02/18/sort-algo/">算法学习笔记-插入排序</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/02/16/kafka-study-record/">Kafka集群部署与简单应用</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/01/18/docker-demo/">Docker之牛刀小试</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/07/06/leetcode-sql/">leetcode-Database Problems</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/06/25/elasticsearch-cluster/">Elasticsearch集群配置</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - YJD -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <script type="text/javascript">
+	;(function($) {
+	    $(function() {
+	        var url=document.referrer;
+	        if ( url && url.search("http://")>-1) {
+	            var refurl =  url.match(/:\/\/(.[^/]+)/)[1];
+	            if(refurl.indexOf("baidu.com")>-1){
+	                alert('sayno to baidu');
+	            }
+	        }
+	    });
+
+	})(jQuery);
+   </script>
+</body>
+</html>

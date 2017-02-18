@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Kafka | 唯有修为常青树]]></title>
+  <link href="http://youngjd.com/blog/categories/kafka/atom.xml" rel="self"/>
+  <link href="http://youngjd.com/"/>
+  <updated>2017-02-18T23:24:01+08:00</updated>
+  <id>http://youngjd.com/</id>
+  <author>
+    <name><![CDATA[YJD]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Kafka集群部署与简单应用]]></title>
+    <link href="http://youngjd.com/blog/2017/02/16/kafka-study-record/"/>
+    <updated>2017-02-16T17:27:42+08:00</updated>
+    <id>http://youngjd.com/blog/2017/02/16/kafka-study-record</id>
+    <content type="html"><![CDATA[<blockquote></blockquote>
+
+<!-- more -->
+
+
+<hr />
+]]></content>
+  </entry>
+  
+</feed>

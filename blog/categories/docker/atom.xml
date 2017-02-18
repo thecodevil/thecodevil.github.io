@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Docker | 唯有修为常青树]]></title>
   <link href="http://youngjd.com/blog/categories/docker/atom.xml" rel="self"/>
   <link href="http://youngjd.com/"/>
-  <updated>2017-02-14T02:18:02+08:00</updated>
+  <updated>2017-02-18T23:24:01+08:00</updated>
   <id>http://youngjd.com/</id>
   <author>
     <name><![CDATA[YJD]]></name>
@@ -56,101 +56,110 @@
 
 <p>启动类代码如下：</p>
 
-<pre><code>package yjd.demo.springboot.helloworld;
+<p>```java
+package yjd.demo.springboot.helloworld;</p>
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+<p>import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;</p>
 
-/**
+<p>/<em>*
  * @author yjd
  * @since 2017/1/18
- */
+ </em>/
 @SpringBootApplication
- public class Application {
+ public class Application {</p>
 
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-    }
+<pre><code>public static void main(String[] args) {
+    SpringApplication.run(Application.class, args);
 }
 </code></pre>
+
+<p>}
+```</p>
 
 <p>Controller代码如下：</p>
 
-<pre><code>package yjd.demo.springboot.helloworld.controller;
+<p>```java
+package yjd.demo.springboot.helloworld.controller;</p>
 
-import org.springframework.web.bind.annotation.RequestMapping;
+<p>import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import yjd.demo.springboot.helloworld.controller.base.ApiResult;
+import yjd.demo.springboot.helloworld.controller.base.ApiResult;</p>
 
-/**
+<p>/<em>*
  * @author yjd
  * @since 2017/1/18
- */
+ </em>/
 @RestController
-public class IndexController {
+public class IndexController {</p>
 
-    @RequestMapping("/index")
-    ApiResult index() {
-        return ApiResult.success().addData("msg", "helloWorld");
-    }
-
+<pre><code>@RequestMapping("/index")
+ApiResult index() {
+    return ApiResult.success().addData("msg", "helloWorld");
 }
 </code></pre>
 
+<p>}
+```</p>
+
 <p>pom.xml代码如下：</p>
 
-<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"&gt;
-    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+<p>```xml
+&lt;?xml version=&ldquo;1.0&rdquo; encoding=&ldquo;UTF-8&rdquo;?>
+&lt;project xmlns=&ldquo;<a href="http://maven.apache.org/POM/4.0.0">http://maven.apache.org/POM/4.0.0</a>&rdquo; xmlns:xsi=&ldquo;<a href="http://www.w3.org/2001/XMLSchema-instance">http://www.w3.org/2001/XMLSchema-instance</a>&rdquo;</p>
 
-    &lt;groupId&gt;yjd.demo.springboot&lt;/groupId&gt;
-    &lt;artifactId&gt;helloworld&lt;/artifactId&gt;
-    &lt;version&gt;0.1.0&lt;/version&gt;
+<pre><code>xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"&gt;
+&lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
 
-    &lt;packaging&gt;jar&lt;/packaging&gt;
+&lt;groupId&gt;yjd.demo.springboot&lt;/groupId&gt;
+&lt;artifactId&gt;helloworld&lt;/artifactId&gt;
+&lt;version&gt;0.1.0&lt;/version&gt;
 
-    &lt;parent&gt;
+&lt;packaging&gt;jar&lt;/packaging&gt;
+
+&lt;parent&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+    &lt;version&gt;1.4.2.RELEASE&lt;/version&gt;
+&lt;/parent&gt;
+
+&lt;dependencies&gt;
+    &lt;dependency&gt;
         &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-        &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
-        &lt;version&gt;1.4.2.RELEASE&lt;/version&gt;
-    &lt;/parent&gt;
+        &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
 
-    &lt;dependencies&gt;
-        &lt;dependency&gt;
+&lt;properties&gt;
+    &lt;java.version&gt;1.8&lt;/java.version&gt;
+&lt;/properties&gt;
+
+
+&lt;build&gt;
+    &lt;plugins&gt;
+        &lt;plugin&gt;
             &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
-        &lt;/dependency&gt;
-    &lt;/dependencies&gt;
+            &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
+        &lt;/plugin&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;
 
-    &lt;properties&gt;
-        &lt;java.version&gt;1.8&lt;/java.version&gt;
-    &lt;/properties&gt;
-
-
-    &lt;build&gt;
-        &lt;plugins&gt;
-            &lt;plugin&gt;
-                &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-                &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
-            &lt;/plugin&gt;
-        &lt;/plugins&gt;
-    &lt;/build&gt;
-
-    &lt;repositories&gt;
-        &lt;repository&gt;
-            &lt;id&gt;spring-releases&lt;/id&gt;
-            &lt;url&gt;https://repo.spring.io/libs-release&lt;/url&gt;
-        &lt;/repository&gt;
-    &lt;/repositories&gt;
-    &lt;pluginRepositories&gt;
-        &lt;pluginRepository&gt;
-            &lt;id&gt;spring-releases&lt;/id&gt;
-            &lt;url&gt;https://repo.spring.io/libs-release&lt;/url&gt;
-        &lt;/pluginRepository&gt;
-    &lt;/pluginRepositories&gt;
-&lt;/project&gt;
+&lt;repositories&gt;
+    &lt;repository&gt;
+        &lt;id&gt;spring-releases&lt;/id&gt;
+        &lt;url&gt;https://repo.spring.io/libs-release&lt;/url&gt;
+    &lt;/repository&gt;
+&lt;/repositories&gt;
+&lt;pluginRepositories&gt;
+    &lt;pluginRepository&gt;
+        &lt;id&gt;spring-releases&lt;/id&gt;
+        &lt;url&gt;https://repo.spring.io/libs-release&lt;/url&gt;
+    &lt;/pluginRepository&gt;
+&lt;/pluginRepositories&gt;
 </code></pre>
+
+<p></project>
+```</p>
 
 <p>服务器上新建一个目录，把打包好的jar包上传到target目录，并新建一个Dockerfile文件。</p>
 
@@ -158,28 +167,31 @@ public class IndexController {
 
 <p>Dockerfile文件内容如下：</p>
 
-<pre><code>FROM openjdk
+<p>```
+FROM openjdk</p>
 
-MAINTAINER yjd
+<p>MAINTAINER yjd</p>
 
-VOLUME ["/usr/local/app"]
+<p>VOLUME [&ldquo;/usr/local/app&rdquo;]</p>
 
-EXPOSE 8080
+<p>EXPOSE 8080</p>
 
-ENTRYPOINT ["java","-jar","/usr/local/app/helloworld.jar"]
-</code></pre>
+<p>ENTRYPOINT [&ldquo;java&rdquo;,&ldquo;-jar&rdquo;,&ldquo;/usr/local/app/helloworld.jar&rdquo;]
+```</p>
 
 <p>然后使用docker build命令构建镜像。</p>
 
-<pre><code>sudo docker build -t yjd/helloworld .
-</code></pre>
+<p><code>bash
+sudo docker build -t yjd/helloworld .
+</code></p>
 
 <p><img src="/images/20170120-2.png" alt="Alt text" /></p>
 
 <p>镜像构建成功后，启动容器。PS：需要部署的文件通过挂载的方式和容器同步，这样代码更新后，替换jar包重新启动容器即可。</p>
 
-<pre><code>sudo docker run --name helloworld1 -p 50001:8080 -v /home/op/dev/app/target:/usr/local/app -d yjd/helloworld
-</code></pre>
+<p><code>bash
+sudo docker run --name helloworld1 -p 50001:8080 -v /home/op/dev/app/target:/usr/local/app -d yjd/helloworld
+</code></p>
 
 <p>输入docker ps查看容器已经成功启动。</p>
 
@@ -187,16 +199,20 @@ ENTRYPOINT ["java","-jar","/usr/local/app/helloworld.jar"]
 
 <p>输入ip地址+端口测试访问是否正确。<a href="http://xxx.xxx.xxx.xxx:50001/index">http://xxx.xxx.xxx.xxx:50001/index</a></p>
 
-<pre><code>{
-    "success": true,
-    "message": "",
-    "apiVersion": "1.0.0",
-    "apiCode": "OK",
-    "data": {
-        "msg": "helloWorld"
-    }
+<p>```json
+{</p>
+
+<pre><code>"success": true,
+"message": "",
+"apiVersion": "1.0.0",
+"apiCode": "OK",
+"data": {
+    "msg": "helloWorld"
 }
 </code></pre>
+
+<p>}
+```</p>
 
 <hr />
 
@@ -206,8 +222,9 @@ ENTRYPOINT ["java","-jar","/usr/local/app/helloworld.jar"]
 
 <p>首先重复上述步骤，启动一个同样功能的springboot应用，构成一个小集群。注意修改容器运行时暴露的端口(50002)和容器名字(helloworld2)</p>
 
-<pre><code>sudo docker run --name helloworld2 -p 50002:8080 -v /home/op/dev/app/target:/usr/local/app -d yjd/helloworld
-</code></pre>
+<p><code>bash
+sudo docker run --name helloworld2 -p 50002:8080 -v /home/op/dev/app/target:/usr/local/app -d yjd/helloworld
+</code></p>
 
 <p>两个helloworld容器已经成功启动，访问测试也OK！</p>
 
@@ -219,34 +236,41 @@ ENTRYPOINT ["java","-jar","/usr/local/app/helloworld.jar"]
 
 <p>新建一个dockerfile文件，文件内容如下：</p>
 
-<pre><code>FROM debian
+<p>```
+FROM debian</p>
 
-MAINTAINER yjd
+<p>MAINTAINER yjd</p>
 
-RUN apt-get -y update
-RUN apt-get install -y libreadline-dev libncurses5-dev libpcre3-dev \
-    libssl-dev perl make build-essential
-RUN apt-get install -y wget
+<p>RUN apt-get -y update
+RUN apt-get install -y libreadline-dev libncurses5-dev libpcre3-dev \</p>
 
-RUN wget https://openresty.org/download/openresty-1.11.2.1.tar.gz &amp;&amp; tar -zxvf openresty-1.11.2.1.tar.gz -C /usr/local
-
-RUN cd /usr/local/openresty-1.11.2.1 &amp;&amp; ./configure --with-luajit --prefix=/opt/openresty &amp;&amp; make &amp;&amp; make install
-RUN rm -rf /opt/openresty/nginx/conf/nginx.conf
-
-COPY ./nginx.conf /opt/openresty/nginx/conf
-
-VOLUME ["/opt/openresty/nginx/conf/conf.d", "/opt/openresty/nginx/logs"]
-
-EXPOSE 80
-
-CMD ["/opt/openresty/nginx/sbin/nginx", "-g", "daemon off;"]
-#nginx需要以非守护程序运行，即不能后台运行，否则容器运行后又会马上停止
+<pre><code>libssl-dev perl make build-essential
 </code></pre>
+
+<p>RUN apt-get install -y wget</p>
+
+<p>RUN wget <a href="https://openresty.org/download/openresty-1.11.2.1.tar.gz">https://openresty.org/download/openresty-1.11.2.1.tar.gz</a> &amp;&amp; tar -zxvf openresty-1.11.2.1.tar.gz -C /usr/local</p>
+
+<p>RUN cd /usr/local/openresty-1.11.2.1 &amp;&amp; ./configure &mdash;with-luajit &mdash;prefix=/opt/openresty &amp;&amp; make &amp;&amp; make install
+RUN rm -rf /opt/openresty/nginx/conf/nginx.conf</p>
+
+<p>COPY ./nginx.conf /opt/openresty/nginx/conf</p>
+
+<p>VOLUME [&ldquo;/opt/openresty/nginx/conf/conf.d&rdquo;, &ldquo;/opt/openresty/nginx/logs&rdquo;]</p>
+
+<p>EXPOSE 80</p>
+
+<p>CMD [&ldquo;/opt/openresty/nginx/sbin/nginx&rdquo;, &ldquo;-g&rdquo;, &ldquo;daemon off;&rdquo;]</p>
+
+<h1>nginx需要以非守护程序运行，即不能后台运行，否则容器运行后又会马上停止</h1>
+
+<p>```</p>
 
 <p>使用docker build命令构建镜像，镜像构建成功后就可以启动容器了。</p>
 
-<pre><code>sudo docker run --name openresty --link helloworld2:helloworld2 --link helloworld1:helloworld1 -p 80:80 -v /home/op/dev/openresty/logs:/opt/openresty/nginx/logs -v /home/op/dev/openresty/conf.d:/opt/openresty/nginx/conf/conf.d -d yjd/openresty
-</code></pre>
+<p><code>
+sudo docker run --name openresty --link helloworld2:helloworld2 --link helloworld1:helloworld1 -p 80:80 -v /home/op/dev/openresty/logs:/opt/openresty/nginx/logs -v /home/op/dev/openresty/conf.d:/opt/openresty/nginx/conf/conf.d -d yjd/openresty
+</code></p>
 
 <p>如果nginx是搭建在宿主机上的话，upstream的配置直接用127.0.0.1:PORT的方式既可以，但是由于这个实验是单独把nginx服务包装成容器，容器之间的访问需要用到docker的link功能，有两个helloworld服务，则link两次。link成功后，在openresty容器查看hosts，显示如下:</p>
 
@@ -254,27 +278,37 @@ CMD ["/opt/openresty/nginx/sbin/nginx", "-g", "daemon off;"]
 
 <p>再来看看对应的nginx配置。主要是upstream的配置，直接用docker的主机名进行配置，也可以用host对应的ip，只不过docker容器是无状态的，每次重新启动，ip都可能变，而因为link的时候指定了被链接容器的别名，所以helloworld1和helloworld2就不变了。PS：注意这里不是用的容器暴露给宿主机的IP，而是用的容器内部运行的后台程序的端口，springboot默认是8080(使用link就是为了容器间的内部访问)。这里我自己坑了自己很久，一直用的50001和50002，nginx一直502。还以为要去捣腾各种网络桥接的问题，各种百度谷歌都找不到解决办法。结果洗了个热水澡出来就发现是自己傻x了！！</p>
 
-<pre><code>upstream yjd.helloworld.com {
-    server helloworld1:8080 weight=5;
-    server helloworld2:8080 weight=5;
-}
+<p>```
+upstream yjd.helloworld.com {</p>
 
-log_format helloworld '$remote_addr - $remote_user [$time_local] $request '
-              '"$status" $body_bytes_sent "$http_referer" '
-              '"$http_user_agent" "$http_x_forwarded_for" "$request_time" "$request_body" ';                          
-server {
-        listen  80;
-        server_name xxx.xxx.xxx.xxx; # 由于没有备案域名可用，此处就用IP代替
-        access_log /opt/openresty/nginx/logs/helloworld.com-access.log helloworld;
-
-        location / {
-                proxy_set_header Host $host;
-                proxy_set_header X-Real-IP $remote_addr;
-                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-                proxy_pass http://yjd.helloworld.com;
-        }
-}
+<pre><code>server helloworld1:8080 weight=5;
+server helloworld2:8080 weight=5;
 </code></pre>
+
+<p>}</p>
+
+<p>log_format helloworld &lsquo;$remote_addr &ndash; $remote_user [$time_local] $request &rsquo;</p>
+
+<pre><code>          '"$status" $body_bytes_sent "$http_referer" '
+          '"$http_user_agent" "$http_x_forwarded_for" "$request_time" "$request_body" ';                          
+</code></pre>
+
+<p>server {</p>
+
+<pre><code>    listen  80;
+    server_name xxx.xxx.xxx.xxx; # 由于没有备案域名可用，此处就用IP代替
+    access_log /opt/openresty/nginx/logs/helloworld.com-access.log helloworld;
+
+    location / {
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_pass http://yjd.helloworld.com;
+    }
+</code></pre>
+
+<p>}
+```</p>
 
 <p>浏览器直接访问IP，输出结果同样。查看宿主机的logs挂载目录，nginx的日志也成功输出到此目录，查看日志内容也正常，测试OK！！</p>
 
@@ -288,15 +322,17 @@ server {
 
 <p>mysql的docker镜像直接使用docker官方hub上的mariadb镜像。</p>
 
-<pre><code>docker pull mariadb
-</code></pre>
+<p><code>bash
+sudo docker pull mariadb
+</code></p>
 
 <p><img src="/images/20170122-1.png" alt="Alt text" /></p>
 
 <p>在宿主机上新建一个mysql目录作为数据卷，启动mariadb容器时使用-v进行挂载：</p>
 
-<pre><code>sudo docker run --name mariadb-master -p 53306:3306 -v /home/op/dev/mysql/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 -d mariadb
-</code></pre>
+<p><code>bash
+sudo docker run --name mariadb-master -p 53306:3306 -v /home/op/dev/mysql/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 -d mariadb
+</code></p>
 
 <p>容器启动成功后，data目录下就会同步出现mysql的数据文件</p>
 
@@ -304,95 +340,123 @@ server {
 
 <p>容器启动后，使用docker exec命令进入容器, 创建helloworld数据库和测试表数据：</p>
 
-<pre><code>sudo docker exec -ti mariadb-master /bin/bash
-</code></pre>
+<p><code>bash
+sudo docker exec -ti mariadb-master /bin/bash
+</code></p>
 
 <p>容器准备好后，回头修改springboot。pom文件增加mybatis和mysql驱动依赖：</p>
 
-<pre><code>&lt;dependency&gt;
-        &lt;groupId&gt;org.mybatis.spring.boot&lt;/groupId&gt;
-        &lt;artifactId&gt;mybatis-spring-boot-starter&lt;/artifactId&gt;
-        &lt;version&gt;1.2.0&lt;/version&gt;
-&lt;/dependency&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;mysql&lt;/groupId&gt;
-    &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
-    &lt;version&gt;5.1.40&lt;/version&gt;
-&lt;/dependency&gt;
+<p>```xml
+<dependency></p>
+
+<pre><code>    &lt;groupId&gt;org.mybatis.spring.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;mybatis-spring-boot-starter&lt;/artifactId&gt;
+    &lt;version&gt;1.2.0&lt;/version&gt;
 </code></pre>
+
+<p></dependency>
+<dependency></p>
+
+<pre><code>&lt;groupId&gt;mysql&lt;/groupId&gt;
+&lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+&lt;version&gt;5.1.40&lt;/version&gt;
+</code></pre>
+
+<p></dependency>
+```</p>
 
 <p>配置application.yml数据源：</p>
 
-<pre><code>spring:
-    datasource:
-        name: helloworld
-        url: jdbc:mysql://mariadb-master:3306/helloworld?useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull&amp;autoReconnect=true&amp;serverTimezone=UTC
-        username: ???
-        password: ?????
-        driver-class-name: com.mysql.jdbc.Driver
+<p>```
+spring:</p>
+
+<pre><code>datasource:
+    name: helloworld
+    url: jdbc:mysql://mariadb-master:3306/helloworld?useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull&amp;autoReconnect=true&amp;serverTimezone=UTC
+    username: ???
+    password: ?????
+    driver-class-name: com.mysql.jdbc.Driver
 </code></pre>
+
+<p>```</p>
 
 <p>增加mapper类：</p>
 
-<pre><code>package yjd.demo.springboot.helloworld.dao;
+<p>```java
+package yjd.demo.springboot.helloworld.dao;</p>
 
-import org.apache.ibatis.annotations.Mapper;
+<p>import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
-import yjd.demo.springboot.helloworld.model.User;
+import yjd.demo.springboot.helloworld.model.User;</p>
 
-/**
+<p>/<em>*
  * @author yjd
  * @since 2017/1/22
- */
+ </em>/
 @Mapper
-public interface UserMapper {
-    @Select("SELECT * FROM user WHERE username = #{username}")
-    User getByUsername(@Param("username") String username);
-}
+public interface UserMapper {</p>
+
+<pre><code>@Select("SELECT * FROM user WHERE username = #{username}")
+User getByUsername(@Param("username") String username);
 </code></pre>
+
+<p>}
+```</p>
 
 <p>修改controller代码，新增如下代码：</p>
 
-<pre><code>@Autowired
-UserMapper userMapper;
+<p>```java
+@Autowired
+UserMapper userMapper;</p>
 
-@RequestMapping("/user")
-ApiResult findUser(@RequestParam("username") String username) {
-    User user = userMapper.getByUsername(username);
-    if (user == null) {
-        return ApiResult.fail(ApiCode.NOT_FOUND);
-    }
-    return ApiResult.success().addData("user", user);
+<p>@RequestMapping(&ldquo;/user&rdquo;)
+ApiResult findUser(@RequestParam(&ldquo;username&rdquo;) String username) {</p>
+
+<pre><code>User user = userMapper.getByUsername(username);
+if (user == null) {
+    return ApiResult.fail(ApiCode.NOT_FOUND);
 }
+return ApiResult.success().addData("user", user);
 </code></pre>
+
+<p>}
+```</p>
 
 <p>修改完成后，重新打包并上传到服务器。此时，因为helloworld应用需要访问到mariadb容器中的数据库，所以同启动openresty一样需要用到link，helloworld容器需要link到mariadb容器，启动helloworld容器命令修改如下：</p>
 
-<pre><code># 服务1
-sudo docker run --name helloworld1 --link mariadb-master:mariadb-master -p 50001:8080 -v /home/op/dev/app/target:/usr/local/app -d yjd/helloworld
+<p>```bash</p>
 
-# 服务2
-sudo docker run --name helloworld2 --link mariadb-master:mariadb-master -p 50002:8080 -v /home/op/dev/app/target:/usr/local/app -d yjd/helloworld
-</code></pre>
+<h1>服务1</h1>
+
+<p>sudo docker run &mdash;name helloworld1 &mdash;link mariadb-master:mariadb-master -p 50001:8080 -v /home/op/dev/app/target:/usr/local/app -d yjd/helloworld</p>
+
+<h1>服务2</h1>
+
+<p>sudo docker run &mdash;name helloworld2 &mdash;link mariadb-master:mariadb-master -p 50002:8080 -v /home/op/dev/app/target:/usr/local/app -d yjd/helloworld
+```</p>
 
 <p>访问测试OK！！</p>
 
-<pre><code>curl http://xxx.xxx.xxx.xxx/user?username=young
+<p>```json
+curl <a href="http://xxx.xxx.xxx.xxx/user?username=young">http://xxx.xxx.xxx.xxx/user?username=young</a></p>
 
-{
-    "success": true,
-    "message": "",
-    "apiVersion": "1.0.0",
-    "apiCode": "OK",
-    "data": {
-        "user": {
-            "id": 1,
-            "username": "young"
-        }
+<p>{</p>
+
+<pre><code>"success": true,
+"message": "",
+"apiVersion": "1.0.0",
+"apiCode": "OK",
+"data": {
+    "user": {
+        "id": 1,
+        "username": "young"
     }
 }
 </code></pre>
+
+<p>}
+```</p>
 
 <hr />
 
@@ -402,33 +466,37 @@ sudo docker run --name helloworld2 --link mariadb-master:mariadb-master -p 50002
 
 <p>首先按照上一步再启动一个mariadb-slave容器。PS:这里注意宿主机的数据目录也要新建一个，简单更改为mysql2，同事暴露的端口也要修改。如果了解mysql主从配置的读者应该知道，从服务器是需要和主服务器进行通信的，即从服务器会启用一个专门的线程通过网络通信去抓取主服务器的binlog来进行数据同步。由此可知，mariadb-slave容器需要link到mariadb-master容器，启动命令如下：</p>
 
-<pre><code>sudo docker run --name mariadb-slave --link mariadb-master:mariadb-master -p 53307:3306 -v /home/op/dev/mysql2/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 -d mariadb
-</code></pre>
+<p><code>bash
+sudo docker run --name mariadb-slave --link mariadb-master:mariadb-master -p 53307:3306 -v /home/op/dev/mysql2/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 -d mariadb
+</code></p>
 
 <p>容器启动后，就是按照通常的mysql主从配置进行配置即可，步骤如下：</p>
 
 <h5>STEP 1.修改master配置，然后重启容器（即重启数据库，使得配置生效）</h5>
 
-<pre><code>vi /etc/mysql/my.cnf
+<p>```
+vi /etc/mysql/my.cnf</p>
 
-[mysqld]
+<p>[mysqld]
 server-id = 1
 log_bin = /var/log/mysql/mariadb-bin
-</code></pre>
+```</p>
 
 <h5>STEP 2.修改slave配置（修改server-id），然后重启容器（即重启数据库，使得配置生效）</h5>
 
-<pre><code>vi /etc/mysql/my.cnf
+<p>```
+vi /etc/mysql/my.cnf</p>
 
-[mysqld]
+<p>[mysqld]
 server-id = 2
 log_bin = /var/log/mysql/mariadb-bin
-</code></pre>
+```</p>
 
 <h5>STEP 3.在master上创建和授权主从复制账号</h5>
 
-<pre><code>MariaDB [(none)]&gt; grant replication slave on *.* to 'rwsync'@'%' identified by 'rwsync';
-</code></pre>
+<p><code>bash
+MariaDB [(none)]&gt; grant replication slave on *.* to 'rwsync'@'%' identified by 'rwsync';
+</code></p>
 
 <p>查询master状态</p>
 
@@ -436,18 +504,21 @@ log_bin = /var/log/mysql/mariadb-bin
 
 <h5>STEP 4.根据master状态，配置slave</h5>
 
-<pre><code>MariaDB [(none)]&gt; change master to master_host='mariadb-master',master_user='rwsync',master_password='rwsync',master_log_file='mariadb-bin.000001',master_log_pos=315; 
-</code></pre>
+<p><code>bash
+MariaDB [(none)]&gt; change master to master_host='mariadb-master',master_user='rwsync',master_password='rwsync',master_log_file='mariadb-bin.000001',master_log_pos=315;
+</code></p>
 
 <p>开启slave复制</p>
 
-<pre><code>MariaDB [(none)]&gt; start slave;
-</code></pre>
+<p><code>bash
+MariaDB [(none)]&gt; start slave;
+</code></p>
 
 <p>查看slave状态，Slave_IO_Running和Slave_SQL_Running均为YES则表示主从同步正常</p>
 
-<pre><code>MariaDB [(none)]&gt; show slave status;
-</code></pre>
+<p><code>bash
+MariaDB [(none)]&gt; show slave status;
+</code></p>
 
 <p><img src="/images/20170123-2.png" alt="Alt text" /></p>
 
@@ -457,137 +528,172 @@ log_bin = /var/log/mysql/mariadb-bin
 
 <p>先在宿主机上解压，提取里面的配置文件到数据卷目录</p>
 
-<pre><code>tar -zxvpf Mycat-server-1.6-RELEASE-20161028204710-linux.tar.gz &amp;&amp; cp -R /home/op/dev/mycat/mycat/conf/. /home/op/dev/mycat/conf &amp;&amp; rm -rf /home/op/dev/mycat/mycat
-</code></pre>
+<p><code>bash
+tar -zxvpf Mycat-server-1.6-RELEASE-20161028204710-linux.tar.gz &amp;&amp; cp -R /home/op/dev/mycat/mycat/conf/. /home/op/dev/mycat/conf &amp;&amp; rm -rf /home/op/dev/mycat/mycat
+</code></p>
 
 <p><img src="/images/20170124-1.png" alt="Alt text" /></p>
 
 <p>修改server.xml和schema.xml，代码如下：</p>
 
-<pre><code>// server.xml，其他配置不变，根据实际情况修改以下部分
-&lt;user name="root"&gt;
-        &lt;property name="password"&gt;123456&lt;/property&gt;
-        &lt;property name="schemas"&gt;helloworld&lt;/property&gt;
-&lt;/user&gt;
+<p>```xml
+// server.xml，其他配置不变，根据实际情况修改以下部分
+<user name="root"></p>
 
-// schema.xml
+<pre><code>    &lt;property name="password"&gt;123456&lt;/property&gt;
+    &lt;property name="schemas"&gt;helloworld&lt;/property&gt;
+</code></pre>
+
+<p></user></p>
+
+<p>// schema.xml
 // balance=3：所有读请求随机的路由到写库对应的读库上执行
 // writeType=0：所有写操作第一个写库上，即mariadb-master
-&lt;?xml version="1.0"?&gt;
-&lt;!DOCTYPE mycat:schema SYSTEM "schema.dtd"&gt;
-&lt;mycat:schema xmlns:mycat="http://io.mycat/"&gt;
-        &lt;schema name="helloworld" checkSQLschema="false" dataNode="dn1"&gt;&lt;/schema&gt;
-        &lt;dataNode name="dn1" dataHost="localhost1" database="helloworld" /&gt;
-        &lt;dataHost name="localhost1" maxCon="1000" minCon="10" balance="3"
-                          writeType="0" dbType="mysql" dbDriver="native" switchType="1"  slaveThreshold="100"&gt;
-                &lt;heartbeat&gt;select user()&lt;/heartbeat&gt;
-                &lt;!-- can have multi write hosts --&gt;
-                &lt;writeHost host="mariadb-master" url="mariadb-master:3306" user="root"
-                                   password="123456"&gt;
-                        &lt;!-- can have multi read hosts --&gt;
-                        &lt;readHost host="mariadb-slave" url="mariadb-slave:3306" user="root" password="123456" /&gt;
-                &lt;/writeHost&gt;
-        &lt;/dataHost&gt;
-&lt;/mycat:schema&gt;
+&lt;?xml version=&ldquo;1.0&rdquo;?>
+&lt;!DOCTYPE mycat:schema SYSTEM &ldquo;schema.dtd&rdquo;>
+&lt;mycat:schema xmlns:mycat=&ldquo;<a href="http://io.mycat/">http://io.mycat/</a>&rdquo;></p>
+
+<pre><code>    &lt;schema name="helloworld" checkSQLschema="false" dataNode="dn1"&gt;&lt;/schema&gt;
+    &lt;dataNode name="dn1" dataHost="localhost1" database="helloworld" /&gt;
+    &lt;dataHost name="localhost1" maxCon="1000" minCon="10" balance="3"
+                      writeType="0" dbType="mysql" dbDriver="native" switchType="1"  slaveThreshold="100"&gt;
+            &lt;heartbeat&gt;select user()&lt;/heartbeat&gt;
+            &lt;!-- can have multi write hosts --&gt;
+            &lt;writeHost host="mariadb-master" url="mariadb-master:3306" user="root"
+                               password="123456"&gt;
+                    &lt;!-- can have multi read hosts --&gt;
+                    &lt;readHost host="mariadb-slave" url="mariadb-slave:3306" user="root" password="123456" /&gt;
+            &lt;/writeHost&gt;
+    &lt;/dataHost&gt;
 </code></pre>
+
+<p>&lt;/mycat:schema>
+```</p>
 
 <p>Dockerfile内容如下：</p>
 
-<pre><code>FROM openjdk
+<p>```
+FROM openjdk</p>
 
-MAINTAINER yjd
+<p>MAINTAINER yjd</p>
 
-VOLUME ["/opt/mycat/conf"]
+<p>VOLUME [&ldquo;/opt/mycat/conf&rdquo;]</p>
 
-ADD Mycat-server-1.6-RELEASE-20161028204710-linux.tar.gz /opt
-#使用ADD，docker会自动解压
+<p>ADD Mycat-server-1.6-RELEASE-20161028204710-linux.tar.gz /opt</p>
 
-EXPOSE 8066 9066
+<h1>使用ADD，docker会自动解压</h1>
 
-CMD ["/opt/mycat/bin/mycat","console"]
-</code></pre>
+<p>EXPOSE 8066 9066</p>
+
+<p>CMD [&ldquo;/opt/mycat/bin/mycat&rdquo;,&ldquo;console&rdquo;]
+```</p>
 
 <p>构建镜像：</p>
 
-<pre><code>sudo docker build -t yjd/mycat .
-</code></pre>
+<p><code>bash
+sudo docker build -t yjd/mycat .
+</code></p>
 
 <p>由于mycat中间件容器需要访问mariadb-master和mariadb-slave两个数据库容器，所以也需要用到link指令，启动命令如下：</p>
 
-<pre><code>sudo docker run --name mycat --link mariadb-master:mariadb-master --link mariadb-slave:mariadb-slave -v /home/op/dev/mycat/conf:/opt/mycat/conf -p 8066:8066 -p 9066:9066 yjd/mycat
-</code></pre>
+<p><code>bash
+sudo docker run --name mycat --link mariadb-master:mariadb-master --link mariadb-slave:mariadb-slave -v /home/op/dev/mycat/conf:/opt/mycat/conf -p 8066:8066 -p 9066:9066 yjd/mycat
+</code></p>
 
 <p>在springboot代码里编写新增用户的代码逻辑:</p>
 
-<pre><code>// Controller
-@RequestMapping(value = "/user", method = RequestMethod.POST)
-ApiResult createUser(@ModelAttribute User user) {
-    userMapper.createUser(user);
-    return ApiResult.success().addData("new user ID", user.getId());
-}
+<p>```java
+// Controller
+@RequestMapping(value = &ldquo;/user&rdquo;, method = RequestMethod.POST)
+ApiResult createUser(@ModelAttribute User user) {</p>
 
-// Mapper
-@Insert("INSERT INTO user(username) VALUES (#{user.username})")
-@Options(useGeneratedKeys = true, keyProperty = "user.id")
-void createUser(@Param("user") User user);
+<pre><code>userMapper.createUser(user);
+return ApiResult.success().addData("new user ID", user.getId());
 </code></pre>
+
+<p>}</p>
+
+<p>// Mapper
+@Insert(&ldquo;INSERT INTO user(username) VALUES (#{user.username})&rdquo;)
+@Options(useGeneratedKeys = true, keyProperty = &ldquo;user.id&rdquo;)
+void createUser(@Param(&ldquo;user&rdquo;) User user);
+```</p>
 
 <p>由于helloworld服务器由直接访问mariadb改成通过mycat中间件路由主从数据库，因此需要修改两处地方：</p>
 
 <p>1.修改hellworld数据源配置，主要修改连接host(mycat)和端口(8066)：</p>
 
-<pre><code>spring:
-datasource:
-    name: helloworld
-    url: jdbc:mysql://mycat:8066/helloworld?useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull&amp;autoReconnect=true&amp;serverTimezone=UTC
-    username: root
-    password: 123456
-    driver-class-name: com.mysql.jdbc.Driver
+<p>```
+spring:
+datasource:</p>
+
+<pre><code>name: helloworld
+url: jdbc:mysql://mycat:8066/helloworld?useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull&amp;autoReconnect=true&amp;serverTimezone=UTC
+username: root
+password: 123456
+driver-class-name: com.mysql.jdbc.Driver
 </code></pre>
+
+<p>```</p>
 
 <p>2.helloworld容器需要从link到mariadb改成link到mycat，修改启动命令如下：</p>
 
-<pre><code># 服务1
-sudo docker run --name helloworld1 --link mycat:mycat -p 50001:8080 -v /home/op/dev/app/target:/usr/local/app -d yjd/helloworld
+<p>```bash</p>
 
-# 服务2
-sudo docker run --name helloworld2 --link mycat:mycat -p 50002:8080 -v /home/op/dev/app/target:/usr/local/app -d yjd/helloworld
-</code></pre>
+<h1>服务1</h1>
+
+<p>sudo docker run &mdash;name helloworld1 &mdash;link mycat:mycat -p 50001:8080 -v /home/op/dev/app/target:/usr/local/app -d yjd/helloworld</p>
+
+<h1>服务2</h1>
+
+<p>sudo docker run &mdash;name helloworld2 &mdash;link mycat:mycat -p 50002:8080 -v /home/op/dev/app/target:/usr/local/app -d yjd/helloworld
+```</p>
 
 <p>打包helloworld应用上传到服务器，用新的命令restart两个helloworld容器。现在来测试下是否成功进行读写分离：</p>
 
-<pre><code># 新增一个用户
-curl -d "username="Trump" http://106.14.60.228/user
-{
-    "success": true,
-    "message": "",
-    "apiVersion": "1.0.0",
-    "apiCode": "OK",
-    "data": {
-        "new user ID": 11
-    }
-}
+<p>```json</p>
 
-# 查询Trump用户
-curl http://106.14.60.228/user?username=Trump
-{
-    "success": true,
-    "message": "",
-    "apiVersion": "1.0.0",
-    "apiCode": "OK",
-    "data": {
-        "user": {
-            "id": 11,
-            "username": "Trump"
-        }
+<h1>新增一个用户</h1>
+
+<p>curl -d &ldquo;username="Trump&rdquo; <a href="http://106.14.60.228/user">http://106.14.60.228/user</a>
+{</p>
+
+<pre><code>"success": true,
+"message": "",
+"apiVersion": "1.0.0",
+"apiCode": "OK",
+"data": {
+    "new user ID": 11
+}
+</code></pre>
+
+<p>}</p>
+
+<h1>查询Trump用户</h1>
+
+<p>curl <a href="http://106.14.60.228/user?username=Trump">http://106.14.60.228/user?username=Trump</a>
+{</p>
+
+<pre><code>"success": true,
+"message": "",
+"apiVersion": "1.0.0",
+"apiCode": "OK",
+"data": {
+    "user": {
+        "id": 11,
+        "username": "Trump"
     }
 }
 </code></pre>
+
+<p>}
+```</p>
 
 <p>进入mycat容器追踪mycat的日志(把log4j2.xml的日志级别改成DEBUG)</p>
 
-<pre><code>tail /opt/mycat/logs/mycat.log -f -n 30
-</code></pre>
+<p>```bash
+tail /opt/mycat/logs/mycat.log -f -n 30
+````</p>
 
 <p>新增用户日志，从红色划线部分即可看出，写操作已经成功路由到master上</p>
 
@@ -611,76 +717,87 @@ curl http://106.14.60.228/user?username=Trump
 
 <p>解压zookeeper安装包并提取配置文件到conf目录</p>
 
-<pre><code>tar -zxvpf zookeeper-3.4.9.tar.gz &amp;&amp; cp -R /home/op/dev/zookeeper/zookeeper-3.4.9/conf/. /home/op/dev/zookeeper/conf &amp;&amp; rm -rf /home/op/dev/zookeeper/zookeeper-3.4.9
-</code></pre>
+<p><code>bash
+tar -zxvpf zookeeper-3.4.9.tar.gz &amp;&amp; cp -R /home/op/dev/zookeeper/zookeeper-3.4.9/conf/. /home/op/dev/zookeeper/conf &amp;&amp; rm -rf /home/op/dev/zookeeper/zookeeper-3.4.9
+</code></p>
 
 <p>使用Dockerfile构建容器，Dockerfile内容如下：</p>
 
-<pre><code>FROM openjdk
-#zookeeper使用java编写的，所以需要java运行环境
+<p>```
+FROM openjdk</p>
 
-MAINTAINER yjd
+<h1>zookeeper使用java编写的，所以需要java运行环境</h1>
 
-RUN mkdir /var/lib/zookeeper
-#这个目录作为zookeeper的data目录
+<p>MAINTAINER yjd</p>
 
-VOLUME ["/var/lib/zookeeper", "/opt/zookeeper-3.4.9/conf"]
+<p>RUN mkdir /var/lib/zookeeper</p>
 
-ADD zookeeper-3.4.9.tar.gz /opt
+<h1>这个目录作为zookeeper的data目录</h1>
 
-CMD ["/opt/zookeeper-3.4.9/bin/zkServer.sh", "start-foreground"]
-#start-foreground：使用前台运行模式，否则（后台运行）容器启动后就自动关闭
-</code></pre>
+<p>VOLUME [&ldquo;/var/lib/zookeeper&rdquo;, &ldquo;/opt/zookeeper-3.4.9/conf&rdquo;]</p>
+
+<p>ADD zookeeper-3.4.9.tar.gz /opt</p>
+
+<p>CMD [&ldquo;/opt/zookeeper-3.4.9/bin/zkServer.sh&rdquo;, &ldquo;start-foreground&rdquo;]</p>
+
+<h1>start-foreground：使用前台运行模式，否则（后台运行）容器启动后就自动关闭</h1>
+
+<p>```</p>
 
 <p>构建镜像后启动容器，挂载conf和data两个数据卷目录：</p>
 
-<pre><code>sudo docker build -ti yjd/zookeeper .
+<p>```bash
+sudo docker build -ti yjd/zookeeper .</p>
 
-sudo docker run --name zk1 \
-        -p 2181:2181 \
-        -v /home/op/dev/zookeeper/conf:/opt/zookeeper-3.4.9/conf \
-        -v /home/op/dev/zookeeper/data:/var/lib/zookeeper \
-        -d yjd/zookeeper
+<p>sudo docker run &mdash;name zk1 \</p>
+
+<pre><code>    -p 2181:2181 \
+    -v /home/op/dev/zookeeper/conf:/opt/zookeeper-3.4.9/conf \
+    -v /home/op/dev/zookeeper/data:/var/lib/zookeeper \
+    -d yjd/zookeeper
 </code></pre>
+
+<p>```</p>
 
 <p>进入容器，使用zookeeper客户端连接zookeeper本地服务端，检查是否正常启动zookeeper：</p>
 
-<pre><code>op@iZuf6ikqrgj1kq9sbrou5fZ:~/dev/zookeeper$ sudo docker exec -ti zk1 /bin/bash
-root@fb6b4983dbb7:/# cd opt                                                                                                                                                                                     
+<p>```
+op@iZuf6ikqrgj1kq9sbrou5fZ:~/dev/zookeeper$ sudo docker exec -ti zk1 /bin/bash
+root@fb6b4983dbb7:/# cd opt                                                                                                                                                                                   <br/>
 root@fb6b4983dbb7:/opt# cd zookeeper-3.4.9/
 root@fb6b4983dbb7:/opt/zookeeper-3.4.9# cd bin/
 root@fb6b4983dbb7:/opt/zookeeper-3.4.9/bin# ./zkCli.sh -server localhost:2181
 Connecting to localhost:2181
-2017-02-13 13:49:16,018 [myid:] - INFO  [main:Environment@100] - Client environment:zookeeper.version=3.4.9-1757313, built on 08/23/2016 06:50 GMT
-2017-02-13 13:49:16,021 [myid:] - INFO  [main:Environment@100] - Client environment:host.name=fb6b4983dbb7
-2017-02-13 13:49:16,021 [myid:] - INFO  [main:Environment@100] - Client environment:java.version=1.8.0_111
-2017-02-13 13:49:16,023 [myid:] - INFO  [main:Environment@100] - Client environment:java.vendor=Oracle Corporation
-2017-02-13 13:49:16,023 [myid:] - INFO  [main:Environment@100] - Client environment:java.home=/usr/lib/jvm/java-8-openjdk-amd64/jre
-2017-02-13 13:49:16,023 [myid:] - INFO  [main:Environment@100] - Client environment:java.class.path=/opt/zookeeper-3.4.9/bin/../build/classes:/opt/zookeeper-3.4.9/bin/../build/lib/*.jar:/opt/zookeeper-3.4.9/bin/../lib/slf4j-log4j12-1.6.1.jar:/opt/zookeeper-3.4.9/bin/../lib/slf4j-api-1.6.1.jar:/opt/zookeeper-3.4.9/bin/../lib/netty-3.10.5.Final.jar:/opt/zookeeper-3.4.9/bin/../lib/log4j-1.2.16.jar:/opt/zookeeper-3.4.9/bin/../lib/jline-0.9.94.jar:/opt/zookeeper-3.4.9/bin/../zookeeper-3.4.9.jar:/opt/zookeeper-3.4.9/bin/../src/java/lib/*.jar:/opt/zookeeper-3.4.9/bin/../conf:
-2017-02-13 13:49:16,024 [myid:] - INFO  [main:Environment@100] - Client environment:java.library.path=/usr/java/packages/lib/amd64:/usr/lib/x86_64-linux-gnu/jni:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/usr/lib/jni:/lib:/usr/lib
-2017-02-13 13:49:16,024 [myid:] - INFO  [main:Environment@100] - Client environment:java.io.tmpdir=/tmp
-2017-02-13 13:49:16,024 [myid:] - INFO  [main:Environment@100] - Client environment:java.compiler=&lt;NA&gt;
-2017-02-13 13:49:16,024 [myid:] - INFO  [main:Environment@100] - Client environment:os.name=Linux
-2017-02-13 13:49:16,024 [myid:] - INFO  [main:Environment@100] - Client environment:os.arch=amd64
-2017-02-13 13:49:16,024 [myid:] - INFO  [main:Environment@100] - Client environment:os.version=3.13.0-106-generic
-2017-02-13 13:49:16,024 [myid:] - INFO  [main:Environment@100] - Client environment:user.name=root
-2017-02-13 13:49:16,024 [myid:] - INFO  [main:Environment@100] - Client environment:user.home=/root
-2017-02-13 13:49:16,024 [myid:] - INFO  [main:Environment@100] - Client environment:user.dir=/opt/zookeeper-3.4.9/bin
-2017-02-13 13:49:16,025 [myid:] - INFO  [main:ZooKeeper@438] - Initiating client connection, connectString=localhost:2181 sessionTimeout=30000 watcher=org.apache.zookeeper.ZooKeeperMain$MyWatcher@41906a77
-2017-02-13 13:49:16,047 [myid:] - INFO  [main-SendThread(localhost:2181):ClientCnxn$SendThread@1032] - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+2017-02-13 13:49:16,018 [myid:] &ndash; INFO  [main:Environment@100] &ndash; Client environment:zookeeper.version=3.4.9-1757313, built on 08/23/2016 06:50 GMT
+2017-02-13 13:49:16,021 [myid:] &ndash; INFO  [main:Environment@100] &ndash; Client environment:host.name=fb6b4983dbb7
+2017-02-13 13:49:16,021 [myid:] &ndash; INFO  [main:Environment@100] &ndash; Client environment:java.version=1.8.0_111
+2017-02-13 13:49:16,023 [myid:] &ndash; INFO  [main:Environment@100] &ndash; Client environment:java.vendor=Oracle Corporation
+2017-02-13 13:49:16,023 [myid:] &ndash; INFO  [main:Environment@100] &ndash; Client environment:java.home=/usr/lib/jvm/java-8-openjdk-amd64/jre
+2017-02-13 13:49:16,023 [myid:] &ndash; INFO  [main:Environment@100] &ndash; Client environment:java.class.path=/opt/zookeeper-3.4.9/bin/../build/classes:/opt/zookeeper-3.4.9/bin/../build/lib/<em>.jar:/opt/zookeeper-3.4.9/bin/../lib/slf4j-log4j12-1.6.1.jar:/opt/zookeeper-3.4.9/bin/../lib/slf4j-api-1.6.1.jar:/opt/zookeeper-3.4.9/bin/../lib/netty-3.10.5.Final.jar:/opt/zookeeper-3.4.9/bin/../lib/log4j-1.2.16.jar:/opt/zookeeper-3.4.9/bin/../lib/jline-0.9.94.jar:/opt/zookeeper-3.4.9/bin/../zookeeper-3.4.9.jar:/opt/zookeeper-3.4.9/bin/../src/java/lib/</em>.jar:/opt/zookeeper-3.4.9/bin/../conf:
+2017-02-13 13:49:16,024 [myid:] &ndash; INFO  [main:Environment@100] &ndash; Client environment:java.library.path=/usr/java/packages/lib/amd64:/usr/lib/x86_64-linux-gnu/jni:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/usr/lib/jni:/lib:/usr/lib
+2017-02-13 13:49:16,024 [myid:] &ndash; INFO  [main:Environment@100] &ndash; Client environment:java.io.tmpdir=/tmp
+2017-02-13 13:49:16,024 [myid:] &ndash; INFO  [main:Environment@100] &ndash; Client environment:java.compiler=<NA>
+2017-02-13 13:49:16,024 [myid:] &ndash; INFO  [main:Environment@100] &ndash; Client environment:os.name=Linux
+2017-02-13 13:49:16,024 [myid:] &ndash; INFO  [main:Environment@100] &ndash; Client environment:os.arch=amd64
+2017-02-13 13:49:16,024 [myid:] &ndash; INFO  [main:Environment@100] &ndash; Client environment:os.version=3.13.0-106-generic
+2017-02-13 13:49:16,024 [myid:] &ndash; INFO  [main:Environment@100] &ndash; Client environment:user.name=root
+2017-02-13 13:49:16,024 [myid:] &ndash; INFO  [main:Environment@100] &ndash; Client environment:user.home=/root
+2017-02-13 13:49:16,024 [myid:] &ndash; INFO  [main:Environment@100] &ndash; Client environment:user.dir=/opt/zookeeper-3.4.9/bin
+2017-02-13 13:49:16,025 [myid:] &ndash; INFO  [main:ZooKeeper@438] &ndash; Initiating client connection, connectString=localhost:2181 sessionTimeout=30000 watcher=org.apache.zookeeper.ZooKeeperMain$MyWatcher@41906a77
+2017-02-13 13:49:16,047 [myid:] &ndash; INFO  [main-SendThread(localhost:2181):ClientCnxn$SendThread@1032] &ndash; Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
 Welcome to ZooKeeper!
 JLine support is enabled
-2017-02-13 13:49:16,122 [myid:] - INFO  [main-SendThread(localhost:2181):ClientCnxn$SendThread@876] - Socket connection established to localhost/127.0.0.1:2181, initiating session
-[zk: localhost:2181(CONNECTING) 0] 2017-02-13 13:49:16,211 [myid:] - INFO  [main-SendThread(localhost:2181):ClientCnxn$SendThread@1299] - Session establishment complete on server localhost/127.0.0.1:2181, sessionid = 0x15a37bba5810000, negotiated timeout = 30000
+2017-02-13 13:49:16,122 [myid:] &ndash; INFO  [main-SendThread(localhost:2181):ClientCnxn$SendThread@876] &ndash; Socket connection established to localhost/127.0.0.1:2181, initiating session
+[zk: localhost:2181(CONNECTING) 0] 2017-02-13 13:49:16,211 [myid:] &ndash; INFO  [main-SendThread(localhost:2181):ClientCnxn$SendThread@1299] &ndash; Session establishment complete on server localhost/127.0.0.1:2181, sessionid = 0x15a37bba5810000, negotiated timeout = 30000</p>
 
-WATCHER::
+<p>WATCHER::</p>
 
-WatchedEvent state:SyncConnected type:None path:null
+<p>WatchedEvent state:SyncConnected type:None path:null</p>
 
-[zk: localhost:2181(CONNECTED) 0] ls /
+<p>[zk: localhost:2181(CONNECTED) 0] ls /
 [zookeeper]
-[zk: localhost:2181(CONNECTED) 1] 
-</code></pre>
+[zk: localhost:2181(CONNECTED) 1]
+```</p>
 
 <p>zk中间件已经准备好，现在进行代码改造。还是基于上面的helloworld进行修改，在不改动原工程下，拷贝两个新的工程，分别是ms-helloworld-server和ms-helloworld-client。</p>
 
@@ -688,332 +805,370 @@ WatchedEvent state:SyncConnected type:None path:null
 
 <p>pom.xml，新增spring-cloud和zookeeper的依赖：</p>
 
-<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"&gt;
-    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+<p>```xml
+&lt;?xml version=&ldquo;1.0&rdquo; encoding=&ldquo;UTF-8&rdquo;?>
+&lt;project xmlns=&ldquo;<a href="http://maven.apache.org/POM/4.0.0">http://maven.apache.org/POM/4.0.0</a>&rdquo; xmlns:xsi=&ldquo;<a href="http://www.w3.org/2001/XMLSchema-instance">http://www.w3.org/2001/XMLSchema-instance</a>&rdquo;</p>
 
-    &lt;groupId&gt;yjd.demo.springboot&lt;/groupId&gt;
-    &lt;artifactId&gt;ms-helloworld-server&lt;/artifactId&gt;
-    &lt;version&gt;1.0.0&lt;/version&gt;
+<pre><code>xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"&gt;
+&lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
 
-    &lt;packaging&gt;jar&lt;/packaging&gt;
+&lt;groupId&gt;yjd.demo.springboot&lt;/groupId&gt;
+&lt;artifactId&gt;ms-helloworld-server&lt;/artifactId&gt;
+&lt;version&gt;1.0.0&lt;/version&gt;
 
-    &lt;parent&gt;
-        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-        &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
-        &lt;version&gt;1.4.4.RELEASE&lt;/version&gt;
-    &lt;/parent&gt;
+&lt;packaging&gt;jar&lt;/packaging&gt;
 
-    &lt;dependencyManagement&gt;
-        &lt;dependencies&gt;
-            &lt;dependency&gt;
-                &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
-                &lt;artifactId&gt;spring-cloud-dependencies&lt;/artifactId&gt;
-                &lt;version&gt;Camden.SR5&lt;/version&gt;
-                &lt;type&gt;pom&lt;/type&gt;
-                &lt;scope&gt;import&lt;/scope&gt;
-            &lt;/dependency&gt;
-        &lt;/dependencies&gt;
-    &lt;/dependencyManagement&gt;
+&lt;parent&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+    &lt;version&gt;1.4.4.RELEASE&lt;/version&gt;
+&lt;/parent&gt;
 
+&lt;dependencyManagement&gt;
     &lt;dependencies&gt;
         &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
             &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-cloud-starter-zookeeper-all&lt;/artifactId&gt;
+            &lt;artifactId&gt;spring-cloud-dependencies&lt;/artifactId&gt;
+            &lt;version&gt;Camden.SR5&lt;/version&gt;
+            &lt;type&gt;pom&lt;/type&gt;
+            &lt;scope&gt;import&lt;/scope&gt;
         &lt;/dependency&gt;
     &lt;/dependencies&gt;
+&lt;/dependencyManagement&gt;
 
-    &lt;properties&gt;
-        &lt;java.version&gt;1.8&lt;/java.version&gt;
-    &lt;/properties&gt;
+&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-cloud-starter-zookeeper-all&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
+
+&lt;properties&gt;
+    &lt;java.version&gt;1.8&lt;/java.version&gt;
+&lt;/properties&gt;
 
 
-    &lt;build&gt;
-        &lt;plugins&gt;
-            &lt;plugin&gt;
-                &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-                &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
-            &lt;/plugin&gt;
-        &lt;/plugins&gt;
-    &lt;/build&gt;
+&lt;build&gt;
+    &lt;plugins&gt;
+        &lt;plugin&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
+        &lt;/plugin&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;
 
-    &lt;repositories&gt;
-        &lt;repository&gt;
-            &lt;id&gt;spring-releases&lt;/id&gt;
-            &lt;url&gt;https://repo.spring.io/libs-release&lt;/url&gt;
-        &lt;/repository&gt;
-    &lt;/repositories&gt;
-    &lt;pluginRepositories&gt;
-        &lt;pluginRepository&gt;
-            &lt;id&gt;spring-releases&lt;/id&gt;
-            &lt;url&gt;https://repo.spring.io/libs-release&lt;/url&gt;
-        &lt;/pluginRepository&gt;
-    &lt;/pluginRepositories&gt;
-&lt;/project&gt;
+&lt;repositories&gt;
+    &lt;repository&gt;
+        &lt;id&gt;spring-releases&lt;/id&gt;
+        &lt;url&gt;https://repo.spring.io/libs-release&lt;/url&gt;
+    &lt;/repository&gt;
+&lt;/repositories&gt;
+&lt;pluginRepositories&gt;
+    &lt;pluginRepository&gt;
+        &lt;id&gt;spring-releases&lt;/id&gt;
+        &lt;url&gt;https://repo.spring.io/libs-release&lt;/url&gt;
+    &lt;/pluginRepository&gt;
+&lt;/pluginRepositories&gt;
 </code></pre>
+
+<p></project>
+```</p>
 
 <p>为了简单，服务方和调用方还是使用最简单的http服务，不引入rpc框架，服务方服务接口代码：</p>
 
-<pre><code>package yjd.demo.springboot.helloworld.controller;
+<p>```java   <br/>
+package yjd.demo.springboot.helloworld.controller;</p>
 
-import org.springframework.beans.factory.annotation.Autowired;
+<p>import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import yjd.demo.springboot.helloworld.controller.base.ApiCode;
-import yjd.demo.springboot.helloworld.controller.base.ApiResult;
+import yjd.demo.springboot.helloworld.controller.base.ApiResult;</p>
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+<p>import java.net.InetAddress;
+import java.net.UnknownHostException;</p>
 
-/**
+<p>/<em>*
  * @author yjd
  * @since 2017/2/13
- */
+ </em>/
 @RestController
-public class HelloworldRestService {
+public class HelloworldRestService {</p>
 
-    @RequestMapping("/index")
-    ApiResult index() throws UnknownHostException {
-        String ip = InetAddress.getLocalHost().getHostAddress();
-        return ApiResult.success().addData("msg", "helloWorld, ip:" + ip);
-    }
-
+<pre><code>@RequestMapping("/index")
+ApiResult index() throws UnknownHostException {
+    String ip = InetAddress.getLocalHost().getHostAddress();
+    return ApiResult.success().addData("msg", "helloWorld, ip:" + ip);
 }
 </code></pre>
+
+<p>}
+```</p>
 
 <p>启动类代码，增加@EnableDiscoveryClient注解即可：</p>
 
-<pre><code>package yjd.demo.springboot.helloworld;
+<p>```java
+package yjd.demo.springboot.helloworld;</p>
 
-import org.springframework.boot.SpringApplication;
+<p>import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;</p>
 
-/**
+<p>/<em>*
  * @author yjd
  * @since 2017/2/13
- */
+ </em>/
 @SpringBootApplication
 @EnableDiscoveryClient
-public class Application {
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-    }
+public class Application {</p>
+
+<pre><code>public static void main(String[] args) {
+    SpringApplication.run(Application.class, args);
 }
 </code></pre>
 
+<p>}
+```</p>
+
 <p>application.yml</p>
 
-<pre><code>spring:
-    application:
-      name: helloworld-server
+<p>```   <br/>
+spring:</p>
+
+<pre><code>application:
+  name: helloworld-server
 </code></pre>
+
+<p>```</p>
 
 <p>bootstrap.yml</p>
 
-<pre><code>spring:
-  cloud:
-    zookeeper:
-      connect-string: zk1:2181
+<p>```
+spring:
+  cloud:</p>
+
+<pre><code>zookeeper:
+  connect-string: zk1:2181
 </code></pre>
+
+<p>```</p>
 
 <h4>2. ms-helloworld-client：</h4>
 
 <p>pom.xml，增加spring-cloud，zookeeper，feign（一个http客户端库）依赖：</p>
 
-<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"&gt;
-    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+<p>```xml
+&lt;?xml version=&ldquo;1.0&rdquo; encoding=&ldquo;UTF-8&rdquo;?>
+&lt;project xmlns=&ldquo;<a href="http://maven.apache.org/POM/4.0.0">http://maven.apache.org/POM/4.0.0</a>&rdquo; xmlns:xsi=&ldquo;<a href="http://www.w3.org/2001/XMLSchema-instance">http://www.w3.org/2001/XMLSchema-instance</a>&rdquo;</p>
 
-    &lt;groupId&gt;yjd.demo.springboot&lt;/groupId&gt;
-    &lt;artifactId&gt;helloworld&lt;/artifactId&gt;
-    &lt;version&gt;1.0.0&lt;/version&gt;
+<pre><code>xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"&gt;
+&lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
 
-    &lt;packaging&gt;jar&lt;/packaging&gt;
+&lt;groupId&gt;yjd.demo.springboot&lt;/groupId&gt;
+&lt;artifactId&gt;helloworld&lt;/artifactId&gt;
+&lt;version&gt;1.0.0&lt;/version&gt;
 
-    &lt;parent&gt;
-        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-        &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
-        &lt;version&gt;1.4.4.RELEASE&lt;/version&gt;
-    &lt;/parent&gt;
+&lt;packaging&gt;jar&lt;/packaging&gt;
 
-    &lt;dependencyManagement&gt;
-        &lt;dependencies&gt;
-            &lt;dependency&gt;
-                &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
-                &lt;artifactId&gt;spring-cloud-dependencies&lt;/artifactId&gt;
-                &lt;version&gt;Camden.SR5&lt;/version&gt;
-                &lt;type&gt;pom&lt;/type&gt;
-                &lt;scope&gt;import&lt;/scope&gt;
-            &lt;/dependency&gt;
-        &lt;/dependencies&gt;
-    &lt;/dependencyManagement&gt;
+&lt;parent&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+    &lt;version&gt;1.4.4.RELEASE&lt;/version&gt;
+&lt;/parent&gt;
 
+&lt;dependencyManagement&gt;
     &lt;dependencies&gt;
         &lt;dependency&gt;
             &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-cloud-starter-feign&lt;/artifactId&gt;
-        &lt;/dependency&gt;
-
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
-        &lt;/dependency&gt;
-
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.mybatis.spring.boot&lt;/groupId&gt;
-            &lt;artifactId&gt;mybatis-spring-boot-starter&lt;/artifactId&gt;
-            &lt;version&gt;1.2.0&lt;/version&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;mysql&lt;/groupId&gt;
-            &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
-            &lt;version&gt;5.1.40&lt;/version&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-cloud-starter-zookeeper-all&lt;/artifactId&gt;
+            &lt;artifactId&gt;spring-cloud-dependencies&lt;/artifactId&gt;
+            &lt;version&gt;Camden.SR5&lt;/version&gt;
+            &lt;type&gt;pom&lt;/type&gt;
+            &lt;scope&gt;import&lt;/scope&gt;
         &lt;/dependency&gt;
     &lt;/dependencies&gt;
+&lt;/dependencyManagement&gt;
 
-    &lt;properties&gt;
-        &lt;java.version&gt;1.8&lt;/java.version&gt;
-    &lt;/properties&gt;
+&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-cloud-starter-feign&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.mybatis.spring.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;mybatis-spring-boot-starter&lt;/artifactId&gt;
+        &lt;version&gt;1.2.0&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;mysql&lt;/groupId&gt;
+        &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+        &lt;version&gt;5.1.40&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-cloud-starter-zookeeper-all&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
+
+&lt;properties&gt;
+    &lt;java.version&gt;1.8&lt;/java.version&gt;
+&lt;/properties&gt;
 
 
-    &lt;build&gt;
-        &lt;plugins&gt;
-            &lt;plugin&gt;
-                &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-                &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
-            &lt;/plugin&gt;
-        &lt;/plugins&gt;
-    &lt;/build&gt;
+&lt;build&gt;
+    &lt;plugins&gt;
+        &lt;plugin&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
+        &lt;/plugin&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;
 
-    &lt;repositories&gt;
-        &lt;repository&gt;
-            &lt;id&gt;spring-releases&lt;/id&gt;
-            &lt;url&gt;https://repo.spring.io/libs-release&lt;/url&gt;
-        &lt;/repository&gt;
-    &lt;/repositories&gt;
-    &lt;pluginRepositories&gt;
-        &lt;pluginRepository&gt;
-            &lt;id&gt;spring-releases&lt;/id&gt;
-            &lt;url&gt;https://repo.spring.io/libs-release&lt;/url&gt;
-        &lt;/pluginRepository&gt;
-    &lt;/pluginRepositories&gt;
-&lt;/project&gt;
+&lt;repositories&gt;
+    &lt;repository&gt;
+        &lt;id&gt;spring-releases&lt;/id&gt;
+        &lt;url&gt;https://repo.spring.io/libs-release&lt;/url&gt;
+    &lt;/repository&gt;
+&lt;/repositories&gt;
+&lt;pluginRepositories&gt;
+    &lt;pluginRepository&gt;
+        &lt;id&gt;spring-releases&lt;/id&gt;
+        &lt;url&gt;https://repo.spring.io/libs-release&lt;/url&gt;
+    &lt;/pluginRepository&gt;
+&lt;/pluginRepositories&gt;
 </code></pre>
+
+<p></project>
+```</p>
 
 <p>客户端调用服务端代码：</p>
 
-<pre><code>package yjd.demo.springboot.helloworld.api;
+<p>```java
+package yjd.demo.springboot.helloworld.api;</p>
 
-import org.springframework.beans.factory.annotation.Autowired;
+<p>import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import yjd.demo.springboot.helloworld.api.base.ApiResult;
-import yjd.demo.springboot.helloworld.rmi.IndexRmi;
+import yjd.demo.springboot.helloworld.rmi.IndexRmi;</p>
 
-import java.util.List;
-import java.util.stream.Collectors;
+<p>import java.util.List;
+import java.util.stream.Collectors;</p>
 
-/**
+<p>/<em>*
  * @author yjd
  * @since 2017/2/13
- */
+ </em>/
 @RestController
-public class IndexApi {
+public class IndexApi {</p>
 
-    @Autowired
-    private DiscoveryClient discovery;
+<pre><code>@Autowired
+private DiscoveryClient discovery;
 
-    @Autowired
-    private IndexRmi indexRmi;
+@Autowired
+private IndexRmi indexRmi;
 
-    @RequestMapping("/info")
-    ApiResult info() {
-        List&lt;ServiceInstance&gt; instanceList = discovery.getInstances("helloworld-server");
-        String instances = instanceList.stream().map(it -&gt; it.getHost() + ":" + it.getPort()).collect(Collectors.joining("; "));
-        return ApiResult.success().addData("instances", instances);
-    }
+@RequestMapping("/info")
+ApiResult info() {
+    List&lt;ServiceInstance&gt; instanceList = discovery.getInstances("helloworld-server");
+    String instances = instanceList.stream().map(it -&gt; it.getHost() + ":" + it.getPort()).collect(Collectors.joining("; "));
+    return ApiResult.success().addData("instances", instances);
+}
 
-    @RequestMapping("/index")
-    ApiResult index() {
-        return indexRmi.index();
-    }
+@RequestMapping("/index")
+ApiResult index() {
+    return indexRmi.index();
 }
 </code></pre>
+
+<p>}
+```</p>
 
 <p>feign代码：</p>
 
-<pre><code>package yjd.demo.springboot.helloworld.rmi;
+<p>```java
+package yjd.demo.springboot.helloworld.rmi;</p>
 
-import org.springframework.cloud.netflix.feign.FeignClient;
+<p>import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
-import yjd.demo.springboot.helloworld.api.base.ApiResult;
+import yjd.demo.springboot.helloworld.api.base.ApiResult;</p>
 
-/**
+<p>/<em>*
  * Created by young on 2017/2/13.
- */
+ </em>/
 @Component
-@FeignClient(value = "helloworld-server")
-public interface IndexRmi {
+@FeignClient(value = &ldquo;helloworld-server&rdquo;)
+public interface IndexRmi {</p>
 
-    @RequestMapping(value = "/index")
-    public ApiResult index();
-
-}
+<pre><code>@RequestMapping(value = "/index")
+public ApiResult index();
 </code></pre>
+
+<p>}
+```</p>
 
 <p>启动类代码：</p>
 
-<pre><code>package yjd.demo.springboot.helloworld;
+<p>```java
+package yjd.demo.springboot.helloworld;</p>
 
-import org.springframework.boot.SpringApplication;
+<p>import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.netflix.feign.EnableFeignClients;
+import org.springframework.cloud.netflix.feign.EnableFeignClients;</p>
 
-/**
+<p>/<em>*
  * @author yjd
  * @since 2017/2/13
- */
+ </em>/
 @SpringBootApplication
 @EnableFeignClients
 @EnableDiscoveryClient
- public class Application {
+ public class Application {</p>
 
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-    }
+<pre><code>public static void main(String[] args) {
+    SpringApplication.run(Application.class, args);
 }
 </code></pre>
 
+<p>}
+```</p>
+
 <p>application.yml：</p>
 
-<pre><code>spring:
-    application:
-      name: helloworld-client
+<p>```
+spring:</p>
+
+<pre><code>application:
+  name: helloworld-client
 </code></pre>
+
+<p>```</p>
 
 <p>bootstrap.yml</p>
 
-<pre><code>spring:
-  cloud:
-    zookeeper:
-      connect-string: zk1:2181
-      discovery:
-        register: false # 注意要设为false，为否client也会被注册的zk上
+<p>```
+spring:
+  cloud:</p>
+
+<pre><code>zookeeper:
+  connect-string: zk1:2181
+  discovery:
+    register: false # 注意要设为false，为否client也会被注册的zk上
 </code></pre>
+
+<p>```</p>
 
 <p>打包server和client代码上传到服务器，目录结构如下：</p>
 
@@ -1023,87 +1178,109 @@ import org.springframework.cloud.netflix.feign.EnableFeignClients;
 
 <p>server:</p>
 
-<pre><code>FROM openjdk
+<p>```
+FROM openjdk</p>
 
-MAINTAINER yjd
+<p>MAINTAINER yjd</p>
 
-VOLUME ["/usr/local/app"]
+<p>VOLUME [&ldquo;/usr/local/app&rdquo;]</p>
 
-EXPOSE 8080
+<p>EXPOSE 8080</p>
 
-ENTRYPOINT ["java","-jar","/usr/local/app/ms-helloworld-server.jar"]
-</code></pre>
+<p>ENTRYPOINT [&ldquo;java&rdquo;,&ldquo;-jar&rdquo;,&ldquo;/usr/local/app/ms-helloworld-server.jar&rdquo;]
+```</p>
 
 <p>client:</p>
 
-<pre><code>FROM openjdk
+<p>```
+FROM openjdk</p>
 
-MAINTAINER yjd
+<p>MAINTAINER yjd</p>
 
-VOLUME ["/usr/local/app"]
+<p>VOLUME [&ldquo;/usr/local/app&rdquo;]</p>
 
-EXPOSE 8080
+<p>EXPOSE 8080</p>
 
-ENTRYPOINT ["java","-jar","/usr/local/app/ms-helloworld-client.jar"]
-</code></pre>
+<p>ENTRYPOINT [&ldquo;java&rdquo;,&ldquo;-jar&rdquo;,&ldquo;/usr/local/app/ms-helloworld-client.jar&rdquo;]
+```</p>
 
 <p>构建server和client镜像并启动2个server容器和1个client容器：</p>
 
-<pre><code># 启动server1
-sudo docker run --name ms-helloworld-server1 --link zk1:zk1 -p 50001:8080 -v /home/op/dev/ms-app/ms-app-server/deploy:/usr/local/app -d yjd/ms-helloworld-server
+<p>```bash</p>
 
-# 启动server2
-sudo docker run --name ms-helloworld-server2 --link zk1:zk1 -p 50002:8080 -v /home/op/dev/ms-app/ms-app-server/deploy:/usr/local/app -d yjd/ms-helloworld-server
+<h1>启动server1</h1>
 
-# 启动client
-# 这里需要link两个server端，否则zk返回可用实例后，client端就无法与该实例的docker容器通讯
-sudo docker run --name ms-helloworld-client --link zk1:zk1 --link ms-helloworld-server1:ms-helloworld-server1 --link ms-helloworld-server2:ms-helloworld-server2 -p 50003:8080 -v /home/op/dev/ms-app/ms-app-client/deploy:/usr/local/app -d yjd/ms-helloworld-client
-</code></pre>
+<p>sudo docker run &mdash;name ms-helloworld-server1 &mdash;link zk1:zk1 -p 50001:8080 -v /home/op/dev/ms-app/ms-app-server/deploy:/usr/local/app -d yjd/ms-helloworld-server</p>
+
+<h1>启动server2</h1>
+
+<p>sudo docker run &mdash;name ms-helloworld-server2 &mdash;link zk1:zk1 -p 50002:8080 -v /home/op/dev/ms-app/ms-app-server/deploy:/usr/local/app -d yjd/ms-helloworld-server</p>
+
+<h1>启动client</h1>
+
+<h1>这里需要link两个server端，否则zk返回可用实例后，client端就无法与该实例的docker容器通讯</h1>
+
+<p>sudo docker run &mdash;name ms-helloworld-client &mdash;link zk1:zk1 &mdash;link ms-helloworld-server1:ms-helloworld-server1 &mdash;link ms-helloworld-server2:ms-helloworld-server2 -p 50003:8080 -v /home/op/dev/ms-app/ms-app-client/deploy:/usr/local/app -d yjd/ms-helloworld-client
+```</p>
 
 <p>curl访问测试结果如下：</p>
 
-<pre><code>curl http://IP:50003/info
-# 打印出两个server实例
-{
-    "success":true,
-    "message":"",
-    "apiVersion":"1.0.0",
-    "apiCode":"OK",
-    "data":{
-        "instances":"192.168.0.3:8080; 192.168.0.4:8080"
-    }
-}
+<p>```json
+curl <a href="http://IP:50003/info">http://IP:50003/info</a></p>
 
-curl http://IP:50003/index
-# 刷新会打印出不同的IP，证明有进行load balance
-{
-    "success":true,
-    "message":"",
-    "apiVersion":"1.0.0",
-    "apiCode":"OK",
-    "data":{
-        "msg":"helloWorld, ip:192.168.0.3"
-    }
-}
+<h1>打印出两个server实例</h1>
 
-{
-    "success":true,
-    "message":"",
-    "apiVersion":"1.0.0",
-    "apiCode":"OK",
-    "data":{
-        "msg":"helloWorld, ip:192.168.0.4"
-    }
+<p>{</p>
+
+<pre><code>"success":true,
+"message":"",
+"apiVersion":"1.0.0",
+"apiCode":"OK",
+"data":{
+    "instances":"192.168.0.3:8080; 192.168.0.4:8080"
 }
 </code></pre>
+
+<p>}</p>
+
+<p>curl <a href="http://IP:50003/index">http://IP:50003/index</a></p>
+
+<h1>刷新会打印出不同的IP，证明有进行load balance</h1>
+
+<p>{</p>
+
+<pre><code>"success":true,
+"message":"",
+"apiVersion":"1.0.0",
+"apiCode":"OK",
+"data":{
+    "msg":"helloWorld, ip:192.168.0.3"
+}
+</code></pre>
+
+<p>}</p>
+
+<p>{</p>
+
+<pre><code>"success":true,
+"message":"",
+"apiVersion":"1.0.0",
+"apiCode":"OK",
+"data":{
+    "msg":"helloWorld, ip:192.168.0.4"
+}
+</code></pre>
+
+<p>}
+```</p>
 
 <p>再进入zookeeper查看znode信息，可以看到/services/helloworld-server下注册了两个节点：</p>
 
-<pre><code>[zk: localhost:2181(CONNECTED) 2] ls /services/helloworld-server
+<p><code>bash
+[zk: localhost:2181(CONNECTED) 2] ls /services/helloworld-server
 [e4af27b2-613f-4f26-9a4a-fa0b979a2658, 128e338a-f10b-4047-b593-d60969b95aa3]
-</code></pre>
-
-<hr />
+</code>
+__</p>
 
 <p><a name="006" id="006"></a></p>
 
@@ -1113,195 +1290,254 @@ curl http://IP:50003/index
 
 <p>配置zookeeper zoo.cfg文件，新增集群实例：</p>
 
-<pre><code>...
+<p><code>
+...
 server.1=zk1:2881:3881  
 server.2=zk2:2882:3882  
-server.3=zk3:2883:3883 
+server.3=zk3:2883:3883
 ...
-</code></pre>
+</code></p>
 
 <p>这里会遇到的问题是，zookeeper启动时就会去检测配置的集群节点，这时候如果容器本身没有互相连接，就无法知道zk1,zk2,zk3这3个主机名对应的是哪个容器IP地址，zk就无法成功启动。所以每个zk容器运行的时候都需要加上link，如下：</p>
 
-<pre><code>op@iZuf6ikqrgj1kq9sbrou5fZ:~/dev/zookeeper$ sudo docker run --name zk1 \
-        --link zk2:zk2 --link zk3:zk3 \
-        -p 2181:2181 \
-        -v /home/op/dev/zookeeper/conf:/opt/zookeeper-3.4.9/conf \
-        -v /home/op/dev/zookeeper/data:/var/lib/zookeeper \
-        -d yjd/zookeeper
+<p>```bash
+op@iZuf6ikqrgj1kq9sbrou5fZ:~/dev/zookeeper$ sudo docker run &mdash;name zk1 \</p>
 
-op@iZuf6ikqrgj1kq9sbrou5fZ:~/dev/zookeeper$ sudo docker run --name zk2 \
-        --link zk1:zk1 --link zk3:zk3 \
-        -p 2181:2181 \
-        -v /home/op/dev/zookeeper2/conf:/opt/zookeeper-3.4.9/conf \
-        -v /home/op/dev/zookeeper2/data:/var/lib/zookeeper \
-        -d yjd/zookeeper
-
-op@iZuf6ikqrgj1kq9sbrou5fZ:~/dev/zookeeper$ sudo docker run --name zk3 \
-        --link zk1:zk1 --link zk2:zk2 \
-        -p 2181:2181 \
-        -v /home/op/dev/zookeeper3/conf:/opt/zookeeper-3.4.9/conf \
-        -v /home/op/dev/zookeeper3/data:/var/lib/zookeeper \
-        -d yjd/zookeeper
+<pre><code>    --link zk2:zk2 --link zk3:zk3 \
+    -p 2181:2181 \
+    -v /home/op/dev/zookeeper/conf:/opt/zookeeper-3.4.9/conf \
+    -v /home/op/dev/zookeeper/data:/var/lib/zookeeper \
+    -d yjd/zookeeper
 </code></pre>
+
+<p>op@iZuf6ikqrgj1kq9sbrou5fZ:~/dev/zookeeper$ sudo docker run &mdash;name zk2 \</p>
+
+<pre><code>    --link zk1:zk1 --link zk3:zk3 \
+    -p 2181:2181 \
+    -v /home/op/dev/zookeeper2/conf:/opt/zookeeper-3.4.9/conf \
+    -v /home/op/dev/zookeeper2/data:/var/lib/zookeeper \
+    -d yjd/zookeeper
+</code></pre>
+
+<p>op@iZuf6ikqrgj1kq9sbrou5fZ:~/dev/zookeeper$ sudo docker run &mdash;name zk3 \</p>
+
+<pre><code>    --link zk1:zk1 --link zk2:zk2 \
+    -p 2181:2181 \
+    -v /home/op/dev/zookeeper3/conf:/opt/zookeeper-3.4.9/conf \
+    -v /home/op/dev/zookeeper3/data:/var/lib/zookeeper \
+    -d yjd/zookeeper
+</code></pre>
+
+<p>```</p>
 
 <p>从运行命令可以看到，3个节点link是循环依赖的，所以单独执行任何一条启动命令都是失败的。无法link就无法在容器内部建立IP与主机名的映射关系。如果是先不进行link启动，启动成功后再用容器IP去配置zk集群，则会出现容器重启后IP变化的问题。当然这个问题一般只存在于单机情况下，如果是多物理机或多云主机的话，直接配置IP即可。这时候就可以用到docker-compose来解决问题，docker-compose是用于多容器的容器管理与编排，它的其中一个特性解决了这个问题。一开始学习docker-compose的时候，以为只是把不同的容器通过一个配置文件统一起来，方便管理和描述一组服务间的关系，然后按照不同容器的依赖关系(link参数指出依赖顺序)启动容器，其实docker-compose是创建了一个网络来组织这些被配置起来的容器。具体可以查看<a href="https://docs.docker.com/compose/networking/" style="text-decoration: underline;">官方文档</a>。摘要其中一段：</p>
 
-<pre><code>By default Compose sets up a single network for your app. Each container for a service joins the default network 
-and is both reachable by other containers on that network, and discoverable by them at a hostname identical to the 
-container name.
+<p>```
+By default Compose sets up a single network for your app. Each container for a service joins the default network
+and is both reachable by other containers on that network, and discoverable by them at a hostname identical to the
+container name.</p>
 
-默认Docker-compose会为你的应用（被组织起来的容器）创建一个单独的网络。每个服务容器都加入到这个网络中，
+<p>默认Docker-compose会为你的应用（被组织起来的容器）创建一个单独的网络。每个服务容器都加入到这个网络中，
 并且这些容器相互之间可以访问，容器的名字作为此网络中的主机名。
-</code></pre>
+```</p>
 
 <p>比如在myapp目录下有如下配置的docker-compose.yml：</p>
 
-<pre><code>version: '2'
+<p>```
+version: &lsquo;2&rsquo;</p>
 
-services:
-  web:
-    build: .
-    ports:
-      - "8000:8000"
-  db:
-    image: postgres
+<p>services:
+  web:</p>
 
-When you run docker-compose up, the following happens:
-
-1. A network called myapp_default is created. 
-   一个名为myapp_default的网络被创建
-2. A container is created using web’s configuration. It joins the network myapp_default under the name web.
-   根据web的配置创建一个容器。这个容器以web作为主机名加入这个网络
-3. A container is created using db’s configuration. It joins the network myapp_default under the name db.
-   根据db的配置创建一个容器。这个容器以db作为主机名加入这个网络
+<pre><code>build: .
+ports:
+  - "8000:8000"
 </code></pre>
+
+<p>  db:</p>
+
+<pre><code>image: postgres
+</code></pre>
+
+<p>When you run docker-compose up, the following happens:</p>
+
+<ol>
+<li>A network called myapp_default is created.
+一个名为myapp_default的网络被创建</li>
+<li>A container is created using web’s configuration. It joins the network myapp_default under the name web.
+根据web的配置创建一个容器。这个容器以web作为主机名加入这个网络</li>
+<li>A container is created using db’s configuration. It joins the network myapp_default under the name db.
+根据db的配置创建一个容器。这个容器以db作为主机名加入这个网络
+```</li>
+</ol>
+
 
 <p>所以使用docker-compose可以很方便的启动一个zookeeper集群，步骤如下：</p>
 
 <h5>1. 在docker-hub仓库下拉一个官方的zookeeper镜像。（不采用自己构建的镜像是因为还需要考虑到不同zk节点需要不同的配置和myid文件，需要编写entrypoint.sh脚本进行文件的写入，为了方便直接使用官方已经写好了entrypoint.sh的容器）：</h5>
 
-<pre><code>docker pull zookeeper
-</code></pre>
+<p><code>bash
+sudo docker pull zookeeper
+</code></p>
 
 <h5>2.创建compose工程目录：</h5>
 
-<pre><code>mkdir zkcompose &amp;&amp; touch ./zkcompose/docker-compose.yml &amp;&amp; cd zkcompose
-</code></pre>
+<p><code>bash
+mkdir zkcompose &amp;&amp; touch ./zkcompose/docker-compose.yml &amp;&amp; cd zkcompose
+</code></p>
 
 <h5>3 创建数据卷：</h5>
 
-<pre><code>mkdir zkcompose/zk1 &amp;&amp; mkdir zkcompose/zk1/data &amp;&amp; mkdir zkcompose/zk1/datalog
+<p><code>bash
+mkdir zkcompose/zk1 &amp;&amp; mkdir zkcompose/zk1/data &amp;&amp; mkdir zkcompose/zk1/datalog
 mkdir zkcompose/zk2 &amp;&amp; mkdir zkcompose/zk2/data &amp;&amp; mkdir zkcompose/zk2/datalog
 mkdir zkcompose/zk3 &amp;&amp; mkdir zkcompose/zk3/data &amp;&amp; mkdir zkcompose/zk3/datalog
-</code></pre>
+</code></p>
 
 <h5>4.编写docker-compose.yml：</h5>
 
-<pre><code>version: '2'
+<p>```
+version: &lsquo;2&rsquo;
 services:
-    zk1:
-        image: zookeeper
-        restart: always
-        container_name: zk1
-        ports:
-            - "2181:2181"
-        volumes:
-            - /home/op/dev/zkcompose/zk1/data:/data
-            - /home/op/dev/zkcompose/zk1/datalog:/datalog
-        environment:
-            ZOO_MY_ID: 1
-            ZOO_SERVERS: server.1=zk1:2888:3888 server.2=zk2:2888:3888 server.3=zk3:2888:3888
+zk1:</p>
 
-    zk2:
-        image: zookeeper
-        restart: always
-        container_name: zk2
-        ports:
-            - "2182:2181"
-        volumes:
-            - /home/op/dev/zkcompose/zk2/data:/data
-            - /home/op/dev/zkcompose/zk2/datalog:/datalog
-        environment:
-            ZOO_MY_ID: 2
-            ZOO_SERVERS: server.1=zk1:2888:3888 server.2=zk2:2888:3888 server.3=zk3:2888:3888
-
-    zk3:
-        image: zookeeper
-        restart: always
-        container_name: zk3
-        ports:
-            - "2183:2181"
-        volumes:
-            - /home/op/dev/zkcompose/zk3/data:/data
-            - /home/op/dev/zkcompose/zk3/datalog:/datalog
-        environment:
-            ZOO_MY_ID: 3
-            ZOO_SERVERS: server.1=zk1:2888:3888 server.2=zk2:2888:3888 server.3=zk3:2888:3888
+<pre><code>image: zookeeper
+restart: always
+container_name: zk1
+ports:
+    - "2181:2181"
+volumes:
+    - /home/op/dev/zkcompose/zk1/data:/data
+    - /home/op/dev/zkcompose/zk1/datalog:/datalog
+environment:
+    ZOO_MY_ID: 1
+    ZOO_SERVERS: server.1=zk1:2888:3888 server.2=zk2:2888:3888 server.3=zk3:2888:3888
 </code></pre>
+
+<p>zk2:</p>
+
+<pre><code>image: zookeeper
+restart: always
+container_name: zk2
+ports:
+    - "2182:2181"
+volumes:
+    - /home/op/dev/zkcompose/zk2/data:/data
+    - /home/op/dev/zkcompose/zk2/datalog:/datalog
+environment:
+    ZOO_MY_ID: 2
+    ZOO_SERVERS: server.1=zk1:2888:3888 server.2=zk2:2888:3888 server.3=zk3:2888:3888
+</code></pre>
+
+<p>zk3:</p>
+
+<pre><code>image: zookeeper
+restart: always
+container_name: zk3
+ports:
+    - "2183:2181"
+volumes:
+    - /home/op/dev/zkcompose/zk3/data:/data
+    - /home/op/dev/zkcompose/zk3/datalog:/datalog
+environment:
+    ZOO_MY_ID: 3
+    ZOO_SERVERS: server.1=zk1:2888:3888 server.2=zk2:2888:3888 server.3=zk3:2888:3888
+</code></pre>
+
+<p>```</p>
 
 <h5>5.启动</h5>
 
-<pre><code># -d: 后台运行
-sudo docker-compose up -d
-</code></pre>
+<p>```bash</p>
+
+<h1>-d: 后台运行</h1>
+
+<p>sudo docker-compose up -d
+```</p>
 
 <h5>6.运行客户端容器连接zk集群</h5>
 
-<pre><code># 因为只是临时容器，使用--rm，当容器退出时就会被删掉
-# 使用--net指定网络用的是docker-compose创建的zkcompose_default网络
-docker run -it --rm --link zk1:zk1 --link zk2:zk2 --link zk3:zk3 --net zkcompose_default zookeeper zkCli.sh -server zk1:2181,zk2:2181,zk3:2181
-</code></pre>
+<p>```bash</p>
+
+<h1>因为只是临时容器，使用&mdash;rm，当容器退出时就会被删掉</h1>
+
+<h1>使用&mdash;net指定网络用的是docker-compose创建的zkcompose_default网络</h1>
+
+<p>sudo docker run -it &mdash;rm &mdash;link zk1:zk1 &mdash;link zk2:zk2 &mdash;link zk3:zk3 &mdash;net zkcompose_default zookeeper zkCli.sh -server zk1:2181,zk2:2181,zk3:2181
+```</p>
 
 <p>zookeeper集群已经成功部署，现在修改代码，把连接单个zk节点改成连接zk集群</p>
 
 <h5>1.修改server和client的bootstrap.yml</h5>
 
-<pre><code>#server
-spring:
-  cloud:
-    zookeeper:
-      connect-string: zk1:2181,zk2:2181,zk3:2181
+<p>```</p>
 
-#client
-spring:
-  cloud:
-    zookeeper:
-      connect-string: zk1:2181,zk2:2181,zk3:2181
-      discovery:
-        register: false
+<h1>server</h1>
+
+<p>spring:
+  cloud:</p>
+
+<pre><code>zookeeper:
+  connect-string: zk1:2181,zk2:2181,zk3:2181
 </code></pre>
+
+<h1>client</h1>
+
+<p>spring:
+  cloud:</p>
+
+<pre><code>zookeeper:
+  connect-string: zk1:2181,zk2:2181,zk3:2181
+  discovery:
+    register: false
+</code></pre>
+
+<p>```</p>
 
 <h5>2.修改server和client容器启动命令：</h5>
 
-<pre><code># 注意需要指明使用网络zkcompose_default
+<p>```</p>
 
-# 启动server1
-sudo docker run --name ms-helloworld-server1 \
-    --net zkcompose_default \
-    --link zk1:zk1 --link zk2:zk2 --link zk3:zk3 \
-    -p 50001:8080 \
-    -v /home/op/dev/ms-app/ms-app-server/deploy:/usr/local/app \
-    -d yjd/ms-helloworld-server
+<h1>注意需要指明使用网络zkcompose_default</h1>
 
-# 启动server2
-sudo docker run --name ms-helloworld-server2 \
-    --net zkcompose_default \
-    --link zk1:zk1 --link zk2:zk2 --link zk3:zk3 \
-    -p 50002:8080 \
-    -v /home/op/dev/ms-app/ms-app-server/deploy:/usr/local/app \
-    -d yjd/ms-helloworld-server
+<h1>启动server1</h1>
 
-# 启动client
-# 这里需要link两个server端，否则zk返回可用实例后，client端就无法与该实例的docker容器通讯
-sudo docker run --name ms-helloworld-client \
-    --net zkcompose_default \
-    --link ms-helloworld-server1:ms-helloworld-server1 \
-    --link ms-helloworld-server2:ms-helloworld-server2 \
-    --link zk1:zk1 --link zk2:zk2 --link zk3:zk3 \
-    -p 50003:8080 \
-    -v /home/op/dev/ms-app/ms-app-client/deploy:/usr/local/app \
-    -d yjd/ms-helloworld-client
+<p>sudo docker run &mdash;name ms-helloworld-server1 \</p>
+
+<pre><code>--net zkcompose_default \
+--link zk1:zk1 --link zk2:zk2 --link zk3:zk3 \
+-p 50001:8080 \
+-v /home/op/dev/ms-app/ms-app-server/deploy:/usr/local/app \
+-d yjd/ms-helloworld-server
 </code></pre>
+
+<h1>启动server2</h1>
+
+<p>sudo docker run &mdash;name ms-helloworld-server2 \</p>
+
+<pre><code>--net zkcompose_default \
+--link zk1:zk1 --link zk2:zk2 --link zk3:zk3 \
+-p 50002:8080 \
+-v /home/op/dev/ms-app/ms-app-server/deploy:/usr/local/app \
+-d yjd/ms-helloworld-server
+</code></pre>
+
+<h1>启动client</h1>
+
+<h1>这里需要link两个server端，否则zk返回可用实例后，client端就无法与该实例的docker容器通讯</h1>
+
+<p>sudo docker run &mdash;name ms-helloworld-client \</p>
+
+<pre><code>--net zkcompose_default \
+--link ms-helloworld-server1:ms-helloworld-server1 \
+--link ms-helloworld-server2:ms-helloworld-server2 \
+--link zk1:zk1 --link zk2:zk2 --link zk3:zk3 \
+-p 50003:8080 \
+-v /home/op/dev/ms-app/ms-app-client/deploy:/usr/local/app \
+-d yjd/ms-helloworld-client
+</code></pre>
+
+<p>···</p>
 
 <p>完！！</p>
 ]]></content>

@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: 排序 | 唯有修为常青树]]></title>
+  <link href="http://youngjd.com/blog/categories/pai-xu/atom.xml" rel="self"/>
+  <link href="http://youngjd.com/"/>
+  <updated>2017-02-18T23:24:01+08:00</updated>
+  <id>http://youngjd.com/</id>
+  <author>
+    <name><![CDATA[YJD]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[算法学习笔记-插入排序]]></title>
+    <link href="http://youngjd.com/blog/2017/02/18/sort-algo/"/>
+    <updated>2017-02-18T17:27:42+08:00</updated>
+    <id>http://youngjd.com/blog/2017/02/18/sort-algo</id>
+    <content type="html"><![CDATA[<blockquote><p>Surviving is not relevant.Living is. （生存本身没有意义，生活才有。) by 电影《机器纪元》</p></blockquote>
+
+<!-- more -->
+
+
+<hr />
+
+<p>插入排序 &ndash; Insertion sort</p>
+
+<p>以下是来自wikipedia的解释</p>
+
+<p><code>
+Insertion sort is a simple sorting algorithm that builds the final sorted array (or list) one item at a time. It is much less efficient on large lists than more advanced algorithms such as quicksort, heapsort, or merge sort. However, insertion sort provides several advantages:
+Simple implementation: Jon Bentley shows a three-line C version, and a five-line optimized version[1]:116
+Efficient for (quite) small data sets, much like other quadratic sorting algorithms
+More efficient in practice than most other simple quadratic (i.e., O(n2)) algorithms such as selection sort or bubble sort
+Adaptive, i.e., efficient for data sets that are already substantially sorted: the time complexity is O(nk) when each element in the input is no more than k places away from its sorted position
+Stable; i.e., does not change the relative order of elements with equal keys
+In-place; i.e., only requires a constant amount O(1) of additional memory space
+Online; i.e., can sort a list as it receives it
+When people manually sort cards in a bridge hand, most use a method that is similar to insertion sort.
+</code></p>
+
+<p>插入排序就好像打扑克牌的时候，从牌堆中一张张牌依次取牌，然后和手上已有的牌大小比较，插入到适合的位置上。比如打大老二扑克游戏，通过发牌已经发了13张牌到你的位置上，现在你从这13张牌堆中一张张地依次拿到手上。比如13张牌堆是[5, 2, 9, 3, 6, 4, 13(K), 1(A), 12(Q), 7, 11(J), 8, 10]，假设是按照升序排序，那么整理手牌的顺序如下：</p>
+
+<h5>STEP 1：因为手上没有牌，所以5放到第一个位置</h5>
+
+<pre><code>5 - - - - - - - - - - - -
+</code></pre>
+
+<h5>STEP 2：手上是一张5，从牌堆拿到2，2比5小，所以2替换5放到第一个位置，5放到第二个位置</h5>
+
+<pre><code>2 5 - - - - - - - - - - -
+</code></pre>
+
+<h5>STEP 3: 从牌堆拿到9，9比5和2大，所以直接插入到5的后面</h5>
+
+<pre><code>2 5 9 - - - - - - - - - -
+</code></pre>
+
+<h5>STEP 4：现在手上是2，5，9顺序的手牌，从牌堆拿到3，3比5和9小，所以5，9顺延往后整理，3比2大，所以3就会插入到2的后面，5的前面</h5>
+
+<pre><code>2 3 5 9 - - - - - - - - -
+</code></pre>
+
+<p>如此类推直到取完牌堆上所有的牌。</p>
+
+<p>以下是wikipedia上插入排序的伪代码。</p>
+
+<p>```
+for i ← 1 to length(A)</p>
+
+<pre><code>j ← i
+while j &gt; 0 and A[j-1] &gt; A[j]
+    swap A[j] and A[j-1]
+    j ← j - 1
+end while
+</code></pre>
+
+<p>end for
+```</p>
+
+<p>但是刚开始看的时候看不太清楚这个思路，所以我按照上面整理扑克牌的思路写了一个易于自己理解的版本，然后再进行优化。</p>
+
+<p>```java
+public static void main(String[] args) {</p>
+
+<pre><code>// 定义和初始化13张扑克牌牌堆
+int[] _13pokers = new int[]{5, 2, 9, 3, 6, 4, 13, 1, 12, 7, 11, 8, 10};
+sort1(_13pokers);
+</code></pre>
+
+<p>}</p>
+
+<p>public static void sort1(int[] _13pokers) {</p>
+
+<pre><code>int len = _13pokers.length;
+// 手牌数组
+int[] handPokers = new int[len];
+// 当前手牌数量
+int currentHandPokerNum = 0;
+// 依次从牌堆取牌
+for (int i = 0; i &lt; len; i++) {
+    // 从牌堆取出的第i张牌
+    int newPokerVal = _13pokers[i];
+    // 新牌与手牌比较并获取插入位置
+    int insertIndex = getInsertPosition(newPokerVal, currentHandPokerNum, handPokers);
+    // 插入新牌到手牌
+    handPokers[insertIndex] = newPokerVal;
+    // 当前手牌数量加1
+    currentHandPokerNum ++;
+    PrintHelper.printArray(handPokers);
+}
+</code></pre>
+
+<p>}</p>
+
+<p>public static int getInsertPosition(int newPokerVal, int currentHandPokerNum, int[] handPokers) {</p>
+
+<pre><code>// 从手牌的尾端(大)至开头(小)进行比较
+// 末尾牌的下标即手牌数量-1，开始时手上没有牌，所以下标为-1
+int handIndex = currentHandPokerNum - 1;
+do {
+    // 1. 没手牌时，不需要进行比较。所以新取到的手牌插入到第一个位置，即下标为0，所以handIndex+1
+    // 2. 所有手牌比较完毕时，新牌依然没有找到插入位置，则说明，新牌是现在手牌当中最小的牌，所以插入到开头位置，即handIndex+1
+    if (handIndex &lt; 0) {
+        return handIndex + 1;
+    }
+    // 取出当前需要和新牌比较的手牌
+    int handIndexPokerVal = handPokers[handIndex];
+    // 如果新牌的值比当前手牌的值小
+    if (newPokerVal &lt; handIndexPokerVal) {
+        // 把当前这张手牌往后移一位，腾出的空间或许给新手牌，或给下一张也比新牌大的手牌
+        handPokers[handIndex + 1] = handPokers[handIndex];
+    }
+    // 如果新牌的值比当前手牌的值大，则新牌应该插入到当前手牌的后一位，所以handIndex+1
+    else {
+        return handIndex + 1;
+    }
+    // 比较下一张手牌（方向往手牌开头，值小的一端 &lt;--- ）
+    handIndex --;
+} while (true);
+</code></pre>
+
+<p>}
+```</p>
+
+<p>运行结果：</p>
+
+<p><code>
+[5 0 0 0 0 0 0 0 0 0 0 0 0]
+[2 5 0 0 0 0 0 0 0 0 0 0 0]
+[2 5 9 0 0 0 0 0 0 0 0 0 0]
+[2 3 5 9 0 0 0 0 0 0 0 0 0]
+[2 3 5 6 9 0 0 0 0 0 0 0 0]
+[2 3 4 5 6 9 0 0 0 0 0 0 0]
+[2 3 4 5 6 9 13 0 0 0 0 0 0]
+[1 2 3 4 5 6 9 13 0 0 0 0 0]
+[1 2 3 4 5 6 9 12 13 0 0 0 0]
+[1 2 3 4 5 6 7 9 12 13 0 0 0]
+[1 2 3 4 5 6 7 9 11 12 13 0 0]
+[1 2 3 4 5 6 7 8 9 11 12 13 0]
+[1 2 3 4 5 6 7 8 9 10 11 12 13]
+</code></p>
+
+<p>写完第一个版本之后，思路清晰了一点，现在看看哪些地方可以进行简化和优化，直到接近伪代码的样子。</p>
+
+<h5>1.当前手牌数量就是从牌堆拿的数量，比如我现在从牌堆拿第一张牌，则当前手牌就是1。</h5>
+
+<p><code>java
+int handIndex = currentHandPokerNum - 1; =》 int handIndex = i - 1;
+</code></p>
+
+<h4>2.wiki中有一段解释，插入排序是一个in-place的算法，即不需要申请额外空间的算法，其前后结果没有依赖关系，从内存角度来说，可以直接原地覆盖掉。而第一个版本的算法明显的申请了一个额外的空间，即handPokers，它的大小和输入的数组一样。按照这个解释，这两个数组是可以共用的而不影响结果的计算。所以可以去掉handPokers，用原数组直接进行计算。PS：改成一个数组，从扑克牌的角度，就是原本是从牌堆依次取牌，现在改成把13张未排序的牌一次全部拿到手上，然后从第一张开始进行依次比较和插入。第一张牌同样地不需要比较，直接插入到手牌第一张，即什么都不做。第二张牌和第一张比较，如果第一张牌小，则第一张牌挪到第二张牌的位置上，然后当前牌插入到位置1。就是手牌的右半部份就相当于牌堆，左半部分相当于手牌。</h4>
+
+<p>```java
+public static void sort1(int[] _13pokers) {</p>
+
+<pre><code>int len = _13pokers.length;
+for (int i = 0; i &lt; len; i++) {
+    int newPokerVal = _13pokers[i];
+    int insertIndex = getInsertPosition(newPokerVal, i - 1, _13pokers);
+    _13pokers[insertIndex] = newPokerVal;
+}
+</code></pre>
+
+<p>}
+```</p>
+
+<h5>3. 把do-while改成while</h5>
+
+<p>```java
+public static int getInsertPosition(int newPokerVal, int handIndex, int[] handPokers) {</p>
+
+<pre><code>while (handIndex &gt;= 0 &amp;&amp; handPokers[handIndex] &gt; newPokerVal) {
+    handPokers[handIndex + 1] = handPokers[handIndex];
+    handIndex --;
+}
+return handIndex + 1;
+</code></pre>
+
+<p>}
+```</p>
+
+<h5>4. 合并代码并通用化常量</h5>
+
+<p>```java</p>
+
+<p>public static void main(String[] args) {</p>
+
+<pre><code>int[] array = new int[]{5, 2, 9, 3, 6, 4, 13, 1, 12, 7, 11, 8, 10};
+sort2(array);
+</code></pre>
+
+<p>}</p>
+
+<p>public static void sort2(int[] array) {</p>
+
+<pre><code>int len = array.length;
+for (int i = 0; i &lt; len; i++) {
+    int ai = array[i];
+    int insertIndex = i - 1;
+    while (insertIndex &gt;= 0 &amp;&amp; array[insertIndex] &gt; ai) {
+        array[insertIndex + 1] = array[insertIndex];
+        insertIndex --;
+    }
+    array[insertIndex + 1] = ai;
+}
+PrintHelper.printArray(array);
+</code></pre>
+
+<p>}
+```</p>
+
+<p>sort2基本就和伪代码差不多了。</p>
+
+<p>完！</p>
+]]></content>
+  </entry>
+  
+</feed>
