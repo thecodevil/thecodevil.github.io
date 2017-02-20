@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 排序 | 唯有修为常青树]]></title>
   <link href="http://youngjd.com/blog/categories/pai-xu/atom.xml" rel="self"/>
   <link href="http://youngjd.com/"/>
-  <updated>2017-02-18T23:24:01+08:00</updated>
+  <updated>2017-02-20T18:34:42+08:00</updated>
   <id>http://youngjd.com/</id>
   <author>
     <name><![CDATA[YJD]]></name>
@@ -12,6 +12,294 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[算法学习笔记-归并排序（二路归并）]]></title>
+    <link href="http://youngjd.com/blog/2017/02/18/sort-algo_merge_sort/"/>
+    <updated>2017-02-18T20:30:10+08:00</updated>
+    <id>http://youngjd.com/blog/2017/02/18/sort-algo_merge_sort</id>
+    <content type="html"><![CDATA[<blockquote><p>佛法在世间，不离世间觉。离世觅菩提，恰如求兔角。&mdash;《原经般若品 * 无相颂》</p></blockquote>
+
+<!-- more -->
+
+
+<hr />
+
+<h3>归并排序 &ndash; Merge sort</h3>
+
+<p><sup>> 以下是来自wikipedia的解释<sup>
+```
+In computer science, merge sort (also commonly spelled mergesort) is an efficient, general-purpose, comparison-based sorting algorithm.
+Most implementations produce a stable sort, which means that the implementation preserves the input order of equal elements in the sorted output.
+Mergesort is a divide and conquer algorithm that was invented by John von Neumann in 1945.[1]
+A detailed description and analysis of bottom-up mergesort appeared in a report by Goldstine and Neumann as early as 1948.[2]</p>
+
+<p>归并排序是一个基于比较的排序算法。大部分的归并排序的实现都属于稳定排序，即最终的输出序列保持原有
+序列中那些相等的元素的位置。归并排序是一个基于分治算法产生的排序算法。</p>
+
+<p>Conceptually, a merge sort works as follows:
+Divide the unsorted list into n sublists, each containing 1 element (a list of 1 element is considered sorted).
+Repeatedly merge sublists to produce new sorted sublists until there is only 1 sublist remaining. This will be the sorted list.</p>
+
+<p>归并排序的步骤如下：
+1. 把未排序的序列分成n个子序列，每个子序列仅仅包含一个元素（只有一个元素的序列自然有序）。
+2. 重复地把子序列合并成新的有序子序列，直到只剩下一个子序列，那么这个子序列就是最终的有序序列。</p>
+
+<p>```</p>
+
+<p>一般的归并排序又称为<font color=#0B0080><strong>二路归并排序</strong></font>，即归并过程中总是以2个子序列作为一组合并单元。归并排序又分为<font color=#0B0080><strong>&ldquo;Top-down implementation(自顶向下)&rdquo;</strong></font>和<font color=#0B0080><strong>&ldquo;Bottom-up implementation(自底向下)&rdquo;</strong></font>两种实现方式。不管是哪种方式，都必须进行两个子序列合并这一步，也称作<font color=#0B0080><strong>一次归并</strong></font>。下面先看看一次归并的思路和算法。</p>
+
+<p>图1为合并过程的示意图。因为归并排序是基于两个已经有序的子序列前提下进行合并的，所以只要同时遍历两个子序列，然后依次比较就可以至少处理完一个子序列，然后把还有剩余元素的子序列中的元素追加到新序列即可，时间复杂度是O(n)。合并过程如下图1所示：</p>
+
+<p><sup>图1：一次归并示意图</sup><br>
+<img src="/images/2017-02-20-1.png" height="500" width="400" alt="Alt text" /></p>
+
+<p><sup>> 一次归并代码实现如下：</sup>
+```java
+public static void merge(int a[], int left, int mid, int right) {</p>
+
+<pre><code>// b1[] =&gt; a[left .. mid]  左子数组
+// b2[] =&gt; b[mid + 1.. right - 1] 右子数组
+
+// 定义临时数组用于存放两个子数组合并后的结果，长度为两个子数组的长度和
+int temp[] = new int[right - left];
+
+int b1_i = left, b2_i = mid + 1, temp_i = 0;
+
+// 合并两个已排序的子数组为一个有序数组
+while (b1_i &lt;= mid &amp;&amp; b2_i &lt;= right) {
+    temp[temp_i++] = a[b1_i] &lt;= a[b2_i] ? a[b1_i++] : a[b2_i++];
+}
+
+// 如果左子数组还有剩余元素，则追加到临时数组的末尾
+while (b1_i &lt;= mid) {
+    temp[temp_i++] = a[b1_i++];
+}
+
+// 如果右子数组还有剩余元素，则追加到临时数组的末尾
+while (b2_i &lt;= right) {
+    temp[temp_i++] = a[b2_i++];
+}
+
+// 拷贝临时数组中合并好的有序数组到原数组
+for (int i = 0; i &lt; temp_i; i++) {
+    a[left + i] = temp[i];
+}
+</code></pre>
+
+<p>}
+```</p>
+
+<p>接着分别说明"Top-down implementation(自顶向下)&ldquo;和"Bottom-up implementation(自底向下)"两种实现方式。</p>
+
+<h4>一、 自顶向下</h4>
+
+<p>自顶向下就是递归地拆序列为子序列，直到子序列长度为1，然后两两合并子序列成新的有序序列。假设初始数组是A[left&hellip;right]，则步骤如下：</p>
+
+<h5>1) 分解：</h5>
+
+<p>将当前数组划分为两个子数组，划分下标mid = (left + right) / 2， 即划分为B1[left&hellip;mid]和B2[mid + 1&hellip;right]两个子数组。</p>
+
+<h5>2) 求解:</h5>
+
+<p>递归地对B1[left&hellip;mid]和B2[mid + 1&hellip;right]两个子数组求解（排序），直到子数组长度为1（即仅剩一个元素，一个元素自然有序，则得出问题解）。</p>
+
+<h5>3) 合并:</h5>
+
+<p>将两个已求解的子问题（两个已排序的子数组）合并成一个有序的解数组（得出上一层的问题解），如此类推逐层往上归并相邻的两个已排好序的子数组最后得到一个有序的最终解数组。</p>
+
+<p><sup>图2：自顶向下的归并排序过程示意图</sup><br>
+<img src="/images/2017-02-20-2.png" height="400" width="450" alt="Alt text" /></p>
+
+<p><sup>> 自顶向下的递归版本</sup>
+```java
+public static void mergeSortRecursively (int a[], int left, int right) {</p>
+
+<pre><code>if (left &lt; right) {
+    // 分解数组
+    int mid = (left + right) / 2;
+    // 对左子数组递归地进行归并排序
+    mergeSort(a, left, mid);
+    // 对右子数组递归地进行归并排序
+    mergeSort(a, mid + 1, right);
+    // 合并两个已排序的数组为一个有序数组和复制到原数组上
+    merge(a, left, mid, right);
+}
+</code></pre>
+
+<p>}</p>
+
+<p>public static void main(String[] args) {</p>
+
+<pre><code>int[] a = new int[]{5, 2, 9, 3, 6, 4, 13, 1, 12, 7, 11, 8, 10};
+mergeSortRecursively(a, 0, a.length - 1);
+PrintHelper.printArray(a);
+</code></pre>
+
+<p>}</p>
+
+<p>// 自顶向下的递归版本的输出结果
+[2 5 9 3 6 4 13 1 12 7 11 8 10]
+[2 5 3 9 6 4 13 1 12 7 11 8 10]
+[2 3 5 9 6 4 13 1 12 7 11 8 10]
+[2 3 5 9 4 6 13 1 12 7 11 8 10]
+[2 3 5 9 4 6 13 1 12 7 11 8 10]
+[2 3 4 5 6 9 13 1 12 7 11 8 10]
+[2 3 4 5 6 9 13 1 12 7 11 8 10]
+[2 3 4 5 6 9 13 1 7 12 11 8 10]
+[2 3 4 5 6 9 13 1 7 12 8 11 10]
+[2 3 4 5 6 9 13 1 7 12 8 10 11]
+[2 3 4 5 6 9 13 1 7 8 10 11 12]
+[1 2 3 4 5 6 7 8 9 10 11 12 13]
+```</p>
+
+<p><sup>> 自顶向下的非递归版本</sup>
+```java
+static class StackItem {</p>
+
+<pre><code>public int left;
+public int right;
+public int read;
+
+public StackItem(int left, int right) {
+    this.left = left;
+    this.right = right;
+}
+</code></pre>
+
+<p>}</p>
+
+<p>// read = 0：还没有拆分子问题
+// read = 1: 如果当前栈的read=1，则说明它的左子问题已经处理完出栈
+// read = 2：如果当前栈的read=2，则说明它的右子问题已经处理完出栈。也就说明两个子问题已经解决，可以进行合并。
+public static void mergeSortUnRecursively(int a[], int left, int right) {</p>
+
+<pre><code>Stack&lt;StackItem&gt; stack = new Stack&lt;&gt;();
+
+// 推入初始栈顶
+stack.push(new StackItem(left, right));
+// 一直遍历直到栈为空
+while (!stack.isEmpty()) {
+    // 拿到当前栈顶元素
+    StackItem si = stack.peek();
+    // 表示左右子序列已经排好序，可以进行合并
+    // 合并完之后出栈
+    if (si.read == 2) {
+        merge(a, si.left, (si.left + si.right) / 2, si.right);
+        stack.pop();
+    }
+    // 分解序列
+    int _mid = (si.left + si.right) / 2;
+    if (si.left &lt; si.right) {
+        // 当前序列还没有进行分解，首先拆分左子序列，入栈
+        if (si.read == 0) {
+            stack.push(new StackItem(si.left, _mid));
+            // 标志左序列已经推入栈中
+            si.read++;
+        } 
+        // 左子数组已经处理完，回到上一个栈状态，继续拆分右子数组，入栈
+        else if (si.read == 1) {
+            stack.push(new StackItem(_mid, si.right));
+            // 标志右序列已经推入栈中
+            si.read++;
+        }
+    } else {
+        // 如果已经是最小子序列（序列中只有一个元素），则不用处理，直接出栈
+        stack.pop();
+    }
+}
+</code></pre>
+
+<p>}</p>
+
+<p>public static void main(String[] args) {</p>
+
+<pre><code>int[] a = new int[]{5, 2, 9, 3, 6, 4, 13, 1, 12, 7, 11, 8, 10};
+mergeSortUnRecursively(a, 0, a.length - 1);
+PrintHelper.printArray(a);
+</code></pre>
+
+<p>}</p>
+
+<p>// 自顶向下的非递归版本的输出结果
+[2 5 9 3 6 4 13 1 12 7 11 8 10]
+[2 5 3 9 6 4 13 1 12 7 11 8 10]
+[2 3 5 9 6 4 13 1 12 7 11 8 10]
+[2 3 5 9 4 6 13 1 12 7 11 8 10]
+[2 3 5 9 4 6 13 1 12 7 11 8 10]
+[2 3 4 5 6 9 13 1 12 7 11 8 10]
+[2 3 4 5 6 9 13 1 12 7 11 8 10]
+[2 3 4 5 6 9 13 1 7 12 11 8 10]
+[2 3 4 5 6 9 13 1 7 12 8 11 10]
+[2 3 4 5 6 9 13 1 7 12 8 10 11]
+[2 3 4 5 6 9 13 1 7 8 10 11 12]
+[1 2 3 4 5 6 7 8 9 10 11 12 13]
+```</p>
+
+<h4>二、 自底向上</h4>
+
+<p>自底向上就是把序列当作是由n个长度为1的子序列组成的序列，然后以2个序列为单元循环来回地合并子序列。如图3所示，开始时把序列看成是一个由5个长度为1的子序列组成的序列，然后第1个子序列和第2个子序列归并，第3个子序列和第4个子序列归并，第5个（n为奇数的情况）不进行归并，这样就产生了2个长度为2的子序列和1个长度为1的子序列，每次循环都来回地归并元素，这样的一次循环操作称作是<font color=#0B0080><strong>一趟归并</strong></font>。接着是第2躺归并，仍然把序列当作是由2个长度为2的子序列组成的序列，最后一个长度为1的序列依然不进行归并，然后像第1躺归并一样，以2个序列为单元归并。如此反复，直到最终得到一个长度为n的子序列为止。</p>
+
+<p><sup>图3：自底向上的归并排序过程示意图</sup><br>
+<img src="/images/2017-02-20-3.png" height="400" width="400" alt="Alt text" /></p>
+
+<p><sup>> 自底向上的归并排序版本</sup>
+```java
+public static void downTopMerge(int a[]) {</p>
+
+<pre><code>int len = a.length;
+// 进行log(2为底)N + 1趟归并
+// sublistLen: 当前这趟归并的子序列长度
+// 从1开始，每次以2的倍数递增（因为是以2个序列为单元进行两两合并，1&gt;2&gt;4&gt;8&gt;16....）
+for (int sublistLen = 1; sublistLen &lt; len; sublistLen *= 2) {
+    // i: 当前归并序列的左子序列的起始坐标
+    // 每次归并2个序列，每个序列长度为sublistLen，因此下一个左子序列的起始坐标就是 i = i + 2 * sublistLen
+    // 左子序列的下标不能大于整个原序列的长度
+    for (int i = 0; i &lt; len; i += 2 * sublistLen) {
+        // 进行一次归并
+        // 左子序列[i .. i + sublistLen], 右子序列 [i + sublistLen + 1 ... i + 2 * sublistLen - 1]
+        int left = i;
+        int mid = i + sublistLen - 1; // i + sublistLen : 右子序列的起始坐标，减1就是左子序列的结束坐标，
+                                      // 即被这两个序列合并成的新序列的中间坐标
+        int right = (i + 2 * sublistLen) - 1; // i + 2 * sublistLen : 下一个左子序列的起始坐标
+                                              // 所以右子序列的结束坐标就是它的前一个坐标= (i + 2 * sublistLen) - 1
+        merge(a, i, Math.min(mid, len - 1),  Math.min(right, len - 1));
+        PrintHelper.printArray(a);
+    }
+}
+</code></pre>
+
+<p>}</p>
+
+<p>public static void main(String[] args) {</p>
+
+<pre><code>int[] a = new int[]{5, 2, 9, 3, 6, 4, 13, 1, 12, 7, 11, 8, 10};
+downTopMerge(a);
+PrintHelper.printArray(a);
+</code></pre>
+
+<p>}</p>
+
+<p>// 自底向上的输出结果
+[2 5 9 3 6 4 13 1 12 7 11 8 10]
+[2 5 3 9 6 4 13 1 12 7 11 8 10]
+[2 5 3 9 4 6 13 1 12 7 11 8 10]
+[2 5 3 9 4 6 1 13 12 7 11 8 10]
+[2 5 3 9 4 6 1 13 7 12 11 8 10]
+[2 5 3 9 4 6 1 13 7 12 8 11 10]
+[2 5 3 9 4 6 1 13 7 12 8 11 10]
+[2 3 5 9 4 6 1 13 7 12 8 11 10]
+[2 3 5 9 1 4 6 13 7 12 8 11 10]
+[2 3 5 9 1 4 6 13 7 8 11 12 10]
+[2 3 5 9 1 4 6 13 7 8 11 12 10]
+[1 2 3 4 5 6 9 13 7 8 11 12 10]
+[1 2 3 4 5 6 9 13 7 8 10 11 12]
+[1 2 3 4 5 6 7 8 9 10 11 12 13]
+```</p>
+
+<p>完！</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[算法学习笔记-插入排序]]></title>
@@ -25,11 +313,10 @@
 
 <hr />
 
-<p>插入排序 &ndash; Insertion sort</p>
+<h3>插入排序 &ndash; Insertion sort</h3>
 
-<p>以下是来自wikipedia的解释</p>
-
-<p><code>
+<p><sup>> 以下是来自wikipedia的解释<sup>
+<code>
 Insertion sort is a simple sorting algorithm that builds the final sorted array (or list) one item at a time. It is much less efficient on large lists than more advanced algorithms such as quicksort, heapsort, or merge sort. However, insertion sort provides several advantages:
 Simple implementation: Jon Bentley shows a three-line C version, and a five-line optimized version[1]:116
 Efficient for (quite) small data sets, much like other quadratic sorting algorithms
